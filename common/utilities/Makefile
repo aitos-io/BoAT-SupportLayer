@@ -1,7 +1,7 @@
 # Source and Objects
 
 SOURCES = $(wildcard *.c)
-OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/utilities
+OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/utilities
 OBJECTS = $(patsubst %.c,$(OBJECTS_DIR)/%.o,$(SOURCES))
 
 

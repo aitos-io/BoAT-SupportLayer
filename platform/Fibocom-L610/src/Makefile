@@ -1,12 +1,12 @@
 # Source and Objects
-SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/rpc/*.o) \
-				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/utilities/*.o) \
+SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/rpc/*.o) \
+				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/utilities/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keypair/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/DAL/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/OSAL/*.o)
 	
 
-PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/storage/*.o) \
+PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/storage/*.o) \
 					  $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keystore/*.o) \
 					  $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keystore/SE/NXP/sscom/se_process/*.o) \
 		  			  $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keystore/SE/NXP/sscom/smCom/*.o) \
