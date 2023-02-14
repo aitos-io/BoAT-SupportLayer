@@ -55,7 +55,7 @@ CRYPTO_CFLAGS += -DUSE_PRECOMPUTED_CP=0
 # Source and Objects
 
 SOURCES = $(wildcard *.c) $(wildcard aes/*.c)
-OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/crypto/crypto_default
+OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/crypto
 OBJECTS = $(patsubst %.c,$(OBJECTS_DIR)/%.o,$(SOURCES))
 
 

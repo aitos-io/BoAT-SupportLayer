@@ -1,6 +1,6 @@
 # Select one of the crypto-dep and platform
 
-.PHONY:all mbedTLS crypto_default keccak storage keystore platform keypair utilities rpc tests
+.PHONY:all mbedTLS crypto_default keccak storage keystore platform keypair utilities rpc tests third-party
     #cryptointf http2
 
 ifeq ($(SOFT_CRYPTO), CRYPTO_DEFAULT)
@@ -31,13 +31,13 @@ keypair:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/keypair all
 
 mbedTLS:
-	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/crypto/mbedTLS all
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/third-party/crypto/mbedTLS all
 
 crypto_default:
-	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/crypto/crypto_default all
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/third-party/crypto all
 
 keccak:	
-	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/crypto/keccak all
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/third-party/crypto/keccak all
 
 utilities:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/utilities all
@@ -50,7 +50,7 @@ rpc:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/rpc all
 
 #http2:
-#	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/http2 all
+#	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/http2intf all
 
 #cryptointf:
 #	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/cryptointf all
@@ -63,12 +63,12 @@ keystore:
 	
 clean:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/keypair clean
-	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/crypto/crypto_default clean
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/third-party/crypto clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/utilities clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/rpc clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/storage clean
 	#make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/cryptointf clean
-	#make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/http2 clean	
+	#make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/common/http2intf clean	
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/platform clean 
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/keystore clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests clean

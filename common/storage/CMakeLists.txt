@@ -11,7 +11,7 @@ target_include_directories(storage_obj
     ${PROJECT_SOURCE_DIR}/sdk/include
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/BoAT-SupportLayer/platform/include
-    ${PROJECT_SOURCE_DIR}/BoAT-SupportLayer/crypto/keccak
+    ${PROJECT_SOURCE_DIR}/BoAT-SupportLayer/third-party/crypto/keccak
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
