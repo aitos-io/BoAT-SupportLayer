@@ -1,5 +1,5 @@
 # Source and Objects
-SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/src/rpc/*.o) \
+SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/rpc/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/utilities/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keypair/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/DAL/*.o) \
@@ -14,10 +14,10 @@ PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/storage/*.o
 
 PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/crypto/crypto_default/*.o) \
 			$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/crypto/crypto_default/aes/*.o) \
-			$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/src/port_crypto_default/*.o) 
+			$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/port_crypto_default/*.o) 
 
-PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/src/DAL/*.o) \
-						$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/src/OSAL/*.o) \
+PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/DAL/*.o) \
+						$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/OSAL/*.o) \
 
 
 LIBNAME = $(BOAT_LIB_DIR)/libboatvendor.a

@@ -1,5 +1,5 @@
 # Source and Objects
-SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/rpc/*.o) 
+SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/rpc/*.o) 
 
 PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/storage/*.o ) \
 					 $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keystore/*.o) 
@@ -7,7 +7,7 @@ PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/storage/*.o
 ifeq ($(SOFT_CRYPTO), CRYPTO_DEFAULT)
     PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/crypto/crypto_default/*.o) \
 			   $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/crypto/crypto_default/aes/*.o) \
-	           $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/port_crypto_default/*.o) 
+	           $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/port_crypto_default/*.o) 
     PORT_CRYPTO_DIRECTORY = port_crypto_default
 else
     PORT_CRYPTO_OBJECTS += 

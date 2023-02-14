@@ -1,12 +1,11 @@
-# Source and Objects  
+# Source and Objects
 
 SOURCES = $(wildcard *.c)
-OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/vendor/platform/$(PLATFORM_TARGET)/src/OSAL
+OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/rpc
 OBJECTS = $(patsubst %.c,$(OBJECTS_DIR)/%.o,$(SOURCES))
 
 
 all: $(OBJECTS_DIR) $(OBJECTS)
-
 
 $(OBJECTS_DIR):
 	$(BOAT_MKDIR) -p $(OBJECTS_DIR)

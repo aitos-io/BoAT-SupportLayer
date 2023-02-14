@@ -43,7 +43,7 @@ storage:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/storage all
 
 platform:
-	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/vendor/platform all
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/platform all
 
 keystore:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/keystore all
@@ -53,7 +53,7 @@ clean:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/utilities clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/crypto/crypto_default clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/storage clean
-	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/vendor/platform clean 
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/platform clean 
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/keystore clean
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests clean
 
