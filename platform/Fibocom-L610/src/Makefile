@@ -32,7 +32,6 @@ $(LIBNAME): boatvendor_objs
 
 boatvendor_objs:
 	make -C port_crypto_default all
-	make -C rpc all
 	make -C DAL all
 	make -C OSAL all
 

@@ -28,7 +28,6 @@ $(LIBNAME): boatvendor_objs
 
 boatvendor_objs:
 	make -C $(PORT_CRYPTO_DIRECTORY) all
-	make -C rpc all
 
 
 clean: $(CLEAN_SUBDIRS)
