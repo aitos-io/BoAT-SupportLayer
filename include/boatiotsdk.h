@@ -43,6 +43,6 @@ boatiotsdk.h is the wrapper header file for 3rd application to include.
 #include "boatutility.h"
 #include "boatrlp.h"
 #include "boatplatform.h"
-#include "boatconfig.h"
+/////#include "boatconfig.h"
 
 #endif

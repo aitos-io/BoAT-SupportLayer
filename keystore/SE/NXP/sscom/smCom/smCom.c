@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "smCom.h"
 /////#include "boat_Mutex.h"
-#include "boatOSAL.h"
+#include "boatosal.h"
 #include "boatlog.h"
 // #include "nxLog_smCom.h"
 

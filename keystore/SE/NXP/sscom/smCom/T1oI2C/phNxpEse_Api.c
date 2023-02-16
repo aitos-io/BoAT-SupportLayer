@@ -18,7 +18,7 @@
 #include "phNxpEsePal_i2c.h"
 #include "sm_types.h"
 #include "boatlog.h"
-//!#include "boatDAL.h"
+//!#include "boatdal.h"
 #include "i2c_hal.h"
 
 #ifdef FLOW_VERBOSE

@@ -9,15 +9,15 @@
 ****************************************************************************************
 */
 #include "boat_timer.h"
-#include "boatOSAL.h"
+#include "boatosal.h"
 #include "boatlog.h"
 
 
-BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callBackRoutine)(void *), void *argv)
+BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callbackRoutine)(void *), void *argv)
 {
 	BUINT32 rtnVal;
 
-	if((timerRef == NULL) || (callBackRoutine == NULL) || ((initialTime == 0) && (intervalTime == 0)))
+	if((timerRef == NULL) || (callbackRoutine == NULL) || ((initialTime == 0) && (intervalTime == 0)))
 	{
 		BoatPrintf(0,"[boat][timer] boatTimerStart bad parameter\r\n");
 		return BOAT_ERROR;
@@ -25,7 +25,7 @@ BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 int
 	if(intervalTime > 0) ///// period timer
 	{
 		BoatPrintf(0,"[boat][timer] boatTimerStart start a period timer[%x][%d]\r\n",intervalTime,intervalTime);
-	    rtnVal = fibo_timer_period_new(intervalTime,callBackRoutine,argv);
+	    rtnVal = fibo_timer_period_new(intervalTime,callbackRoutine,argv);
 		timerRef->timerID = rtnVal;
 		if(rtnVal > 0)
 		{
@@ -41,7 +41,7 @@ BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 int
 	else
 	{
 		BoatPrintf(0,"[boat][timer] boatTimerStart start a one time timer[%x][%d]\r\n",initialTime,initialTime);
-	    rtnVal = fibo_timer_new(initialTime,callBackRoutine,argv);
+	    rtnVal = fibo_timer_new(initialTime,callbackRoutine,argv);
 		timerRef->timerID = rtnVal;
 		if(rtnVal > 0)
 		{

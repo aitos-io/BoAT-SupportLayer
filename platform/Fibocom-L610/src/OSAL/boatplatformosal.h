@@ -55,7 +55,7 @@ struct boatPlatformTimer{
 //!@brief Abstract definition of semaphore object based on Ficocom L610 openCPU OS
 #ifndef PLATFORM_OSAL_SEMA
 #define PLATFORM_OSAL_SEMA
-struct boat_platform_sem{
+struct boatPlatformSem{
     sem_t semid; //! fibocom-L610 semaphore descriptor
 };
 #endif
@@ -72,7 +72,7 @@ struct boatPlatformMutex{
 //!@brief Abstract definition of message queue object based on Ficocom L610 openCPU OS
 #ifndef PLATFORM_OSAL_QUEUE
 #define PLATFORM_OSAL_QUEUE
-struct boat_platform_queue{
+struct boatPlatformQueue{
     mqd_t queueid; //! fibocom-L610 message queue descriptor
     char *name; //! The name of message queue
 };

@@ -26,21 +26,21 @@
 #include <stdio.h>
 #include "boattypes.h"
 #include "boaterrcode.h"
-#include "platformOSAL.h"
+#include "boatplatformosal.h"
 
 
 #ifdef PLATFORM_OSAL_SEMA
-typedef struct boat_platform_sem boat_sem;
+typedef struct boatPlatformSem boatSem;
 
 /*!*****************************************************************************
 @brief Init a Boat semaphore
 
-Function: BoAT_sem_init()
+Function: boatSemInit()
 
     This function create a semaphore instance and init the boat semaphore.
 
-    BoAT_sem_init() MUST be called before any use of BoAT semaphore.
-    BoAT_sem_destroy() MUST be called after use of BoAT semaphore.
+    boatSemInit() MUST be called before any use of BoAT semaphore.
+    boatSemDestroy() MUST be called after use of BoAT semaphore.
 
 @return
     This function returns BOAT_SUCCESS if the initialization is successful.\n
@@ -48,20 +48,20 @@ Function: BoAT_sem_init()
     indicate the error, for reference in boaterrcode.h.
     
 
-@param[in] semaRef
-    A boat_sem struct pointer,the BoAT_sem_init() function shall \n
-    initialize the boat semaphore referred to by semaRef.
+@param[in] semRef
+    A boatSem struct pointer,the boatSemInit() function shall \n
+    initialize the boat semaphore referred to by semRef.
 
 @param[in] initialCount
     The value of the initialized boat semaphore shall be initialCount.
         
 *******************************************************************************/
-BOAT_RESULT BoAT_sem_init(boat_sem *semaRef,int initialCount);
+BOAT_RESULT boatSemInit(boatSem *semRef,int initialCount);
 
 /*!*****************************************************************************
 @brief Destroy a Boat semaphore
 
-Function: BoAT_sem_destroy()
+Function: boatSemDestroy()
 
     This function destroys a semaphore instance and deinit the boat semaphore.
 
@@ -71,41 +71,41 @@ Function: BoAT_sem_destroy()
     indicate the error, for reference in boaterrcode.h.
     
 
-@param[in] semaRef
-    A boat_sem struct pointer,the BoAT_sem_destroy() function shall \n
-    destroy the boat semaphore indicated by semaRef.
+@param[in] semRef
+    A boatSem struct pointer,the boatSemDestroy() function shall \n
+    destroy the boat semaphore indicated by semRef.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_sem_destroy(boat_sem *semaRef);
+BOAT_RESULT boatSemDestroy(boatSem *semRef);
 
 /*!*****************************************************************************
 @brief Unlock a Boat semaphore
 
-Function: BoAT_sem_post()
+Function: boatSemPost()
 
-     The BoAT_sem_post() function shall unlock the Boat semaphore referenced by\n
-     semaRef. 
+     The boatSemPost() function shall unlock the Boat semaphore referenced by\n
+     semRef. 
 
 @return
     This function returns BOAT_SUCCESS if the unlock operation is successful.\n
     Otherwise it returns BOAT_ERROR or a negative value to indicate the error, \n
     for reference in boaterrcode.h.    
 
-@param[in] semaRef
-    A boat_sem struct pointer,The BoAT_sem_post() function shall unlock\n
-    the Boat semaphore referenced by semaRef by performing a semaphore \n
+@param[in] semRef
+    A boatSem struct pointer,The boatSemPost() function shall unlock\n
+    the Boat semaphore referenced by semRef by performing a semaphore \n
     unlock operation on that BoAT semaphore.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_sem_post(boat_sem *semaRef);
+BOAT_RESULT boatSemPost(boatSem *semRef);
 
 /*!*****************************************************************************
 @brief Lock a Boat semaphore
 
-Function: BoAT_sem_wait()
+Function: boatSemWait()
 
-     The BoAT_sem_wait() function shall lock the Boat semaphore referenced by
-     semaRef. 
+     The boatSemWait() function shall lock the Boat semaphore referenced by
+     semRef. 
 
 @return
     This function returns BOAT_SUCCESS if the lock operation is successful.\n
@@ -113,12 +113,12 @@ Function: BoAT_sem_wait()
     indicate the error, for reference in boaterrcode.h.\n\n
 
        If the timeout has already expired by the time of the call, and the \n
-    boat semaphore could not be locked immediately, then BoAT_sem_wait() \n
+    boat semaphore could not be locked immediately, then boatSemWait() \n
     return a timeout error (BOAT_ERROR_TIMEOUT)
 
-@param[in] semaRef
-    A boat_sem struct pointer,The BoAT_sem_wait() function shall lock\n
-    the Boat semaphore referenced by semaRef by performing a semaphore \n
+@param[in] semRef
+    A boatSem struct pointer,The boatSemWait() function shall lock\n
+    the Boat semaphore referenced by semRef by performing a semaphore \n
     lock operation on that BoAT semaphore.
 
 @param[in] timeout
@@ -126,7 +126,7 @@ Function: BoAT_sem_wait()
     block if the decrement cannot be immediately performed.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_sem_wait(boat_sem *semaRef,BUINT32 timeout);
+BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout);
 #endif
 
 //!@brief The APIs of BoAT mutex object
@@ -234,17 +234,17 @@ BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout);
 //!@brief The APIs of BoAT queue object
 
 #ifdef PLATFORM_OSAL_QUEUE
-typedef struct boat_platform_queue boat_queue;
+typedef struct boatPlatformQueue boatQueue;
 
 /*!*****************************************************************************
 @brief Init a Boat queue
 
-Function: BoAT_msgqueue_init()
+Function: boatQueueInit()
 
     This function create a queue instance and init the boat queue.
 
-    BoAT_msgqueue_init() MUST be called before any use of BoAT queue.
-    BoAT_msgqueue_delete() MUST be called after use of BoAT queue.
+    boatQueueInit() MUST be called before any use of BoAT queue.
+    boatQueueDelete() MUST be called after use of BoAT queue.
 
 @return
     This function returns BOAT_SUCCESS if the initialization is successful.\n
@@ -253,7 +253,7 @@ Function: BoAT_msgqueue_init()
     
 
 @param[in] msgQRef
-    A boat_queue struct pointer,the BoAT_msgqueue_init() function shall \n
+    A boatQueue struct pointer,the boatQueueInit() function shall \n
     initialize the boat queue referred to by msgQRef.
 
 @param[in] queueName
@@ -266,13 +266,13 @@ Function: BoAT_msgqueue_init()
     The maxNumber is the max amount of messages on queue.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_msgqueue_init(boat_queue *msgQRef, char *queueName, BUINT32 maxSize, BUINT32 maxNumber);
+BOAT_RESULT boatQueueInit(boatQueue *msgQRef, char *queueName, BUINT32 maxSize, BUINT32 maxNumber);
 
 
 /*!*****************************************************************************
 @brief Destroy a Boat queue
 
-Function: BoAT_msgqueue_delete()
+Function: boatQueueDelete()
 
     This function destroys a queue instance and deinit the boat queue.
 
@@ -282,18 +282,18 @@ Function: BoAT_msgqueue_delete()
     indicate the error, for reference in boaterrcode.h.    
 
 @param[in] msgQRef
-    A boat_queue struct pointer,the BoAT_msgqueue_delete() function shall \n
+    A boatQueue struct pointer,the boatQueueDelete() function shall \n
     destroy the boat queue indicated by msgQRef.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_msgqueue_delete(boat_queue *msgQRef);
+BOAT_RESULT boatQueueDelete(boatQueue *msgQRef);
 
 /*!*****************************************************************************
 @brief Send data to a boat queue
 
-Function: BoAT_msgqueue_send()
+Function: boatQueueSend()
 
-     The BoAT_msgqueue_send() function shall send a message to the Boat queue \n
+     The boatQueueSend() function shall send a message to the Boat queue \n
      referenced by msgQRef. 
 
 @return
@@ -302,7 +302,7 @@ Function: BoAT_msgqueue_send()
     for reference in boaterrcode.h.    
 
 @param[in] msgQRef
-    A boat_queue struct pointer,the BoAT_msgqueue_send() function shall send \n
+    A boatQueue struct pointer,the boatQueueSend() function shall send \n
     data to the boat queue referred to by the boat queue descriptor msgQRef.
 
 @param[in] msgPtr
@@ -313,14 +313,14 @@ Function: BoAT_msgqueue_send()
     The msgLen specifies the length (by byte) of the data pointed to by msg_ptr.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_msgqueue_send(const boat_queue *msgQRef, unsigned char *msgPtr, BUINT32 msgLen);
+BOAT_RESULT boatQueueSend(const boatQueue *msgQRef, unsigned char *msgPtr, BUINT32 msgLen);
 
 /*!*****************************************************************************
 @brief Receive data from a boat queue
 
-Function: BoAT_msgqueue_recv()
+Function: boatQueueReceive()
 
-     The BoAT_msgqueue_recv() function shall receive data from the Boat queue
+     The boatQueueReceive() function shall receive data from the Boat queue
      referenced by msgQRef. 
 
 @return
@@ -328,12 +328,12 @@ Function: BoAT_msgqueue_recv()
     Otherwise it returns BOAT_ERROR or a negative value to \n
     indicate the error, for reference in boaterrcode.h.\n\n
 
-       If the BoAT_msgqueue_recv() could not receive data frome the queue before\n
-       the specified timeout expired, then BoAT_msgqueue_recv() return a timeout\n
+       If the boatQueueReceive() could not receive data frome the queue before\n
+       the specified timeout expired, then boatQueueReceive() return a timeout\n
        error (BOAT_ERROR_TIMEOUT)
 
 @param[in] msgQRef
-    A boat_queue struct pointer,the BoAT_msgqueue_recv() function shall receive\n
+    A boatQueue struct pointer,the boatQueueReceive() function shall receive\n
     data from the boat queue referred to by msgQRef.
 
 @param[in] msgPtr
@@ -349,7 +349,7 @@ Function: BoAT_msgqueue_recv()
     should block if the receiving cannot be immediately performed.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_msgqueue_recv(const boat_queue *msgQRef, unsigned char *msgPtr, BUINT32 msgLen ,BUINT32 timeout);
+BOAT_RESULT boatQueueReceive(const boatQueue *msgQRef, unsigned char *msgPtr, BUINT32 msgLen ,BUINT32 timeout);
 
 
 #endif
@@ -389,7 +389,7 @@ Function: boatTaskCreat()
 @param[in] argv
     The arg is passed as the sole argument of taskfunc().
 *******************************************************************************/
-BOAT_RESULT boatTaskCreat(boatTask *taskRef, char *taskName, BUINT32 stacksize, BUINT32 priority, void (*taskfunc)(void *), void *argv);
+BOAT_RESULT boatTaskCreat(boatTask *taskRef, char *taskName, BUINT32 stackSize, BUINT32 priority, void (*taskfunc)(void *), void *argv);
 
 /*!*****************************************************************************
 @brief Destroy a Boat task
@@ -449,7 +449,7 @@ Function: boatTimerStart()
 
 @param[in] initialTime
     Initial expiration time in OS clock ticks.
-    The BoAT_getTickPeriod() can get the period of a tick.(in millisecond)
+    The boatGetTickPeriod() can get the period of a tick.(in millisecond)
 
 @param[in] intervalTime
     It indicates the period, in OS clock ticks, of a cyclic timer.\n
@@ -464,7 +464,7 @@ Function: boatTimerStart()
 @param[in] argv
     The argv is passed as the sole argument of callBackRoutine().
 *******************************************************************************/
-BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callBackRoutine)(void *), void *argv);
+BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callbackRoutine)(void *), void *argv);
 
 /*!*****************************************************************************
 @brief Destroy a Boat timer
@@ -489,7 +489,7 @@ BOAT_RESULT boatTimerDestroy(boatTimer *timerRef);
 /*!*****************************************************************************
 @brief GET the period of a OS clock tick
 
-Function: BoAT_getTickPeriod()
+Function: boatGetTickPeriod()
 
     This function return a OS clock tick period in millisecond.
 
@@ -498,7 +498,7 @@ Function: BoAT_getTickPeriod()
 
 @param[in] null
 *******************************************************************************/
-BUINT32 BoAT_getTickPeriod(void);
+BUINT32 boatGetTickPeriod(void);
 #endif
 
 #endif

@@ -10,7 +10,7 @@
 */
 /**
 ****************************************************************************************
-* @FilePath: boatTimer.c
+* @FilePath: boatTask.c
 * @Author: aitos
 * @Date: 2022-12-22 16:10:46
 * @LastEditors:
@@ -20,16 +20,16 @@
 */
 #include "boat_timer.h"
 #include "boatiotsdk.h"
-#include "boatOSAL.h"
+#include "boatosal.h"
 #include "boatlog.h"
 
 
-BOAT_RESULT boatTaskCreat(boatTask *taskRef, char *taskName, BUINT32 stacksize, BUINT32 priority, void (*taskfunc)(void *), void *argv)
+BOAT_RESULT boatTaskCreat(boatTask *taskRef, char *taskName, BUINT32 stackSize, BUINT32 priority, void (*taskfunc)(void *), void *argv)
 /////BOAT_RESULT boat_thread_creat(void *pvTaskCode, INT8 *pcName, UINT32 usStackDepth, void *pvParameters, UINT32 uxPriority)
 {
 	BSINT32 threadid = 0;
 
-	if(( taskRef == NULL) || (taskName == NULL) || (stacksize == 0) || (taskfunc == NULL))
+	if(( taskRef == NULL) || (taskName == NULL) || (stackSize == 0) || (taskfunc == NULL))
 	{
 		BoatPrintf(0,"[boat][task] boatTaskCreat bad paramters\r\n");
 		return BOAT_ERROR;
@@ -53,7 +53,7 @@ BOAT_RESULT boatTaskCreat(boatTask *taskRef, char *taskName, BUINT32 stacksize, 
 
 
 	
-    threadid = fibo_thread_create(taskfunc, taskName, stacksize, argv, priority);
+    threadid = fibo_thread_create(taskfunc, taskName, stackSize, argv, priority);
 	/////BoatPrintf(0,"[boat][task] pt boatTaskCreat [%s] priority[%x][%x]\r\n",pp,priority,(BUINT32)threadid);
 	BoatPrintf(0,"[boat][task] tp boatTaskCreat TEST priority[%x][%x]\r\n",priority,(BUINT32)threadid);
 	if(threadid == 0)

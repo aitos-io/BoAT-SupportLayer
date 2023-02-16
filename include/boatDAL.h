@@ -28,11 +28,11 @@
 
 #include "boattypes.h"
 #include "boaterrcode.h"
-#include "platformDAL.h"
+#include "boatplatformdal.h"
 
 #ifdef PLATFORM_DAL_UART
 //!@brief DAL boat uart object descriptor
-typedef struct boatPlatformUART boatUART;
+typedef struct boatPlatformUART boatUart;
 
 //!@brief DAL boat uart configuration parameters
 typedef struct {
@@ -41,21 +41,21 @@ typedef struct {
     unsgined char   databit;	//!< The data bits of the DAL uart device,5\6\7\8
     unsgined char   stopbit;	//!< The stop bits of the DAL uart device,1\2
     unsgined char   parity;	//!< The parity check of the DAL uart device,ODD\EVEN
-}baot_uart_config;
+}boatUartConfig;
 
 /*!*****************************************************************************
 @brief Uart receiving call back function type defination
 
-Function: uart_rx_callback()
+Function: boatUartRxCallback()
 
-     The uart_rx_callback() transmits the data received by the DAL uart\n
+     The boatUartRxCallback() transmits the data received by the DAL uart\n
      device to the user who defined this call back function.
 
 @return
     This function returns void.    
 
-@param[in] UARTRef
-    A boat_uart struct pointer,the UARTRef is a boat uart descriptor\n
+@param[in] uartRef
+    A boatUart struct pointer,the uartRef is a boat uart descriptor\n
     indicates which uart the received data comes from.
 
 @param[in] data
@@ -66,23 +66,23 @@ Function: uart_rx_callback()
     uart device.
 
 *******************************************************************************/
-typedef void (*uart_rx_callback)(boat_uart *UARTRef,  unsigned char *data, BUINT32 len);
+typedef void (*boatUartRxCallback)(boatUart *uartRef,  unsigned char *data, BUINT32 len);
 
 /*!*****************************************************************************
 @brief Init a BoAT uart device
 
-Function: BoAT_uart_init()
+Function: boatUartInit()
 
-     The BoAT_uart_init() function open a uart devie and \n
-     init the boat_uart descriptor.
+     The boatUartInit() function open a uart devie and \n
+     init the boatUart descriptor.
 
 @return
     This function returns BOAT_SUCCESS if the initialization is successful.\n
     Otherwise it returns BOAT_ERROR or a negative value to \n
     indicate the error, for reference in boaterrcode.h.  
 
-@param[in] UARTRef
-    A boat_uart struct pointer,the UARTRef is the boat_uart descriptor \n
+@param[in] uartRef
+    A boatUart struct pointer,the uartRef is the boatUart descriptor \n
     used to indicate which uart device is opened.
 
 @param[in] config
@@ -98,22 +98,22 @@ Function: BoAT_uart_init()
     This function is used to get data from uart device.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_uart_init(boat_uart *UARTRef,BoAT_uart_config_t config,uart_rx_callback rxCallback);
+BOAT_RESULT boatUartInit(boatUart *uartRef,BoAT_uart_config_t config,boatUartRxCallback rxCallback);
 
 /*!*****************************************************************************
 @brief Sending data through the uart
 
-Function: BoAT_uart_write()
+Function: boatUartWrite()
 
-     The BoAT_uart_write() sends data to the uart device specified by UARTRef.
+     The boatUartWrite() sends data to the uart device specified by uartRef.
 
 @return
     This function returns BOAT_SUCCESS if the transmission is successful.\n
     Otherwise it returns BOAT_ERROR or a negative value to \n
     indicate the error, for reference in boaterrcode.h.     
 
-@param[in] UARTRef
-    A boat_uart struct pointer,the UARTRef indicates which uart device\n
+@param[in] uartRef
+    A boatUart struct pointer,the uartRef indicates which uart device\n
     will be used to send data.
 
 @param[in] data
@@ -122,34 +122,34 @@ Function: BoAT_uart_write()
 @param[in] len
     The len is the length of sending data in bytes.
 *******************************************************************************/
-BOAT_RESULT BoAT_uart_write(boat_uart *UARTRef,unsigned char *data, BBUINT32 len);
+BOAT_RESULT boatUartWrite(boatUart *uartRef,unsigned char *data, BBUINT32 len);
 
 /*!*****************************************************************************
 @brief Deinit a BoAT uart device
 
-Function: BoAT_uart_deinit()
+Function: boatUartDeinit()
 
-     The BoAT_uart_deinit() function close a uart devie and \n
-     deinit the boat_uart descriptor.
+     The boatUartDeinit() function close a uart devie and \n
+     deinit the boatUart descriptor.
 
 @return
     This function returns BOAT_SUCCESS if the deinit is successful.\n
     Otherwise it returns BOAT_ERROR or a negative value to \n
     indicate the error, for reference in boaterrcode.h.     
 
-@param[in] UARTRef
-    A boat_uart struct pointer,the UARTRef indicates which uart device\n
+@param[in] uartRef
+    A boatUart struct pointer,the uartRef indicates which uart device\n
     will be closed.
 
 *******************************************************************************/
-BOAT_RESULT BoAT_uart_deinit(boat_uart *UARTRef);
+BOAT_RESULT boatUartDeinit(boatUart *uartRef);
 #endif
 
 //!@brief Abstract definition of VIRTUALAT object based on Linux
 #ifdef PLATFORM_DAL_VIRTUALAT
 
 //!@brief DAL boat uart object descriptor
-typedef struct boatPlatformVirtualAT boatVirtualAT;
+typedef struct boatPlatformVirtualAT boatVirtualAt;
 
 /*!*****************************************************************************
 @brief VirtualAT receieing call back function defination
@@ -167,15 +167,15 @@ Function: BoAT_virtualAT_rx_callback()
 @param[in] len
     The len indicates the length of data placed in content.
 *******************************************************************************/
-typedef void (* boatVirtualATRxCallback)(char *content,BUINT32 len);
+typedef void (* boatVirtualAtRxCallback)(char *content,BUINT32 len);
 
 
 /*!*****************************************************************************
 @brief Init a BoAT virtual AT channel
 
-Function: boatVirtualATOpen()
+Function: boatVirtualAtOpen()
 
-     The boatVirtualATOpen() function open/create a Virtual at channel\n
+     The boatVirtualAtOpen() function open/create a Virtual at channel\n
      used to send AT command to Module and receive AT response from Module.
 
 @return
@@ -188,15 +188,15 @@ Function: boatVirtualATOpen()
     This function is used to get AT response from Module.
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_init(BoAT_virtualAT_rx_callback fun_cb);
-BOAT_RESULT boatVirtualATOpen(boatVirtualATRxCallback rxCallback);
+BOAT_RESULT boatVirtualAtOpen(boatVirtualAtRxCallback rxCallback);
 
 
 /*!*****************************************************************************
 @brief Sending AT command to Module through virtualAT channel
 
-Function: boatVirtualATSend()
+Function: boatVirtualAtSend()
 
-     The boatVirtualATSend() sends AT command to Module.
+     The boatVirtualAtSend() sends AT command to Module.
 
 @return
     This function returns BOAT_SUCCESS if the transmission is successful.\n
@@ -211,14 +211,14 @@ Function: boatVirtualATSend()
 
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_send(char *cmd,int timeout);
-BOAT_RESULT boatVirtualATSend(char *cmd, BUINT16 len);
+BOAT_RESULT boatVirtualAtSend(char *cmd, BUINT16 len);
 
 /*!*****************************************************************************
 @brief Sending AT command to Module through virtualAT channel
 
-Function: boatVirtualATTimedSend()
+Function: boatVirtualAtTimedSend()
 
-     The boatVirtualATTimedSend() sends AT command to Module.
+     The boatVirtualAtTimedSend() sends AT command to Module.
 
 @return
     This function returns BOAT_SUCCESS if the transmission is successful.\n
@@ -237,14 +237,14 @@ Function: boatVirtualATTimedSend()
     n: set timeout time to n millisecond
 
 *******************************************************************************/
-BOAT_RESULT boatVirtualATTimedSend(char *cmd, BUINT16 len, BUINT16 timeout);
+BOAT_RESULT boatVirtualAtTimedSend(char *cmd, BUINT16 len, BUINT16 timeout);
 
 /*!*****************************************************************************
 @brief Deinit a BoAT virtual AT channel
 
-Function: baotVirtualATClose()
+Function: baotVirtualAtClose()
 
-     The baotVirtualATClose() function close a virtual AT channel.
+     The baotVirtualAtClose() function close a virtual AT channel.
 
 @return
     This function returns BOAT_SUCCESS if the closing is successful.\n
@@ -253,7 +253,7 @@ Function: baotVirtualATClose()
 
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_deinit(void);
-BOAT_RESULT baotVirtualATClose(void);
+BOAT_RESULT baotVirtualAtClose(void);
 
 #endif
 
@@ -262,20 +262,20 @@ BOAT_RESULT baotVirtualATClose(void);
 
 #ifdef PLATFORM_DAL_I2C
 typedef struct {
-	BUINT32 I2CSpeed;	//! 100000 = 100k, 400000 = 400k
-	BUINT8  I2CSlaveAddrBits; //! 0: 7 bits, 1: 10 bits
-	BUINT8	I2CSlaveDevRegisterAddrLen;	//! 0: 1 byte, 1: 2 bytes, 2: 4 byte
-}BoATI2CConfig_t;
+	BUINT32 i2cSpeed;	//! 100000 = 100k, 400000 = 400k
+	BUINT8  i2cSlaveAddrBits; //! 0: 7 bits, 1: 10 bits
+	BUINT8	i2cSlaveDevRegisterAddrLen;	//! 0: 1 byte, 1: 2 bytes, 2: 4 byte
+}boatI2cConfig;
 
-typedef struct boatPlatformI2C boatI2C;
+typedef struct boatPlatformI2C boatI2c;
 
-BOAT_RESULT boatI2COpen(boatI2C *I2CRef,BUINT8 I2CPortNum,BoATI2CConfig_t I2CConfig);
-BOAT_RESULT boatI2CClose(boatI2C *I2CRef);
-BOAT_RESULT boatI2CMasterWrite(boatI2C *I2CRef, BUINT16 slave_addr, BUINT32 reg_addr, BUINT8 *data, BUINT16 datalen);
-BOAT_RESULT boatI2CMasterRead(boatI2C *I2CRef, BUINT16 slave_addr, BUINT32 reg_addr, BUINT8 *data, BUINT16 datalen);
+BOAT_RESULT boatI2cOpen(boatI2c *i2cRef,BUINT8 i2cPortNum,boatI2cConfig i2cConfig);
+BOAT_RESULT boatI2cClose(boatI2c *i2cRef);
+BOAT_RESULT boatI2cMasterWrite(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 dataLen);
+BOAT_RESULT boatI2cMasterRead(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 dataLen);
 				
-//! BOAT_RESULT boatI2CMasterSend(boatI2C *I2CRef, BUINT16 slave_addr, BUINT32 reg_addr, BUINT8 *data, BUINT16 datalen);
-//! BOAT_RESULT boatI2CSlaveReceie(boatI2C *I2CRef, BUINT16 slave_addr, BUINT32 reg_addr, BUINT8 *data, BUINT16 datalen);
+//! BOAT_RESULT boatI2CMasterSend(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 datalen);
+//! BOAT_RESULT boatI2CSlaveReceie(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 datalen);
 #endif
 
 #endif

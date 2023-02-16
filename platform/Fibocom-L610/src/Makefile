@@ -6,8 +6,8 @@ SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/rpc/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/protos/*/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/protos/*/*/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/protobuf-c/*.o) \
-				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/DAL/*.o) \
-				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/OSAL/*.o)
+				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/dal/*.o) \
+				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/osal/*.o)
 	
 
 PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/storage/*.o) \
@@ -20,8 +20,8 @@ PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-part
 			$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/crypto/aes/*.o) \
 			$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/port_crypto_default/*.o) 
 
-PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/DAL/*.o) \
-						$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/OSAL/*.o) \
+PORT_CRYPTO_OBJECTS += $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/dal/*.o) \
+						$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/src/osal/*.o) \
 
 
 LIBNAME = $(BOAT_LIB_DIR)/libboatvendor.a
@@ -36,8 +36,8 @@ $(LIBNAME): boatvendor_objs
 
 boatvendor_objs:
 	make -C port_crypto_default all
-	make -C DAL all
-	make -C OSAL all
+	make -C dal all
+	make -C osal all
 
 
 clean: $(CLEAN_SUBDIRS)

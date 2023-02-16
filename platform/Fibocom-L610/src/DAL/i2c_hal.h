@@ -46,9 +46,9 @@ BOAT_RESULT boat_close_i2c(int fd);
 *  This function send data block to slave device.
 * @param[in] fd
 *  device handle id opened;
-* @param[in] slave_addr
+* @param[in] slaveAddr
 *  address of slave device;
-* @param[in] reg_addr
+* @param[in] regAddr
 *  address of register
 * @param[in] *data
 *  data to send out
@@ -60,7 +60,7 @@ BOAT_RESULT boat_close_i2c(int fd);
 *   for details.
 ****************************************************************************************
 */
-BOAT_RESULT boat_i2c_send_block(int fd, BUINT8 slave_addr, BUINT16 reg_addr, BUINT8 *data, BUINT32 datalen);
+BOAT_RESULT boat_i2c_send_block(int fd, BUINT8 slaveAddr, BUINT16 regAddr, BUINT8 *data, BUINT32 datalen);
 
 /**
 ****************************************************************************************
@@ -68,9 +68,9 @@ BOAT_RESULT boat_i2c_send_block(int fd, BUINT8 slave_addr, BUINT16 reg_addr, BUI
 *  This function read data from slave device;
 * @param[in] fd
 *  device handle id opened;
-* @param[in] slave_addr
+* @param[in] slaveAddr
 *  address of slave device;
-* @param[in] reg_addr
+* @param[in] regAddr
 *  address of register
 * @param[in] *data
 *  data from slave device to store
@@ -82,7 +82,7 @@ BOAT_RESULT boat_i2c_send_block(int fd, BUINT8 slave_addr, BUINT16 reg_addr, BUI
 *   for details.
 ****************************************************************************************
 */
-BOAT_RESULT boat_i2c_read_data(int fd, BUINT8 slave_addr, BUINT16 reg_addr, BUINT8 *data, BUINT32 datalen);
+BOAT_RESULT boat_i2c_read_data(int fd, BUINT8 slaveAddr, BUINT16 regAddr, BUINT8 *data, BUINT32 datalen);
 
 void BoatSleepMs(BUINT32 ms);
 void *BoatMalloc(size_t size);
