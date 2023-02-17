@@ -3,9 +3,9 @@ SOURCES = $(wildcard *.c)
 OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keystore
 OBJECTS = $(patsubst %.c,$(OBJECTS_DIR)/%.o,$(SOURCES))
 		  
-.PHONY: all   keystore_SE
+.PHONY: all   keystore_SE keystore_soft
 
-all:   keystore_SE $(OBJECTS_DIR) $(OBJECTS)
+all:   keystore_SE keystore_soft $(OBJECTS_DIR) $(OBJECTS)
 
 keystore_soft:
 	make -C  soft all
