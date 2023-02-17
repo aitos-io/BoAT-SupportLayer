@@ -18,8 +18,8 @@
 #include "phNxpEsePal_i2c.h"
 #include "sm_types.h"
 #include "boatlog.h"
-//!#include "boatdal.h"
-#include "i2c_hal.h"
+//! #include "boatdal.h"
+#include "boatosal.h"
 
 #ifdef FLOW_VERBOSE
 #define NX_LOG_ENABLE_SMCOM_DEBUG 1

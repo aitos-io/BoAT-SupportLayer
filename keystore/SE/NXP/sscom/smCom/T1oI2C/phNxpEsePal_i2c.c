@@ -25,7 +25,7 @@
 #include "phNxpEsePal_i2c.h"
 #include "phEseStatus.h"
 #include <string.h>
-#include "i2c_hal.h"
+#include "boatdal.h"
 #include "boatlog.h"
 #include "boaterrcode.h"
 
@@ -41,7 +41,7 @@
 #include <time.h>
 
 #define MAX_RETRY_CNT 10
-int i2c_fd = 0;
+boatI2c i2c_fd = {0};
 
 /*******************************************************************************
 **
@@ -56,7 +56,7 @@ int i2c_fd = 0;
 *******************************************************************************/
 void phPalEse_i2c_close(void *pDevHandle)
 {
-    boat_close_i2c(i2c_fd);
+    boatI2cClose(&i2c_fd);
     pDevHandle = NULL;
 
     return;
@@ -77,13 +77,19 @@ void phPalEse_i2c_close(void *pDevHandle)
 *******************************************************************************/
 ESESTATUS phPalEse_i2c_open_and_configure(pphPalEse_Config_t pConfig)
 {
+    BOAT_RESULT ret = BOAT_SUCCESS;
+    boatI2cConfig I2CConfig;
+    I2CConfig.i2cSpeed = 100000;
+    I2CConfig.i2cSlaveAddrBits = 0;
+    I2CConfig.i2cSlaveDevRegisterAddrLen = 1;
     // void *conn_ctx = NULL;
-    i2c_fd = boat_open_i2c();
-    // if (i2c_fd < 0)
-    // {
-    //     BoatLog(BOAT_LOG_NORMAL, " open I2C device fail %d", i2c_fd);
-    //     return ESESTATUS_INVALID_DEVICE;
-    // }
+    // i2c_fd = boat_open_i2c();
+    ret = boatI2cOpen(&i2c_fd, 2, I2CConfig);
+    if (ret != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_NORMAL, " open I2C device fail %d", i2c_fd);
+        return ESESTATUS_INVALID_DEVICE;
+    }
     pConfig->pDevHandle = NULL;
     return ESESTATUS_SUCCESS;
 }
@@ -111,7 +117,7 @@ int phPalEse_i2c_read(void *pDevHandle, uint8_t *pBuffer, int nNbBytesToRead)
     // sm_sleep(ESE_POLL_DELAY_MS);
     while (numRead != nNbBytesToRead)
     {
-        ret = boat_i2c_read_data(i2c_fd, SMCOM_I2C_ADDRESS, I2C_BUS_0, pBuffer, nNbBytesToRead);
+        ret = boatI2cMasterRead(&i2c_fd, SMCOM_I2C_ADDRESS, I2C_BUS_0, pBuffer, nNbBytesToRead);
         if (ret != BOAT_SUCCESS)
         {
             BoatLog(BOAT_LOG_NORMAL, "_i2c_read() error : %d ", ret);
@@ -159,7 +165,7 @@ int phPalEse_i2c_write(void *pDevHandle, uint8_t *pBuffer, int nNbBytesToWrite)
     {
         /* 1ms delay to give ESE polling delay */
         BoatSleepMs(ESE_POLL_DELAY_MS);
-        ret = boat_i2c_send_block(i2c_fd, SMCOM_I2C_ADDRESS, I2C_BUS_0, pBuffer, nNbBytesToWrite);
+        ret = boatI2cMasterWrite(&i2c_fd, SMCOM_I2C_ADDRESS, I2C_BUS_0, pBuffer, nNbBytesToWrite);
         if (ret != BOAT_SUCCESS)
         {
             BoatLog(BOAT_LOG_NORMAL, "_i2c_write() error : %d ", ret);

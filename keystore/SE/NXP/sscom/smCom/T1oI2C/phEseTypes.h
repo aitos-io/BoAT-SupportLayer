@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "boatlog.h"
-#include "i2c_hal.h"
+#include "boatosal.h"
 
 #define I2C_OK 0
 #define I2C_FAILED 13
