@@ -23,6 +23,10 @@
 #include "persiststore.h"
 #include "boatkeystore.h"
 
+#include "boatlog.h"
+#include "boatosalcommon.h"
+#include "boat_keystore_intf.h"
+
 #if RPC_USE_LIBCURL == 1
 #include "curl/curl.h"
 #endif
@@ -1076,20 +1080,20 @@ BOAT_RESULT BoATIotKeypairDelete(BUINT8 index)
     BUINT8 lengthBytes[3] = {0};
     BUINT8 keypairnumBytes[4] = {0};
     BUINT8 *keypairData = NULL;
-    BoatStoreType storeType;
+    // BoatStoreType storeType;
     boat_try_declare;
     if (index > BOAT_MAX_KEYPAIR_NUM)
     {
         return BOAT_ERROR_KEYPAIR_KEY_INDEX_EXCEED;
     }
-    if (index == 0)
-    {
-        storeType = BOAT_STORE_TYPE_RAM;
-    }
-    else
-    {
-        storeType = BOAT_STORE_TYPE_FLASH;
-    }
+    // if (index == 0)
+    // {
+    //     storeType = BOAT_STORE_TYPE_RAM;
+    // }
+    // else
+    // {
+    //     storeType = BOAT_STORE_TYPE_FLASH;
+    // }
     /* onetime keypair
        index of onetime keypair must be 0
     */
