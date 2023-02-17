@@ -5,8 +5,10 @@ OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/platform/$(PLATFORM_TARGET)/sr
 OBJECTS = $(patsubst %.c,$(OBJECTS_DIR)/%.o,$(SOURCES))
 
 
-all: $(OBJECTS_DIR) $(OBJECTS)
+all: dal_http $(OBJECTS_DIR) $(OBJECTS)
 
+dal_http:
+	make -C http all
 
 $(OBJECTS_DIR):
 	$(BOAT_MKDIR) -p $(OBJECTS_DIR)

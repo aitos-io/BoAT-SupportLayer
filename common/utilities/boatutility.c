@@ -23,6 +23,7 @@ boatutility.c contains utility functions for boatwallet.
 #include "boatinternal.h"
 #include "boatlog.h"
 #include "base64.h"
+#include "boatosalcommon.h"
 
 //!@brief Literal representation of log level
 const BCHAR *const g_log_level_name_str[] =
@@ -886,7 +887,6 @@ int add_TL_withOffset(BUINT8 bTag, BUINT8 *pbBuff, BUINT32 *nOffset, BUINT32 nLe
         nLen += 1;
         pbBuff[*nOffset] = 0x00;
     }
-    //鍒ゆ柇nLen澶у皬
     if (nLen < 0x80) // nLen < 0x80
     {
         nTLLen = 2;
@@ -1409,10 +1409,11 @@ BCHAR *UtilityNative2PKCS(KeypairNative keypair)
     len += UtilityGetTLV_LL_from_len(len_level_2) + 1 + len_level_2; // pubkey
     len += UtilityGetTLV_LL_from_len(len) + 1 + len;                 // all hex data
     dataHex = BoatMalloc(len);
-    if(NULL == dataHex){
+    if (NULL == dataHex)
+    {
         return NULL;
     }
-    memcpy(dataHex + offset,version,sizeof(version));
+    memcpy(dataHex + offset, version, sizeof(version));
     offset += sizeof(version);
     memcpy(dataHex + offset, keypair.prikey, keypair.prikeylen);
     add_TL_withOffset(BoAT_ASN1_OCTET_STRING, dataHex, &offset, keypair.prikeylen); // prikey
