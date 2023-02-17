@@ -24,21 +24,16 @@ RPC_USE_XXX macros.
 
 #include "boatconfig.h"
 #include "boatinternal.h"
-#include "mbedhttpport.h"
+#include "boathttpport.h"
 
 void *RpcInit(void)
 {
     void *rpc_context_ptr = NULL;
 
-#if RPC_USE_LIBCURL == 1
-    rpc_context_ptr = CurlPortInit();
-#elif RPC_USE_MBEDHTTPPORT == 1
-    rpc_context_ptr = MbedHttpPortInit();
-#endif
+    rpc_context_ptr = BoatHttpPortInit();
 
     return rpc_context_ptr;
 }
-
 
 void RpcDeinit(void *rpc_context_ptr)
 {
@@ -46,42 +41,26 @@ void RpcDeinit(void *rpc_context_ptr)
     {
         return;
     }
-    
-#if RPC_USE_LIBCURL == 1
-    CurlPortDeinit(rpc_context_ptr);
-#elif RPC_USE_MBEDHTTPPORT == 1
-    MbedHttpPortDeinit(rpc_context_ptr);
-#endif
-}
 
+    BoatHttpPortDeinit(rpc_context_ptr);
+}
 
 BOAT_RESULT RpcRequestSet(void *rpc_context_ptr, BCHAR *remote_url_str)
 {
-    BOAT_RESULT result = BOAT_ERROR;
+    // BOAT_RESULT result = BOAT_ERROR;
 
-#if RPC_USE_LIBCURL == 1    
-    return CurlPortSetOpt((CurlPortContext*)rpc_context_ptr, remote_url_str);
-#elif RPC_USE_MBEDHTTPPORT == 1
-	return MbedHttpPortSetOpt((MbedHttpPortContext*)rpc_context_ptr, remote_url_str);
-#endif
-    return result;
+    return BoatHttpPortSetOpt((BoatHttpPortContext *)rpc_context_ptr, remote_url_str);
 }
-
 
 BOAT_RESULT RpcRequestSync(void *rpc_context_ptr,
                            BUINT8 *request_ptr,
                            BUINT32 request_len,
                            BOAT_OUT BUINT8 **response_pptr,
-                           BOAT_OUT BUINT32 *response_len_ptr )
+                           BOAT_OUT BUINT32 *response_len_ptr)
 {
     BOAT_RESULT result = BOAT_ERROR;
-    
-#if RPC_USE_LIBCURL == 1
-    result = CurlPortRequestSync(rpc_context_ptr, (const BCHAR *)request_ptr, request_len, 
-								 (BOAT_OUT BCHAR **)response_pptr, response_len_ptr);
-#elif RPC_USE_MBEDHTTPPORT == 1
-    result = MbedHttpPortRequestSync(rpc_context_ptr, (const BCHAR *)request_ptr, request_len, (BOAT_OUT BCHAR **)response_pptr, response_len_ptr);
-#endif
+
+    result = BoatHttpPortRequestSync(rpc_context_ptr, (const BCHAR *)request_ptr, request_len, (BOAT_OUT BCHAR **)response_pptr, response_len_ptr);
 
     return result;
 }
