@@ -55,4 +55,13 @@ struct boatPlatformI2C{
 //! };
 #endif
 
+#ifndef PLATFORM_DAL_BLE_SERVICE
+#define PLATFORM_DAL_BLE_SERVICE
+
+#include "fibo_opencpu.h"
+
+extern void dal_bleService_sig_callback(GAPP_SIGNAL_ID_T sig, va_list arg);
+
+#endif
+
 #endif
