@@ -4,7 +4,7 @@
 #include "boaterrcode.h"
 #include "boatDAL.h"
 
-void (* dalBleServiceCallback)(UINT8 *buf,UINT32 len);
+UINT32 (* dalBleServiceCallback)(UINT8 *buf,UINT32 len);
 
 /*
 * Mark the status of the BLE service. 
