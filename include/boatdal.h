@@ -167,7 +167,7 @@ Function: BoAT_virtualAT_rx_callback()
 @param[in] len
     The len indicates the length of data placed in content.
 *******************************************************************************/
-typedef void (* boatVirtualAtRxCallback)(char *content,BUINT32 len);
+typedef BUINT32 (* boatVirtualAtRxCallback)(char *content,BUINT32 len);
 
 
 /*!*****************************************************************************
@@ -277,7 +277,7 @@ Function: boatBleServiceRxCallback()
 @param[in] len
     The len indicates the length of data placed in content.
 *******************************************************************************/
-typedef void (* boatBleServiceRxCallback)(BUINT8 *,BUINT32 );
+typedef BUINT32 (* boatBleServiceRxCallback)(BUINT8 *,BUINT32 );
 
 
 /*!*****************************************************************************
