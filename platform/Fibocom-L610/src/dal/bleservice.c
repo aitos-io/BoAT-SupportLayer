@@ -2,8 +2,7 @@
 #include "boattypes.h"
 #include "boatlog.h"
 #include "boaterrcode.h"
-
-#include "boatplatformdal.h"
+#include "boatDAL.h"
 
 void (* dalBleServiceCallback)(UINT8 *buf,UINT32 len);
 
@@ -345,7 +344,7 @@ Function: boatBleServiceSendNOTIFICATION()
 *******************************************************************************/
 BOAT_RESULT boatBleServiceSendNOTIFICATION(BUINT8 *buf, BUINT16 len)
 {
-	if(((buf == NULL) || (len == 0)) || (strlen(buf) != len))
+	if((buf == NULL) || (len == 0))
     {
         return BOAT_ERROR_DAL_INVALID_ARGUMENT;
     }
@@ -392,7 +391,7 @@ Function: boatBleServiceSendINDICATION()
 *******************************************************************************/
 BOAT_RESULT boatBleServiceSendINDICATION(BUINT8 *buf, BUINT16 len)
 {
-	if(((buf == NULL) || (len == 0)) || (strlen(buf) != len))
+	if((buf == NULL) || (len == 0))
     {
         return BOAT_ERROR_DAL_INVALID_ARGUMENT;
     }
