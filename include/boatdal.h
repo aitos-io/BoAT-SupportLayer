@@ -257,7 +257,108 @@ BOAT_RESULT baotVirtualAtClose(void);
 
 #endif
 
+#ifdef PLATFORM_DAL_BLE_SERVICE
 
+//extern void dal_bleService_sig_callback(GAPP_SIGNAL_ID_T sig, va_list arg);
+
+/*!*****************************************************************************
+@brief BLE service return message call back function defination
+
+Function: boatBleServiceRxCallback()
+
+    The boatBleServiceRxCallback() return message to BLE client \n     
+
+@return
+    The length of message.  
+
+@param[in] buf
+    The buf points to the first address of returned message.
+
+@param[in] len
+    The len indicates the length of data placed in content.
+*******************************************************************************/
+typedef void (* boatBleServiceRxCallback)(BUINT8 *,BUINT32 );
+
+
+/*!*****************************************************************************
+@brief Init a BoAT BLE service
+
+Function: boatBleServiceInit()
+
+     The boatBleServiceInit() function init a BLE service \n
+     used to register callback function,turn on BT,set ble service name, \n
+     create a service and characteristic,open the broadcast.
+
+@return
+    This function returns BOAT_SUCCESS if the initialization is successful. \n
+    Otherwise it returns BOAT_ERROR or a negative value to \n
+    indicate the error, for reference in boaterrcode.h.  
+
+@param[in] rxCallback
+    The rxCallback is the ble service receiving call back function defined by user.
+    This function is used to get response message from ble service by ble client.
+*******************************************************************************/
+BOAT_RESULT boatBleServiceInit(boatBleServiceRxCallback rxCallback);
+
+
+/*!*****************************************************************************
+@brief Sending notification message to ble client by ble service
+
+Function: boatBleServiceSendNOTIFICATION()
+
+     The boatBleServiceSendNOTIFICATION() sends notification message to ble client.
+
+@return
+    This function returns BOAT_SUCCESS if the transmission is successful.\n
+    Otherwise it returns BOAT_ERROR or a negative value to \n
+    indicate the error, for reference in boaterrcode.h.
+
+@param[in] buf
+    The cmd points to the first address of the message.
+
+@param[in] len
+	The len indicates the number of buf.
+
+*******************************************************************************/
+BOAT_RESULT boatBleServiceSendNOTIFICATION(BUINT8 *buf, BUINT16 len);
+
+
+/*!*****************************************************************************
+@brief Sending indication message to ble client by ble service
+
+Function: boatBleServiceSendINDICATION()
+
+     The boatBleServiceSendINDICATION() sends indication message to ble client.
+
+@return
+    This function returns BOAT_SUCCESS if the transmission is successful.\n
+    Otherwise it returns BOAT_ERROR or a negative value to \n
+    indicate the error, for reference in boaterrcode.h.
+
+@param[in] buf
+    The cmd points to the first address of the message.
+
+@param[in] len
+	The len indicates the number of buf.
+
+*******************************************************************************/
+BOAT_RESULT boatBleServiceSendINDICATION(BUINT8 *buf, BUINT16 len);
+
+/*!*****************************************************************************
+@brief Deinit a BoAT BLE service
+
+Function: boatBleServiceDeinit()
+
+     The boatBleServiceDeinit() function close a ble service.
+
+@return
+    This function returns BOAT_SUCCESS if the closing is successful.\n
+    Otherwise it returns BOAT_ERROR or a negative value to \n
+    indicate the error, for reference in boaterrcode.h.    
+
+*******************************************************************************/
+BOAT_RESULT boatBleServiceDeinit(void);
+#endif
 
 
 #ifdef PLATFORM_DAL_I2C
