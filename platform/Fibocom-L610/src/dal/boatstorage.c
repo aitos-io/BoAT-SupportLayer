@@ -72,15 +72,14 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
         file_fd = fibo_file_open(BOAT_FILE_STOREDATA, FS_O_CREAT);
         fibo_file_close(file_fd);
         file_fd = fibo_file_open(BOAT_FILE_STOREDATA, FS_O_RDWR);
+        if (file_fd < 0)
+        {
+            BoatLog(BOAT_LOG_CRITICAL, "Failed to create file: %s.", BOAT_FILE_STOREDATA);
+            return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+        }
     }
+    
     /* write to file-system */
-    // file_ptr = fopen(fileName, "wb");
-    if (file_fd < 0)
-    {
-        BoatLog(BOAT_LOG_CRITICAL, "Failed to create file: %s.", BOAT_FILE_STOREDATA);
-        return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
-    }
-
     size = fibo_file_getSize(BOAT_FILE_STOREDATA);
     if (size < offset)
     {
