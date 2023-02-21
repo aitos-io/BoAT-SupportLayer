@@ -3,10 +3,9 @@
 #include "fibo_opencpu.h"
 #include "boattypes.h"
 #include "boaterrcode.h"
+#include "boatDAL.h"
 
-#include "boatplatformdal.h"
-
-void (* dalVirtualATCallback)(char *content,BUINT32 len);
+void (* dalVirtualAtCallback)(char *content,BUINT32 len);
 
 /*
 * Mark the use status of the virtual AT channel. 
@@ -17,7 +16,7 @@ static BBOOL g_virtualAT_Channel_is_used = BOAT_FALSE;
 
 void dal_virtualAT_callback(BUINT8 *buf, BUINT16 len)
 {
-    dalVirtualATCallback((char *)buf,(BUINT32)len);
+    dalVirtualAtCallback((char *)buf,(BUINT32)len);
 }
 
 /*!*****************************************************************************
@@ -38,13 +37,13 @@ Function: boatVirtualATOpen()
     This function is used to get AT response from Module.
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_init(BoAT_virtualAT_rx_callback fun_cb);
-BOAT_RESULT boatVirtualATOpen(boatVirtualATRxCallback rxCallback)
+BOAT_RESULT boatVirtualATOpen(boatVirtualAtRxCallback rxCallback)
 {
     
     if(g_virtualAT_Channel_is_used == BOAT_FALSE)
     {
         /* register callback function */
-        dalVirtualATCallback = rxCallback;
+        dalVirtualAtCallback = rxCallback;
         g_virtualAT_Channel_is_used = BOAT_TRUE;
         return BOAT_SUCCESS;
     }
