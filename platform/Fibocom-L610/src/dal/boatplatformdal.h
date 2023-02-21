@@ -53,6 +53,9 @@ struct boatPlatformI2C{
 //! struct boatPlatformVirtualAT{
 //!    BSINT32 virtualATID; //! Fibocom-L610 virtual AT descriptor
 //! };
+
+extern void dal_virtualAT_callback(BUINT8 *buf, BUINT16 len);
+
 #endif
 
 #ifndef PLATFORM_DAL_BLE_SERVICE
