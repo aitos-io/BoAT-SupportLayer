@@ -5,7 +5,7 @@
 #include "boaterrcode.h"
 #include "boatDAL.h"
 
-void (* dalVirtualAtCallback)(char *content,BUINT32 len);
+BUINT32 (* dalVirtualAtCallback)(char *content,BUINT32 len);
 
 /*
 * Mark the use status of the virtual AT channel. 
