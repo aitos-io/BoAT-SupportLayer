@@ -83,7 +83,7 @@ BOAT_RESULT boatSemDestroy(boatSem *semRef);
 
 Function: boatSemPost()
 
-     The boatSemPost() function shall unlock the Boat semaphore referenced by\n
+     The boatSemPost() function shall unlock/increase the Boat semaphore referenced by\n
      semRef. 
 
 @return
@@ -104,7 +104,7 @@ BOAT_RESULT boatSemPost(boatSem *semRef);
 
 Function: boatSemWait()
 
-     The boatSemWait() function shall lock the Boat semaphore referenced by
+     The boatSemWait() function shall lock/reduce the Boat semaphore referenced by
      semRef. 
 
 @return
@@ -127,7 +127,7 @@ Function: boatSemWait()
 
 *******************************************************************************/
 BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout);
-#endif
+#endif/////PLATFORM_OSAL_SEM
 
 //!@brief The APIs of BoAT mutex object
 
@@ -229,7 +229,7 @@ Function: boatMutexLock()
 *******************************************************************************/
 BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout);
 
-#endif
+#endif/////PLATFORM_OSAL_MUTEX
 
 //!@brief The APIs of BoAT queue object
 
@@ -311,9 +311,15 @@ Function: boatQueueSend()
 
 @param[in] msgLen
     The msgLen specifies the length (by byte) of the data pointed to by msg_ptr.
+    The msgLen can not be great than the maxSize which set in boatQueueInit()
+
+@param[in] timeout 
+    The timeout specifies a limit on the amount of time (in seconds) that the call\n
+    should block if the sending cannot be immediately performed.
+
 
 *******************************************************************************/
-BOAT_RESULT boatQueueSend(const boatQueue *msgQRef, unsigned char *msgPtr, BUINT32 msgLen);
+BOAT_RESULT boatQueueSend(const boatQueue *msgQRef, BUINT8 *msgPtr, BUINT32 msgLen, BUINT32 timeout);
 
 /*!*****************************************************************************
 @brief Receive data from a boat queue
@@ -343,16 +349,18 @@ Function: boatQueueReceive()
 @param[in] msgLen
     The msgLen specifies the length (by byte) of the data received form a\n
     boat queue.
+    Fibocom API does not use this parameter
+    As default, usr must define the msgPtr buffer which size equal the maxSize set in
+    boatQueueInit. fibocom will copy all data of one message.
 
 @param[in] timeout 
     The timeout specifies a limit on the amount of time (in seconds) that the call\n
     should block if the receiving cannot be immediately performed.
 
 *******************************************************************************/
-BOAT_RESULT boatQueueReceive(const boatQueue *msgQRef, unsigned char *msgPtr, BUINT32 msgLen ,BUINT32 timeout);
+BOAT_RESULT boatQueueReceive(const boatQueue *msgQRef, BUINT8 *msgPtr, BUINT32 msgLen ,BUINT32 timeout);
 
-
-#endif
+#endif/////PLATFORM_OSAL_QUEUE
 
 //!@brief The APIs of BoAT task object
 
@@ -425,7 +433,7 @@ Function: boatTaskDelete()
 *******************************************************************************/
 BOAT_RESULT boatTaskDelete(boatTask *taskRef);
 
-#endif
+#endif/////PLATFORM_OSAL_TASK
 
 #ifdef PLATFORM_OSAL_TIMER
 typedef struct boatPlatformTimer boatTimer;
@@ -499,6 +507,6 @@ Function: boatGetTickPeriod()
 @param[in] null
 *******************************************************************************/
 BUINT32 boatGetTickPeriod(void);
-#endif
+#endif/////PLATFORM_OSAL_TIMER
 
-#endif
+#endif/////__BOATOSAL_H__

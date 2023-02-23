@@ -41,8 +41,8 @@ typedef struct {
     BUINT8          databit;	   //!< The data bits of the DAL uart device,5\6\7\8
     BUINT8          stopbit;	   //!< The stop bits of the DAL uart device,1\2
     BUINT8          parity;        //!< The parity check of the DAL uart device,0\1\2 : NONE\ODD\EVEN
-    BUINT32         rxBufSize;     //!< rx buffer size
-    BUINT32         txBufSize;     //!< tx buffer size
+    BUINT32         rxBufSize;     //!< rx buffer size , if input 0 then use the default size 256 bytes
+    BUINT32         txBufSize;     //!< tx buffer size , if input 0 then use the default size 256 bytes
 }boatUartConfig;
 
 /*!*****************************************************************************

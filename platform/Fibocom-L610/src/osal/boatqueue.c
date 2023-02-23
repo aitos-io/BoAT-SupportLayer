@@ -30,17 +30,17 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
 	
 	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }	
 	if(maxSize == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue maxSize is 0, invalid\r\n");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue maxSize is 0, invalid\r\n");
     	return BOAT_ERROR;
     }	
 	if(maxNumber == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue maxNumber is 0, invalid\r\n");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue maxNumber is 0, invalid\r\n");
     	return BOAT_ERROR;
     }	
 	///// queueName is not used
@@ -49,7 +49,7 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
 	fiboQueue = fibo_queue_create(maxNumber, maxSize);
 	if(fiboQueue > 0)
 	{
-		BoatPrintf(0, "[boat][queue]The boatQueue create queue succ\r\n");
+		BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue create queue succ\r\n");
 		queueRef->queueId = fiboQueue;
 		queueRef->maxSize = maxSize;
 		return BOAT_SUCCESS;
@@ -57,7 +57,7 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
 	else
 	{
 		queueRef->queueId = 0;    	
-		BoatPrintf(0, "[boat][queue]The boatQueue create queue succ\r\n");
+		BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue create queue succ\r\n");
 		return BOAT_ERROR;		
 	}
 
@@ -66,64 +66,62 @@ BOAT_RESULT boatQueueDelete(boatQueue *queueRef)
 {
 	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
 	if(queueRef->queueId == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue queueId is 0 in boatQueueDelete, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue queueId is 0 in boatQueueDelete, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
 
 	fibo_queue_delete(queueRef->queueId);
 
-	BoatPrintf(0, "[boat][queue]The boatQueue delete queue succ\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue delete queue succ\r\n");
 	queueRef->maxSize = 0;
 	queueRef->queueId = 0;
 
 	return BOAT_SUCCESS;
 }
-BOAT_RESULT boatQueueSend(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 msgLen)
+BOAT_RESULT boatQueueSend(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 msgLen,BUINT32 timeout)
 {
 	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
 
 	if(queueRef->queueId == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue queueId is 0 in boatQueueSend, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue queueId is 0 in boatQueueSend, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;///// BOAT_DATA_INVALID
     }
 
 	//! msgPtr check
 	if(msgPtr == NULL)
 	{
-    	BoatPrintf(0, "[boat][queue]The boatQueue msgPtr is NULL in boatQueueSend");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue msgPtr is NULL in boatQueueSend");
 		return BOAT_ERROR;
 	}
 
 	//! msgLen check
 	if(msgLen > queueRef->maxSize)
 	{
-		BoatPrintf(0,"[boat][queue] L610 queue msgLen great than maxSize of one message!\r\n");
+		BoatLog(BOAT_LOG_NORMAL, "[boat][queue] L610 queue msgLen great than maxSize of one message!\r\n");
 		return BOAT_ERROR;
 	}
 
 	//! msgLen check
-	if(msgLen == 0)
-	{
-		BoatPrintf(0,"[boat][queue] L610 queue msgLen equal 0, return succ!\r\n");
-		return BOAT_SUCCESS;
-	}
+	/////if(msgLen == 0)
+	/////{
+	/////	BoatLog(BOAT_LOG_NORMAL, "[boat][queue] L610 queue msgLen equal 0, return succ!\r\n");
+	/////	return BOAT_SUCCESS;
+	/////}
 	
-
-
-	BSINT32 ret = fibo_queue_put(queueRef->queueId,msgPtr,msgLen);
+	BSINT32 ret = fibo_queue_put(queueRef->queueId,msgPtr,timeout);
 	if(ret != 0)
 	{
-		BoatPrintf(0,"[boat][queue] L610 queue put failed!\r\n");
+		BoatLog(BOAT_LOG_NORMAL, "[boat][queue] L610 queue put failed!\r\n");
 		return BOAT_ERROR;
 	}
 	
@@ -134,20 +132,20 @@ BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 
 {
 	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
 
 	if(queueRef->queueId == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
     {
-    	BoatPrintf(0, "[boat][queue]The boatQueue queueId is 0 in boatQueueDelete, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue queueId is 0 in boatQueueDelete, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;///// BOAT_DATA_INVALID
     }
 
 	//! msgPtr check
 	if(msgPtr == NULL)
 	{
-    	BoatPrintf(0, "[boat][queue]The boatQueue msgPtr is NULL in boatQueueSend");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue msgPtr is NULL in boatQueueSend");
 		return BOAT_ERROR;
 	}
 	
@@ -158,7 +156,7 @@ BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 
 	BSINT32 ret = fibo_queue_get(queueRef->queueId, msgPtr, timeout);
 	if(ret != 0)
 	{
-		BoatPrintf(0,"[boat][queue] L610 queue get failed!\r\n");
+		BoatLog(BOAT_LOG_NORMAL, "[boat][queue] L610 queue get failed!\r\n");
 		return BOAT_ERROR;///// We do not know witch error is, timeout or error
 	}
 	

@@ -40,25 +40,25 @@
 BOAT_RESULT boatSemInit(boatSem *semRef,int initialCount)
 {
     BUINT32 fiboSem = 0;
-	BoatPrintf(0, "[boat][sem] begin to boatSemInit semRef address[%x]",(BUINT32)semRef);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] begin to boatSemInit semRef address[%x]",(BUINT32)semRef);
 	if(semRef == NULL)  
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem address is illegal in boatSemInit, bad address:%x",(BUINT32)semRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem address is illegal in boatSemInit, bad address:%x",(BUINT32)semRef);
     	return BOAT_ERROR;
     }
         
     
     fiboSem = fibo_sem_new(initialCount);
-    BoatPrintf(0, "[boat][sem] boatSemInit fibo_sem_new return id[%x]",fiboSem);
+    BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemInit fibo_sem_new return id[%x]",fiboSem);
 	if(fiboSem != 0)    /////	fibocom semRef id is a UINT32, if the return value does not equal 0,the value is valid.
     {
     	semRef->semId = fiboSem;
-    	BoatPrintf(0, "[boat][sem] boatSemInit OK 222,rtnVal[%x]",semRef->semId);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemInit OK 222,rtnVal[%x]",semRef->semId);
     }
 	else
     {
     	semRef->semId = fiboSem;
-    	BoatPrintf(0, "[boat][sem] boatSemInit failed,rtnVal is 0");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemInit failed,rtnVal is 0");
     	return BOAT_ERROR;
     }
 	return BOAT_SUCCESS;
@@ -79,19 +79,19 @@ BOAT_RESULT boatSemDestroy(boatSem *semRef)
 {
 	if(semRef == NULL)  
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem address is illegal in boatSemInit, bad address:%x",(BUINT32)semRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem address is illegal in boatSemInit, bad address:%x",(BUINT32)semRef);
     	return BOAT_ERROR;
     }
 	if(semRef->semId == 0)
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem->semId is 0, bad value\r\n");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem->semId is 0, bad value\r\n");
     	return BOAT_ERROR;
     }
 
-	BoatPrintf(0, "[boat][sem] begin to boatSemDestroy ID[%x]",semRef->semId);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] begin to boatSemDestroy ID[%x]",semRef->semId);
 
 	fibo_sem_free(semRef->semId); ///// no return value, void 
-   	BoatPrintf(0, "[boat][sem] boatSemDestroy ok");
+   	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemDestroy ok");
 
 	return BOAT_SUCCESS;
 }
@@ -113,36 +113,36 @@ BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout)
     
 	if(semRef == NULL)  
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem address is illegal in boatSemWait, bad address:%x",(BUINT32)semRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem address is illegal in boatSemWait, bad address:%x",(BUINT32)semRef);
     	return BOAT_ERROR;
     }
 	if(semRef->semId == 0)
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem->semId is 0, bad value\r\n");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem->semId is 0, bad value\r\n");
     	return BOAT_ERROR;
     }
 
-	BoatPrintf(0, "[boat][sem] begin to boatSemWait ID[%x] timeout[%d]",semRef->semId,timeout);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] begin to boatSemWait ID[%x] timeout[%d]",semRef->semId,timeout);
 	if(timeout > 0)    ///// try wait
     {
-    	BoatPrintf(0, "[boat][sem] boatSemWait call fiboSem_try_wait ID[%x] timeout[%d]",semRef->semId,timeout);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemWait call fiboSem_try_wait ID[%x] timeout[%d]",semRef->semId,timeout);
     	rtnVal = fibo_sem_try_wait(semRef->semId,timeout); // it will be blocked untill the semRef is unloked 
-    	BoatPrintf(0, "[boat][sem] boatSemWait retrun from fiboSem_try_wait ID[%x] timeout[%d]",semRef->semId,timeout);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemWait retrun from fiboSem_try_wait ID[%x] timeout[%d]",semRef->semId,timeout);
     	if(rtnVal > 0)    ///// succ
         {
-        	BoatPrintf(0, "[boat][sem] boatSemWait succ ID[%x] timeout[%d] [%d]",semRef->semId,timeout,rtnVal);
+        	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemWait succ ID[%x] timeout[%d] [%d]",semRef->semId,timeout,rtnVal);
         }
     	else///// timeout
         {
-        	BoatPrintf(0, "[boat][sem] boatSemWait time out ID[%x] timeout[%d] [%d]",semRef->semId,timeout,rtnVal);
+        	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemWait time out ID[%x] timeout[%d] [%d]",semRef->semId,timeout,rtnVal);
         	ret = BOAT_ERROR;/////rtnVal + BOAT_ERROR;    ///// need check the error value, define the same TIMEOUT ERROR value for OSAL
         }
     }
 	else
     {
-    	BoatPrintf(0, "[boat][sem] boatSemWait call fibo_Sem_wait ID[%x]",semRef->semId);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemWait call fibo_Sem_wait ID[%x]",semRef->semId);
     	fibo_sem_wait(semRef->semId); ///// it will be blocked untill the semRef is unloked ,no return value
-    	BoatPrintf(0, "[boat][sem] boatSemWait return from fibo_Sem_wait ID[%x]",semRef->semId);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemWait return from fibo_Sem_wait ID[%x]",semRef->semId);
     }
 
 	return ret;
@@ -165,20 +165,20 @@ BOAT_RESULT boatSemPost(boatSem *semRef)
 
 	if(semRef == NULL)  
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem address is illegal in boatSemPost, bad address:%x",(BUINT32)semRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem address is illegal in boatSemPost, bad address:%x",(BUINT32)semRef);
     	return BOAT_ERROR;
     }
 	if(semRef->semId == 0)
     {
-    	BoatPrintf(0, "[boat][sem] The boatSem->semId is 0, bad value\r\n");
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] The boatSem->semId is 0, bad value\r\n");
     	return BOAT_ERROR;
     }
 
-	BoatPrintf(0, "[boat][sem] boatSemPost call fibo_Sem_post ID[%x] ",semRef->semId);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemPost call fibo_Sem_post ID[%x] ",semRef->semId);
 
 	fibo_sem_signal(semRef->semId); ///// no return value
     
-	BoatPrintf(0, "[boat][sem] boatSemPost retrun from fibo_Sem_post ID[%x] ",semRef->semId);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] boatSemPost retrun from fibo_Sem_post ID[%x] ",semRef->semId);
 
 	return ret;
 }
