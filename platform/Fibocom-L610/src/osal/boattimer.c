@@ -26,7 +26,7 @@ BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 int
     {
         BoatLog(BOAT_LOG_NORMAL, "[boat][timer] boatTimerStart start a period timer[%x][%d]\r\n", intervalTime, intervalTime);
         rtnVal = fibo_timer_period_new(intervalTime, callbackRoutine, argv);
-        timerRef->timerID = rtnVal;
+		timerRef->timerId = rtnVal;
         if (rtnVal > 0)
         {
             BoatLog(BOAT_LOG_NORMAL, "[boat][timer] boatTimerStart start a period timer succ [%x]\r\n", rtnVal);
@@ -42,7 +42,7 @@ BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 int
     {
         BoatLog(BOAT_LOG_NORMAL, "[boat][timer] boatTimerStart start a one time timer[%x][%d]\r\n", initialTime, initialTime);
         rtnVal = fibo_timer_new(initialTime, callbackRoutine, argv);
-        timerRef->timerID = rtnVal;
+		timerRef->timerId = rtnVal;
         if (rtnVal > 0)
         {
             BoatLog(BOAT_LOG_NORMAL, "[boat][timer] boatTimerStart one time timer succ [%x]\r\n", rtnVal);
@@ -70,12 +70,12 @@ BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
         BoatLog(BOAT_LOG_NORMAL, "[boat][timer] boatTimerDestroy bad parameter\r\n");
         return BOAT_ERROR;
     }
-    if (timerRef->timerID > 0)
+	if(timerRef->timerId > 0)
     {
         bool bl;
         BSINT32 rtnVal = 0;
 
-        bl = fibo_timer_stop(timerRef->timerID);
+    	bl = fibo_timer_stop(timerRef->timerId);
         if (bl)
         {
             BoatLog(BOAT_LOG_NORMAL, "[boat][timer] fibo_timer_stop bool true\r\n");
@@ -84,14 +84,14 @@ BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
         {
             BoatLog(BOAT_LOG_NORMAL, "[boat][timer] fibo_timer_stop bool false\r\n");
         }
-        rtnVal = fibo_timer_free(timerRef->timerID);
+		rtnVal = fibo_timer_free(timerRef->timerId);
 
         BoatLog(BOAT_LOG_NORMAL, "[boat][timer] fibo_timer_free rtnVal[%d]\r\n", rtnVal);
 
-        timerRef->timerID = 0;
-        return BOAT_SUCCESS;
-    }
-    return BOAT_ERROR;
+		timerRef->timerId = 0;
+		return BOAT_SUCCESS;
+	}
+	return BOAT_ERROR;
 }
 
 BOAT_RESULT boat_Timestamp(BSINT64 *timestamp)
@@ -103,10 +103,10 @@ BOAT_RESULT boat_Timestamp(BSINT64 *timestamp)
 
 void boatTaskInitTimeridZero(boatTimer *timerRef)
 {
-    timerRef->timerID = 0;
+	timerRef->timerId = 0;
 }
 
 void boatTaskInitTimeridInvalid(boatTimer *timerRef)
 {
-    timerRef->timerID = 0x80ba2d00;
+	timerRef->timerId = 0x80ba2d00;
 }

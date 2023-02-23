@@ -72,7 +72,7 @@ BOAT_RESULT boatI2cOpen(boatI2c *i2cRef, BUINT8 i2cPortNum, boatI2cConfig i2cCon
         return BOAT_ERROR;
     }
 
-    BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] boatI2cOpen default value i2cRef->I2CID[%x] i2cConfig.i2cSpeed[%d] \n", i2cRef->I2CID, i2cConfig.i2cSpeed);
+    BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] boatI2cOpen default value i2cRef->i2cId[%x] i2cConfig.i2cSpeed[%d] \n", i2cRef->i2cId, i2cConfig.i2cSpeed);
 
     bsp1_1.i2c_name = i2cPortNum;
     if (i2cConfig.i2cSpeed == 100000)
@@ -107,7 +107,7 @@ BOAT_RESULT boatI2cOpen(boatI2c *i2cRef, BUINT8 i2cPortNum, boatI2cConfig i2cCon
     }
 
     //! set i2cRef value
-    i2cRef->I2CID = i2c_handle;
+    i2cRef->i2cId = i2c_handle;
     //! i2cRef->i2cConfig = i2cConfig;
     fibo_taskSleep(1000);
     return BOAT_SUCCESS;
@@ -136,9 +136,9 @@ BOAT_RESULT boatI2cClose(boatI2c *i2cRef)
     }
     //! i2c_Handle i2c_device = (i2c_Handle)fd;
     //! fibo_i2c_close(&i2c_device);
-    if (i2cRef->I2CID > 0)
+    if (i2cRef->i2cId > 0)
     {
-        rtnVal = fibo_i2c_close(&i2cRef->I2CID);
+        rtnVal = fibo_i2c_close(&i2cRef->i2cId);
         BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] L610 i2c fibo_i2c_close[%x]\r\n", rtnVal);
         if (rtnVal < 0)
         {
@@ -148,7 +148,7 @@ BOAT_RESULT boatI2cClose(boatI2c *i2cRef)
     }
     else
     {
-        BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] I2CRef->I2CID error[%x]\r\n", i2cRef->I2CID);
+        BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] I2CRef->i2cId error[%x]\r\n", i2cRef->i2cId);
         return BOAT_ERROR;
     }
     return BOAT_SUCCESS;
@@ -212,7 +212,7 @@ BOAT_RESULT boatI2cMasterWrite(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAd
     //! drvI2cSlave_t drv_i2c = {L610_slave_addr, 0, 0, false, false};
     drvI2cSlave_t drv_i2c = {L610_slave_addr, L610_reg_addr, 0, false, false};
     //! ret = fibo_i2c_Write(i2c_device, drv_i2c, data, datalen);
-    ret = fibo_i2c_Write(i2cRef->I2CID, drv_i2c, data, dataLen);
+    ret = fibo_i2c_Write(i2cRef->i2cId, drv_i2c, data, dataLen);
     if (ret != 0)
     {
         BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] Error sending \n");
@@ -281,7 +281,7 @@ BOAT_RESULT boatI2cMasterRead(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAdd
     //! drvI2cSlave_t drv_i2c = {slaveAddr, 0, 0, false, false};
     drvI2cSlave_t drv_i2c = {L610_slave_addr, L610_reg_addr, 0, false, false};
     //! ret = fibo_i2c_Read(i2c_device, drv_i2c, data, dataLen);
-    ret = fibo_i2c_Read(i2cRef->I2CID, drv_i2c, data, dataLen);
+    ret = fibo_i2c_Read(i2cRef->i2cId, drv_i2c, data, dataLen);
     if (ret != 0)
     {
         BoatLog(BOAT_LOG_NORMAL, "[boat][I2C] Error reading[%x] \n", ret);
@@ -290,7 +290,7 @@ BOAT_RESULT boatI2cMasterRead(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAdd
     return BOAT_SUCCESS;
 }
 
-void boatI2cInitI2CIDZero(boatI2c *I2C)
+void boatI2cIniti2cIdZero(boatI2c *I2C)
 {
-    I2C->I2CID = -1; ///// 230123 modified to -1
+	I2C->i2cId = 0;	///// 230123 modified to -1
 }

@@ -2,7 +2,7 @@
 #include "boattypes.h"
 #include "boatlog.h"
 #include "boaterrcode.h"
-#include "boatDAL.h"
+#include "boatdal.h"
 
 UINT32 (* dalBleServiceCallback)(UINT8 *buf,UINT32 len);
 

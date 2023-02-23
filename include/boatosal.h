@@ -29,7 +29,7 @@
 #include "boatplatformosal.h"
 
 
-#ifdef PLATFORM_OSAL_SEMA
+#ifdef PLATFORM_OSAL_SEM
 typedef struct boatPlatformSem boatSem;
 
 /*!*****************************************************************************

@@ -3,7 +3,7 @@
 #include "fibo_opencpu.h"
 #include "boattypes.h"
 #include "boaterrcode.h"
-#include "boatDAL.h"
+#include "boatdal.h"
 
 BUINT32 (* dalVirtualAtCallback)(char *content,BUINT32 len);
 

@@ -23,26 +23,27 @@
 */
 
 #include "drv_i2c.h"
+#include "fibo_opencpu.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
 
 
 //!@brief Abstract definition of uart object based on Linux
-#ifndef PLATFORM_DAL_UART_
-#define PLATFORM_DAL_UART_
+#ifndef PLATFORM_DAL_UART
+#define PLATFORM_DAL_UART
 struct boatPlatformUART{
-    int UARTid; //! Linux UARTaphore descriptor
+    hal_uart_port_t uartPort; //! Fibocom  UART descriptor
 };
-#endif
+#endif//PLATFORM_DAL_UART
 
 #ifndef PLATFORM_DAL_I2C
 #define PLATFORM_DAL_I2C
 
 struct boatPlatformI2C{
-    i2c_Handle I2CID; //! Linux UARTaphore descriptor
+    i2c_Handle i2cId; //! Linux UARTaphore descriptor
 };
-#endif
+#endif//PLATFORM_DAL_I2C
 
 
 

@@ -48,12 +48,12 @@ BOAT_RESULT boatTaskCreat(boatTask *taskRef, char *taskName, BUINT32 stackSize, 
     if (threadid == 0)
     {
         BoatLog(BOAT_LOG_NORMAL, "[boat][task] boatTaskCreat SUCC id[%x]\r\n", threadid);
-        taskRef->taskID = threadid;
+		taskRef->taskId = threadid;
         return BOAT_SUCCESS;
     }
 
     BoatLog(BOAT_LOG_NORMAL, "[boat][task] boatTaskCreat Failed id[%x]\r\n", threadid);
-    taskRef->taskID = threadid; ///// must be a nagtive integer
+	taskRef->taskId = threadid;	///// must be a nagtive integer
     return BOAT_ERROR;
 
     /////    return fibo_thread_create(pvTaskCode, pcName, usStackDepth, pvParameters, uxPriority);
@@ -81,5 +81,5 @@ BOAT_RESULT boatTaskDelete(boatTask *taskRef)
 
 void boatTaskInitTaskidNagtive(boatTask *Task)
 {
-    Task->taskID = -1; ///// 230123 modified to -1
+	Task->taskId =-1;	///// 230123 modified to -1
 }

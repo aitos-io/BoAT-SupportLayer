@@ -36,11 +36,13 @@ typedef struct boatPlatformUART boatUart;
 
 //!@brief DAL boat uart configuration parameters
 typedef struct {
-    int             portNum;	//!< The DAL uart device port number
-    int             baudrate;	//!< The baud rate of the DAL uart device,115200\57600\38400\9600...
-    unsgined char   databit;	//!< The data bits of the DAL uart device,5\6\7\8
-    unsgined char   stopbit;	//!< The stop bits of the DAL uart device,1\2
-    unsgined char   parity;	//!< The parity check of the DAL uart device,ODD\EVEN
+//! move out    BUINT8          portNum;	   //!< The DAL uart device port number
+    BUINT32         baudrate;	   //!< The baud rate of the DAL uart device,115200\57600\38400\9600...
+    BUINT8          databit;	   //!< The data bits of the DAL uart device,5\6\7\8
+    BUINT8          stopbit;	   //!< The stop bits of the DAL uart device,1\2
+    BUINT8          parity;        //!< The parity check of the DAL uart device,0\1\2 : NONE\ODD\EVEN
+    BUINT32         rxBufSize;     //!< rx buffer size
+    BUINT32         txBufSize;     //!< tx buffer size
 }boatUartConfig;
 
 /*!*****************************************************************************
@@ -98,7 +100,7 @@ Function: boatUartInit()
     This function is used to get data from uart device.
 
 *******************************************************************************/
-BOAT_RESULT boatUartInit(boatUart *uartRef,BoAT_uart_config_t config,boatUartRxCallback rxCallback);
+BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config,boatUartRxCallback rxCallback);
 
 /*!*****************************************************************************
 @brief Sending data through the uart
@@ -122,7 +124,7 @@ Function: boatUartWrite()
 @param[in] len
     The len is the length of sending data in bytes.
 *******************************************************************************/
-BOAT_RESULT boatUartWrite(boatUart *uartRef,unsigned char *data, BBUINT32 len);
+BOAT_RESULT boatUartWrite(boatUart *uartRef,unsigned char *data, BUINT32 len);
 
 /*!*****************************************************************************
 @brief Deinit a BoAT uart device
@@ -143,7 +145,7 @@ Function: boatUartDeinit()
 
 *******************************************************************************/
 BOAT_RESULT boatUartDeinit(boatUart *uartRef);
-#endif
+#endif//PLATFORM_DAL_UART
 
 //!@brief Abstract definition of VIRTUALAT object based on Linux
 #ifdef PLATFORM_DAL_VIRTUALAT

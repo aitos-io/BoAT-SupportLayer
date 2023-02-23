@@ -5,12 +5,12 @@
 
 ifeq ($(SOFT_CRYPTO), CRYPTO_DEFAULT)
 
-    BUILD_DEP := third-party rpc keypair utilities storage crypto_default keystore tests platform 
+    BUILD_DEP := third-party rpc keypair utilities storage crypto_default keystore platform 
     #cryptointf http2
 
 else ifeq ($(SOFT_CRYPTO), CRYPTO_MBEDTLS)
 
-    BUILD_DEP := third-party rpc keypair utilities keccak  storage mbedTLS keystore tests platform 
+    BUILD_DEP := third-party rpc keypair utilities keccak  storage mbedTLS keystore platform 
     #cryptointf http2
 
 else

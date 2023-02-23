@@ -31,55 +31,43 @@
 struct boatPlatformMutex{
     BUINT32 mutexID; //! fibocom-L610 mutex descriptor
 };
-#endif
+#endif/////PLATFORM_OSAL_MUTEX
 
 //!@brief Abstract definition of task object based on Ficocom L610 openCPU OS
 #ifndef PLATFORM_OSAL_TASK
 #define PLATFORM_OSAL_TASK
 struct boatPlatformTask{
-    BSINT32 taskID; //! fibocom-L610 thread descriptor
+    BSINT32 taskId; //! fibocom-L610 thread descriptor
 };
-#endif
+#endif/////PLATFORM_OSAL_TASK
 
 //!@brief Abstract definition of timer object based on Ficocom L610 openCPU OS
 #ifndef PLATFORM_OSAL_TIMER
 #define PLATFORM_OSAL_TIMER
 struct boatPlatformTimer{
-    BUINT32 timerID; //! fibocom-L610 timer descriptor
+    BUINT32 timerId; //! fibocom-L610 timer descriptor
 };
-#endif
+#endif/////PLATFORM_OSAL_TIMER
 
 
-#if 0
 
 //!@brief Abstract definition of semaphore object based on Ficocom L610 openCPU OS
-#ifndef PLATFORM_OSAL_SEMA
-#define PLATFORM_OSAL_SEMA
+#ifndef PLATFORM_OSAL_SEM
+#define PLATFORM_OSAL_SEM
+#define FIBO_SEM_MUTEX
+
 struct boatPlatformSem{
-    sem_t semid; //! fibocom-L610 semaphore descriptor
+    BUINT32 semId; //! Ficocom L610 semaphore descriptor
 };
-#endif
-
-
-//!@brief Abstract definition of mutex object based on Ficocom L610 openCPU OS
-#ifndef PLATFORM_OSAL_MUTEX
-#define PLATFORM_OSAL_MUTEX
-struct boatPlatformMutex{
-    BUINT32 mutexID; //! fibocom-L610 mutex descriptor
-};
-#endif
+#endif/////PLATFORM_OSAL_SEM
 
 //!@brief Abstract definition of message queue object based on Ficocom L610 openCPU OS
 #ifndef PLATFORM_OSAL_QUEUE
 #define PLATFORM_OSAL_QUEUE
 struct boatPlatformQueue{
-    mqd_t queueid; //! fibocom-L610 message queue descriptor
-    char *name; //! The name of message queue
+    BUINT32 queueId; //! fibocom-L610 message queue descriptor
+    BUINT32 maxSize; //! fibocom L610 put/get message buffer size must qeual maxSize, 
 };
-#endif
+#endif/////PLATFORM_OSAL_QUEUE
 
-
-
-
-#endif
-#endif
+#endif/////__BOATPLATFORMOSAL_H__
