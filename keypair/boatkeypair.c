@@ -27,10 +27,6 @@
 #include "boatplatformosal.h"
 #include "boat_keystore_intf.h"
 
-#if RPC_USE_LIBCURL == 1
-#include "curl/curl.h"
-#endif
-
 #include "cJSON.h"
 
 /**
@@ -1255,27 +1251,23 @@ BOAT_RESULT BoATIotKeypairDelete(BUINT8 index)
 
 BOAT_RESULT BoatIotSdkInit(void)
 {
+    BOAT_RESULT ret = BOAT_SUCCESS;
     // BUINT32 i;
     cJSON_Hooks hooks;
 
-#if RPC_USE_LIBCURL == 1
-    CURLcode curl_result;
-#endif
     hooks.malloc_fn = BoatMalloc;
     hooks.free_fn = BoatFree;
     cJSON_InitHooks(&hooks);
 
     // For Multi-Thread Support: CreateMutex Here
 
-#if RPC_USE_LIBCURL == 1
-    curl_result = curl_global_init(CURL_GLOBAL_DEFAULT);
+    ret = BoatHttpGlobalInit();
 
-    if (curl_result != CURLE_OK)
+    if (ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL, "Unable to initialize curl.");
         return BOAT_ERROR_CURL_INIT_FAIL;
     }
-#endif
 
     return BOAT_SUCCESS;
 }
@@ -1284,9 +1276,7 @@ void BoatIotSdkDeInit(void)
 {
     // BUINT32 i;
 
-#if RPC_USE_LIBCURL == 1
-    curl_global_cleanup();
-#endif
+    BoatHttpGlobalDeInit();
 
     // For Multi-Thread Support: DeleteMutex Here
 }

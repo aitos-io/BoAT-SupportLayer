@@ -351,4 +351,34 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
     return result;
 }
 
+/**
+****************************************************************************************
+* @brief:
+* This function init CURL_GLOBAL_DEFAULT
+* On platform L610, don't need to init this param
+* @return
+*  This function will return BOAT_SUCCESS if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BOAT_RESULT BoatHttpGlobalInit(void)
+{
+    return BOAT_SUCCESS;
+}
+
+/**
+****************************************************************************************
+* @brief:
+* This function deinit CURL_GLOBAL_DEFAULT
+* On platform L610, don't need to init this param
+* @return
+*  This function has no return value
+****************************************************************************************
+*/
+void BoatHttpGlobalDeInit(void)
+{
+    return BOAT_SUCCESS;
+}
+
 // #endif // end of #if RPC_USE_BOATHTTPPORT == 1
