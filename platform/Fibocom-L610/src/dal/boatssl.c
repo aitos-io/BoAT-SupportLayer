@@ -8,8 +8,15 @@
 * @Descripttion:
 ****************************************************************************************
 */
+#include "boattypes.h"
+#include "boaterrcode.h"
+#include "boatlog.h"
+#include "boatdal.h"
+#include "httpclient.h"
+#include "fibo_opencpu.h"
+#include "boatplatformdal.h"
 
-#if (PROTOCOL_USE_HLFABRIC == 1 || PROTOCOL_USE_CHAINMAKER_V1 == 1 || PROTOCOL_USE_CHAINMAKER_V2 == 1 || BOAT_PROTOCOL_USE_HWBCS == 1)
+// #if (PROTOCOL_USE_HLFABRIC == 1 || PROTOCOL_USE_CHAINMAKER_V1 == 1 || PROTOCOL_USE_CHAINMAKER_V2 == 1 || BOAT_PROTOCOL_USE_HWBCS == 1)
 /******************************************************************************
                               BOAT SOCKET WARPPER
                             THIS ONLY USED BY FABRIC OR CHAINMAKER
@@ -75,17 +82,31 @@ BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certl
     return retval;
 }
 #endif
+/**
+****************************************************************************************
+* @brief:
+*  This function connect to address.
+* @param[in] *address
+*  URL of the network wanted to connect.
+* @param[in] *rsvd
+*  unused untill now
+* @return
+*  This function will return socketID if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
 BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 {
     int connectfd;
     char ip[64];
     char port[8];
     char *ptr = NULL;
-    struct hostent *he;
-    struct sockaddr_in server;
-    struct sockaddr localaddr;
-    struct sockaddr_in *localaddr_ptr;
-    socklen_t addrlen = sizeof(struct sockaddr);
+    // struct hostent *he;
+    // struct sockaddr_in server;
+    // struct sockaddr localaddr;
+    // struct sockaddr_in *localaddr_ptr;
+    // socklen_t addrlen = sizeof(struct sockaddr);
 
     (void)rsvd;
 
@@ -152,14 +173,42 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 }
 
 #if (BOAT_TLS_SUPPORT == 1)
+/**
+****************************************************************************************
+* @brief:
+* This function initialize TLS connection. This initialization will set hostname and CA cert of
+* server's TLS cert or client's TLS cert or key.
+* This function will connect to server and complete HandShake process.
+* @param[in] *address
+* URL of server network
+* @param[in] *hostName
+* CN of server's TLS cert
+* @param[in] caChain
+* CA cert of server's TLS cert
+* @param[in] clientPrikey
+* client's tls prikey
+* @param[in] clientCert
+* client's tls cert
+* @param[out] *socketfd
+* socketfd of the connection between client and server
+* @param[out] **tlsContext
+* output of tls context
+* @param[in] *rsvd
+* unused untill now
+* @return
+*  This function will return BOAT_SUCCESS if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
 BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatFieldVariable caChain, const BoatFieldVariable clientPrikey,
-                        const BoatFieldVariable clientCert, BSINT32 *socketfd, void **tlsContext, void *rsvd)
+                        const BoatFieldVariable clientCert, BSINT32 *socketfd, boatSSlCtx **tlsContext, void *rsvd)
 {
 
     int ret = 0;
 
     fibo_set_ssl_chkmode(1);
-    ret = fibo_write_ssl_file("TRUSTFILE", caChain.field_ptr, strlen(caChain.field_ptr));
+    ret = fibo_write_ssl_file("TRUSTFILE", caChain.field_ptr, caChain.field_len);
     if (BOAT_TLS_IDENTIFY_CLIENT == 1)
     {
         ret = fibo_write_ssl_file("CAFILE", clientCert.field_ptr, clientCert.field_len);
@@ -178,12 +227,32 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 }
 #endif
 
-BSINT32 BoatSend(BSINT32 sockfd, void *tlsContext, const void *buf, size_t len, void *rsvd)
+/**
+****************************************************************************************
+* @brief:
+* This function send data with length equal to len to server.
+* @param[in] sockfd
+* socketfd of this connection.
+* @param[in] *tlsContext
+* tls context between client and server
+* @param[in] *buf
+* point to the data wanted to send
+* @param[in] len
+* length of the data wanted to send
+* @param[in] *rsvd
+* unused untill now
+* @return
+*  This function will return length of sent data if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BSINT32 BoatSend(BSINT32 sockfd, boatSSlCtx *tlsContext, const BUINT8 *buf, size_t len, void *rsvd)
 {
 #if (BOAT_TLS_SUPPORT == 1)
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
     //! @todo BOAT_HLFABRIC_TLS_SUPPORT implementation in crypto default.
-    BSINT32 ret = fibo_ssl_sock_send(sockfd, buf, len);
+    BSINT32 ret = fibo_ssl_sock_send(sockfd, (UINT8 *)buf, len);
     // BoatLog(BOAT_LOG_VERBOSE, "write ssl send = %d ", ret);
     return ret;
 #else
@@ -195,7 +264,7 @@ static int ssl_recv_unblock(INT32 sock, void *buf, INT32 size, INT32 timeout)
 {
     struct timeval tm = {0};
     fd_set rset;
-    BUINT8 *temp = buf;
+    // BUINT8 *temp = buf;
 
     int fd = fibo_ssl_sock_get_fd(sock);
 
@@ -241,9 +310,30 @@ static int ssl_recv_unblock(INT32 sock, void *buf, INT32 size, INT32 timeout)
             return ret;
         }
     }
+    return -1;
 }
 
-BSINT32 BoatRecv(BSINT32 sockfd, void *tlsContext, void *buf, size_t len, void *rsvd)
+/**
+****************************************************************************************
+* @brief:
+* This function receive data from server
+* @param[in] sockfd
+* socketfd of this connection.
+* @param[in] *tlsContext
+* tls context between client and server
+* @param[in] *buf
+* point to the data wanted to receive
+* @param[in] len
+* length of the buf to store receiving data
+* @param[in] *rsvd
+* unused untill now
+* @return
+*  This function will return length of received data if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BSINT32 BoatRecv(BSINT32 sockfd, boatSSlCtx *tlsContext, BUINT8 *buf, size_t len, void *rsvd)
 {
 #if (BOAT_TLS_SUPPORT == 1)
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
@@ -253,10 +343,24 @@ BSINT32 BoatRecv(BSINT32 sockfd, void *tlsContext, void *buf, size_t len, void *
     return recv(sockfd, buf, len, 0);
 #endif
 }
-
-void BoatClose(BSINT32 sockfd, void **tlsContext, void *rsvd)
+/**
+****************************************************************************************
+* @brief:
+* This function close the connection between client and server.
+* This function must release the tls context.
+* @param[in] sockfd
+* socketfd of this connection.
+* @param[in] **tlsContext
+* tls context between client and server
+* @param[in] *rsvd
+* unused untill now
+* @return
+* This function has no returned value.
+****************************************************************************************
+*/
+void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd)
 {
-    close(sockfd);
+    // close(sockfd);
 #if (BOAT_TLS_SUPPORT == 1)
     // free tls releated
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
@@ -265,4 +369,4 @@ void BoatClose(BSINT32 sockfd, void **tlsContext, void *rsvd)
     close(sockfd);
 #endif
 }
-#endif /* #if (PROTOCOL_USE_HLFABRIC == 1) */
+// #endif /* #if (PROTOCOL_USE_HLFABRIC == 1) */

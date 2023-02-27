@@ -381,4 +381,117 @@ BOAT_RESULT boatI2cMasterRead(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAdd
 //! BOAT_RESULT boatI2CSlaveReceie(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 datalen);
 #endif
 
+#ifdef PLATFORM_DAL_SSL
+
+typedef struct boatPlatformSSL boatSSlCtx;
+
+/**
+****************************************************************************************
+* @brief:
+*  This function connect to address.
+* @param[in] *address
+*  URL of the network wanted to connect.
+* @param[in] *rsvd
+*  unused untill now
+* @return
+*  This function will return socketfd if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BSINT32 BoatConnect(const BCHAR *address, void *rsvd);
+
+/**
+****************************************************************************************
+* @brief:
+* This function initialize TLS connection. This initialization will set hostname and CA cert of
+* server's TLS cert or client's TLS cert or key.
+* This function will connect to server and complete HandShake process.
+* @param[in] *address
+* URL of server network
+* @param[in] *hostName
+* CN of server's TLS cert
+* @param[in] caChain
+* CA cert of server's TLS cert
+* @param[in] clientPrikey
+* client's tls prikey
+* @param[in] clientCert
+* client's tls cert
+* @param[out] *socketfd
+* socketfd of the connection between client and server
+* @param[out] **tlsContext
+* output of tls context
+* @param[in] *rsvd
+* unused untill now
+* @return
+*  This function will return BOAT_SUCCESS if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatFieldVariable caChain, const BoatFieldVariable clientPrikey, const BoatFieldVariable clientCert, BSINT32 *socketfd, boatSSlCtx **tlsContext, void *rsvd);
+
+/**
+****************************************************************************************
+* @brief:
+* This function send data with length equal to len to server.
+* @param[in] sockfd
+* socketfd of this connection.
+* @param[in] *tlsContext
+* tls context between client and server
+* @param[in] *buf
+* point to the data wanted to send
+* @param[in] len
+* length of the data wanted to send
+* @param[in] *rsvd
+* unused untill now
+* @return
+*  This function will return length of sent data if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BSINT32 BoatSend(BSINT32 sockfd, boatSSlCtx *tlsContext, const BUINT8 *buf, size_t len, void *rsvd);
+
+/**
+****************************************************************************************
+* @brief:
+* This function receive data from server
+* @param[in] sockfd
+* socketfd of this connection.
+* @param[in] *tlsContext
+* tls context between client and server
+* @param[in] *buf
+* point to the data wanted to receive
+* @param[in] len
+* length of the buf to store receiving data
+* @param[in] *rsvd
+* unused untill now
+* @return
+*  This function will return length of received data if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BSINT32 BoatRecv(BSINT32 sockfd, boatSSlCtx *tlsContext, BUINT8 *buf, size_t len, void *rsvd);
+
+/**
+****************************************************************************************
+* @brief:
+* This function close the connection between client and server.
+* This function must release the tls context.
+* @param[in] sockfd
+* socketfd of this connection.
+* @param[in] **tlsContext
+* tls context between client and server
+* @param[in] *rsvd
+* unused untill now
+* @return
+* This function has no returned value.
+****************************************************************************************
+*/
+void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd);
+
+#endif
+
 #endif
