@@ -28,7 +28,7 @@
 #include "bignum.h"
 #include "secp256k1.h"
 #include "nist256p1.h"
-#include "boatosalcommon.h"
+#include "boatplatformosal.h"
 #include "persiststore.h"
 
 #define GENERATE_KEY_REPEAT_TIMES 100

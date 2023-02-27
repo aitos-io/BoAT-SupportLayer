@@ -47,13 +47,10 @@ BOAT_RESULT BoAT_Keystore_Gen_Keypair(BoatKeypairPriKeyType type, BoatKeypairKey
 
 /**
  * @description:
- * 	This function gen signature by digest.
+ * 	This function gen signature by digest, no need to know private key, only the index of private key.
  * @param[in] {BoatKeypairPriKeyType} type
  * 	support ecdsa now.
- * @param[in] {BUINT8} *prikey
- * 	private key
- * @param[in] {BUINT32} prikeylen
- * 	length of prikey
+ * @param[in] {BUINT8} prikeyIndex
  * @param[in] {BUINT8*} digest
  * @param[in] {BUINT32} digestLen
  * @param[out] {BUINT8 *} signature
