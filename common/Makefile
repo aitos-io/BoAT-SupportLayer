@@ -2,14 +2,15 @@
 
 
 all:
-	make -C cJSON all
-
-	make -C protobuf-c/src all
-	make -C protos all
+	make -C http2intf all
+	make -C rpc all
+	make -C storage all
+	make -C utilities all
 
 
 	
 clean:
-	make -C cJSON clean
-	make -C protobuf-c/src clean
-	make -C protos clean
+	make -C http2intf clean
+	make -C rpc clean
+	make -C storage clean
+	make -C utilities clean
