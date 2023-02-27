@@ -1,6 +1,7 @@
 # Source and Objects
 SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/rpc/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/utilities/*.o) \
+				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/http2intf/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/keypair/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/cJSON/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/nghttp2/*.o) \
