@@ -24,7 +24,7 @@
 #include "boatkeystore.h"
 
 #include "boatlog.h"
-#include "boatosalcommon.h"
+#include "boatplatformosal.h"
 #include "boat_keystore_intf.h"
 
 #if RPC_USE_LIBCURL == 1

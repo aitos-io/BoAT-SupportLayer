@@ -11,7 +11,7 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 #include "boatstorage.h"
-#include "boatosalcommon.h"
+#include "boatplatformosal.h"
 #include "boatlog.h"
 #include "fibo_opencpu.h"
 

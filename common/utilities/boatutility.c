@@ -23,7 +23,7 @@ boatutility.c contains utility functions for boatwallet.
 #include "boatinternal.h"
 #include "boatlog.h"
 #include "base64.h"
-#include "boatosalcommon.h"
+#include "boatplatformosal.h"
 
 //!@brief Literal representation of log level
 const BCHAR *const g_log_level_name_str[] =

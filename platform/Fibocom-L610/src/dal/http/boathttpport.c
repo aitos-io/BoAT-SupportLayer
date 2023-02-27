@@ -50,7 +50,7 @@ To use boat HTTP RPC porting, RPC_USE_BOATHTTPPORT in boatoptions.h must set to 
 
 #include "httpclient.h"
 #include "boatlog.h"
-#include "boatosalcommon.h"
+#include "boatplatformosal.h"
 
 /*!*****************************************************************************
 @brief Initialize boat HTTP RPC context.

@@ -24,7 +24,7 @@ persiststore.c contains APIs for default persistent storage as a file.
 #include "persiststore.h"
 #include "boatstorage.h"
 #include "boat_keystore_intf.h"
-#include "boatosalcommon.h"
+#include "boatplatformosal.h"
 #include "boatlog.h"
 
 /* mbedTLS header include */
