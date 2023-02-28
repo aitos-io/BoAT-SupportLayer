@@ -1,7 +1,7 @@
 # Source and Objects
 
 SOURCES = $(wildcard *.c)
-OBJECTS_DIR = $(BOAT_BUILD_DIR)/sdk/rlp
+OBJECTS_DIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/rlp
 OBJECTS = $(patsubst %.c,$(OBJECTS_DIR)/%.o,$(SOURCES))
 
 
