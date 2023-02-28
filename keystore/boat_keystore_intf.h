@@ -130,7 +130,7 @@ BOAT_RESULT BoAT_recover_pubkey(BoatKeypairPriKeyType type, BoatKeypairPriKeyFor
  *  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
  *  for details.
  */
-BOAT_RESULT BoAT_DeletePirkeyByIndex(BUINT8 index);
+BOAT_RESULT BoAT_DeletePrikeyByIndex(BUINT8 index);
 
 /**
  * @description:

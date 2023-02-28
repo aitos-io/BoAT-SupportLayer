@@ -70,7 +70,7 @@ BOAT_RESULT BoAT_Keystore_Sign(BoatKeypairPriKeyType type, BUINT8 prikeyIndex, c
 #else
     BOAT_RESULT result = BOAT_SUCCESS;
     BoatKeypairExtraData prikey;
-    result = BoAT_GetPirkeyByIndex_soft(prikeyIndex, &prikey);
+    result = BoAT_GetPrikeyByIndex_soft(prikeyIndex, &prikey);
     if (result != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_NORMAL, "get prikey by index fail");
@@ -172,10 +172,10 @@ BOAT_RESULT BoAT_Keystore_store_prikey(BUINT8 keypairIndex, BUINT8 *prikey, BUIN
  *  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
  *  for details.
  */
-BOAT_RESULT BoAT_DeletePirkeyByIndex(BUINT8 index)
+BOAT_RESULT BoAT_DeletePrikeyByIndex(BUINT8 index)
 {
 #if (BOAT_CRYPTO_USE_SE == 1)
-    return BoAT_DeletePirkeyByIndex_soft(index);
+    return BoAT_DeletePrikeyByIndex_soft(index);
 #else
     return BOAT_SUCCESS;
 #endif

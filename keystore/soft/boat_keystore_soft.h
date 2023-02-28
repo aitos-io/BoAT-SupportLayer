@@ -82,7 +82,7 @@ BOAT_RESULT BoAT_sign_soft(BoatKeypairPriKeyType type, BoatKeypairPriKeyFormat f
  *   for details.
  * @author: aitos
  */
-static BOAT_RESULT BoAT_GetPirkeyByIndex_soft(BUINT8 index, BoatKeypairExtraData *prikey);
+static BOAT_RESULT BoAT_GetPrikeyByIndex_soft(BUINT8 index, BoatKeypairExtraData *prikey);
 
 /**
  * @description:
@@ -109,7 +109,7 @@ BOAT_RESULT BoAT_Keystore_store_prikey_soft(BUINT8 keypairIndex, BUINT8 *prikey,
  *  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
  *  for details.
  */
-BOAT_RESULT BoAT_DeletePirkeyByIndex_soft(BUINT8 index);
+BOAT_RESULT BoAT_DeletePrikeyByIndex_soft(BUINT8 index);
 
 /**
 ****************************************************************************************
