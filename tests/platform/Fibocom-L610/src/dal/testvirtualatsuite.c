@@ -5,11 +5,8 @@
 
 
 #include "boatlog.h"
-#include "boatcheck.h"
-#include "boatplatform.h"
-#include "errorCode_dal.h"
-#include "platformDAL.h"
-#include "boatDAL.h"
+#include "../../boatcheck/boatcheck.h"
+#include "boatdal.h"
 
 static UINT32 g_virtualAT_lock = 0;
 
@@ -276,4 +273,23 @@ Suite *make_virtualAT_test_suite(void)
 
     return s_virtualAT_test;
 
+}
+
+int runVirtualATTests(void)
+{
+    SRunner *sr = NULL;
+    int failed_number = 0;
+
+    Suite *suiteVirtualATtest = make_virtualAT_test_suite();
+
+    sr = srunner_create(suiteVirtualATtest);
+
+    srunner_run_all(sr,0);
+
+
+    failed_number = srunner_ntests_failed(sr);
+
+    srunner_free(sr);
+
+    return failed_number;
 }

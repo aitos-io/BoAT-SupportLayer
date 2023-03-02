@@ -2,63 +2,52 @@
 #include "boatlog.h"
 #include "boattypes.h"
 #include "fibo_opencpu.h"
+#include "../../boatcheck/boatcheck.h"
+
 
 
 
 BOAT_RESULT boatMutexInitMutexidZero(boatMutex *mutex);
 boatMutex testMutexId;
 
-
-void boatAssert_int_eq(BOAT_RESULT rtnVal, BOAT_RESULT eqVal)
-{
-	/////fibo_taskSleep(500);
-	if(rtnVal != eqVal)
-	{
-		BoatPrintf(0,"[boat]Boat Assert the rtnVal:%d not equal %d, test failed\r\n",rtnVal,eqVal);
-	}
-	else
-	{
-		BoatPrintf(0,"[boat]Boat Assert the rtnVal:%d equal %d, test successful\r\n",rtnVal,eqVal);
-	}
-		
-}
-
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0010InitMutexSuccess(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0010InitMutexSuccess)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0010InitMutexSuccess\r\n");
 	
 	rtnVal = boatMutexInit(&testMutexId);
-	boatAssert_int_eq(rtnVal,0);
+	ck_assert_int_eq(rtnVal,0);
 	
 	boatMutexDestroy(&testMutexId);
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0010InitMutexSuccess finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0011InitMutexFailMutexAddrNULL(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0011InitMutexFailMutexAddrNULL)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0011InitMutexFailMutexAddrNULL\r\n");
 	
 	rtnVal = boatMutexInit(0);	///// input 0 to test retrun -1
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 	
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0011InitMutexFailMutexAddrNULL finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0012InitMutexFailMutexCreateReturnZero(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0012InitMutexFailMutexCreateReturnZero)
 {
 	BoatPrintf(0,"Try test_BoAT_OSAL_FibocomL610_01Mutex_test_0029InitMutexGetLimit to test \
 		 test_BoAT_OSAL_FibocomL610_01Mutex_test_0012InitMutexFailMutexCreateReturnZero\r\n");
 	
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0012InitMutexFailMutexCreateReturnZero finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess\r\n");
@@ -66,25 +55,27 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess(void)
 	rtnVal = boatMutexInit(&testMutexId);	
 	
 	rtnVal = boatMutexDestroy(&testMutexId);
-	boatAssert_int_eq(rtnVal,0);
+	ck_assert_int_eq(rtnVal,0);
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess finished\r\n");
-	return 0;
+	
 
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0014DeinitMutexFailMutexAddrNULL(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0014DeinitMutexFailMutexAddrNULL)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0014DeinitMutexFailMutexAddrNULL\r\n");
 
 	
 	rtnVal = boatMutexDestroy(0);	///// test 0 
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0014DeinitMutexFailMutexAddrNULL finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZero(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZero)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZero\r\n");
@@ -93,14 +84,13 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZer
 	rtnVal = boatMutexInitMutexidZero(&testMutexId);	///// Mutexid =  0;
 	
 	rtnVal = boatMutexDestroy(&testMutexId);	
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZero finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-
-
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess\r\n");
@@ -108,18 +98,18 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess(void)
 	rtnVal = boatMutexInit(&testMutexId);	
 	
 	rtnVal = boatMutexLock(&testMutexId,0);	///// test lock 
-	boatAssert_int_eq(rtnVal,0);
+	ck_assert_int_eq(rtnVal,0);
 
 	/////rtnVal = boatMutexUnlock(&testMutexId);	///// test unlock 
 
 	rtnVal = boatMutexDestroy(&testMutexId);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess\r\n");
@@ -127,30 +117,31 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess(void)
 	rtnVal = boatMutexInit(&testMutexId);	
 	
 	rtnVal = boatMutexLock(&testMutexId,1);	///// test timed lock 
-	boatAssert_int_eq(rtnVal,0);
+	ck_assert_int_eq(rtnVal,0);
 
 	/////rtnVal = boatMutexUnlock(&testMutexId);	///// test unlock 
 
 	rtnVal = boatMutexDestroy(&testMutexId);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0019MutexLockFailMutexAddrNULL(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0019MutexLockFailMutexAddrNULL)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0019MutexLockFailMutexAddrNULL\r\n");
 	
 	rtnVal = boatMutexLock(0,0);	///// test lock 
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0019MutexLockFailMutexAddrNULL finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero\r\n");
@@ -158,25 +149,27 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero(
 	rtnVal = boatMutexInitMutexidZero(&testMutexId);	///// create a mutexID = 0
 	
 	rtnVal = boatMutexLock(&testMutexId,0);	///// test lock 
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL\r\n");
 	
 	rtnVal = boatMutexLock(0,1);	///// test timed lock 
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqualZero(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqualZero)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqualZero\r\n");
@@ -184,13 +177,14 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqual
 	rtnVal = boatMutexInitMutexidZero(&testMutexId);	///// create a mutexID = 0
 	
 	rtnVal = boatMutexLock(&testMutexId,1);	///// test timed lock 
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqualZero finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout\r\n");
@@ -199,7 +193,7 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout(void
 	
 	rtnVal = boatMutexLock(&testMutexId,0);	///// test lock 
 	rtnVal = boatMutexLock(&testMutexId,1);	///// test timed lock 
-	boatAssert_int_eq(rtnVal,-1);			///// the rtnVal must check!
+	ck_assert_int_eq(rtnVal,-1);			///// the rtnVal must check!
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout timeout [%x]\r\n",rtnVal);
 	/////rtnVal = boatMutexUnlock(&testMutexId);	///// test unlock 
@@ -207,10 +201,11 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout(void
 	rtnVal = boatMutexDestroy(&testMutexId);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess\r\n");
@@ -221,28 +216,30 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess(void)
 	rtnVal = boatMutexLock(&testMutexId,0);	///// test lock 
 
 	rtnVal = boatMutexUnlock(&testMutexId);	///// test unlock 
-	boatAssert_int_eq(rtnVal,0);
+	ck_assert_int_eq(rtnVal,0);
 
 	rtnVal = boatMutexDestroy(&testMutexId);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0025MutexUnlockFailMutexAddrNULL(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0025MutexUnlockFailMutexAddrNULL)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0025MutexUnlockFailMutexAddrNULL\r\n");
 
 
 	rtnVal = boatMutexUnlock(0);	///// test unlock 
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0025MutexUnlockFailMutexAddrNULL finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZero(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZero)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZero\r\n");
@@ -250,15 +247,16 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZer
 	rtnVal = boatMutexInitMutexidZero(&testMutexId);	///// create a mutexID = 0
 	
 	rtnVal = boatMutexUnlock(&testMutexId);	
-	boatAssert_int_eq(rtnVal,-1);
+	ck_assert_int_eq(rtnVal,-1);
 
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZero finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
 
 // 多次打开关闭锁查看其ID 变化
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex)
 {
 	BOAT_RESULT rtnVal;
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex\r\n");
@@ -269,14 +267,15 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex(void)
 		BoatPrintf(0,"Testing mutex times[%d]\r\n",i);
 		fibo_taskSleep(800);
 		rtnVal = boatMutexInit(&testMutexId);
-		//boatAssert_int_eq(rtnVal,0);
+		//ck_assert_int_eq(rtnVal,0);
 		rtnVal = boatMutexLock(&testMutexId,0);
 		rtnVal = boatMutexDestroy(&testMutexId);
-		boatAssert_int_eq(rtnVal,0);
+		ck_assert_int_eq(rtnVal,0);
 	}
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
 static void mutex_task_lock_sleep_2s(void *param)
 {
@@ -290,7 +289,7 @@ static void mutex_task_lock_sleep_2s(void *param)
 		BoatPrintf(0,"Testing mutex task lock times[%d] id[%x]\r\n",i,ptestMutexId);
 		//fibo_taskSleep(800);
 		//rtnVal = boatMutexInit(ptestMutexId);
-		//boatAssert_int_eq(rtnVal,0);
+		//ck_assert_int_eq(rtnVal,0);
 		rtnVal = boatMutexLock(ptestMutexId,0);
 		fibo_taskSleep(2000);///// sleep 2 seconds
 		rtnVal = boatMutexUnlock(ptestMutexId);
@@ -306,7 +305,7 @@ static void mutex_task_lock_sleep_2s(void *param)
 	return ;	
 }
 
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex)
 {
 	
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex\r\n");
@@ -326,12 +325,13 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex(void)
 	}
 	boatMutexDestroy(&testMutexId);
 	BoatPrintf(0,"Testing test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex finished\r\n");
-	return 0;
+	
 }
+END_TEST
 
 
 // 检查FIBOCOM 创建 mutex 的极限
-void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0029InitMutexGetLimit(void)
+START_TEST(test_BoAT_OSAL_FibocomL610_01Mutex_test_0029InitMutexGetLimit)
 {
 	BOAT_RESULT rtnVal;
 
@@ -350,53 +350,72 @@ void *test_BoAT_OSAL_FibocomL610_01Mutex_test_0029InitMutexGetLimit(void)
 	}
 	return NULL;
 }
+END_TEST
 
-void testMutexEntry(void)
+Suite *makeMutextest_suite(void)
 {
-	
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0010InitMutexSuccess();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0011InitMutexFailMutexAddrNULL();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0012InitMutexFailMutexCreateReturnZero();
-	fibo_taskSleep(1000);
-	
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0014DeinitMutexFailMutexAddrNULL();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZero();
-	fibo_taskSleep(1000);
+    /* Create Suite */
+    Suite *sMutextest = suite_create("mutex_test");
 
-	
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0019MutexLockFailMutexAddrNULL();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqualZero();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout();
-	fibo_taskSleep(1000);
-	
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0025MutexUnlockFailMutexAddrNULL();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZero();
-	fibo_taskSleep(1000);
+    /* Create test cases */
+    TCase *tcMutextest_api = tcase_create("mutex_test_api");
 
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex();
-	fibo_taskSleep(1000);
-	test_BoAT_OSAL_FibocomL610_01Mutex_test_0029InitMutexGetLimit();
-	
+    /* Add a test case to the Suite */
+    suite_add_tcase(sMutextest,tcMutextest_api);
 
-	return ;
+    /* Test cases are added to the test set */
+
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0010InitMutexSuccess);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0011InitMutexFailMutexAddrNULL);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0012InitMutexFailMutexCreateReturnZero);
+
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0013DeinitMutexSuccess);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0014DeinitMutexFailMutexAddrNULL);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0015DeinitMutexFailMutexidEqualZero);
+
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0017MutexLockSuccess);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0018MutexTimedLockSuccess);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0019MutexLockFailMutexAddrNULL);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0020MutexLockFailMutexidEqualZero);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0022MutexTimedLockFailMutexidEqualZero);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0023MutexTimedLockFailTimeout);
+
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0024MutexUnlockSuccess);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0025MutexUnlockFailMutexAddrNULL);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0026MutexUnlockFailMutexidEqualZero);
+
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0027ReuseSingleMutex);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0028MultiTaskUseOneMutex);
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_FibocomL610_01Mutex_test_0029InitMutexGetLimit);	
+
+    return sMutextest;
+
 }
+
+
+int runMutexTests(void)
+{
+
+#if 1
+    SRunner *sr = NULL;
+    int failed_number = 0;
+
+    Suite *suiteMutextest = makeMutextest_suite();
+
+    sr = srunner_create(suiteMutextest);
+
+    srunner_run_all(sr,0);
+
+
+    failed_number = srunner_ntests_failed(sr);
+
+    srunner_free(sr);
+
+    return failed_number;
+#endif
+
+	
+}
+
+

@@ -7,3 +7,5 @@ int runQueueTests(void);
 int runI2cTests(void);
 int runUartTests(void);
 
+int runBleServiceTests(void);
+int runVirtualATTests(void);

@@ -1,6 +1,6 @@
 # Select one of the crypto-dep and platform
 
-.PHONY:all common crypto_default keccak  keystore platform keypair   third-party
+.PHONY:all common crypto_default keccak  keystore platform keypair   third-party tests
     #cryptointf http2
 
 ifeq ($(SOFT_CRYPTO), CRYPTO_DEFAULT)
@@ -15,6 +15,8 @@ else
 endif
 
 all: $(BUILD_DEP) 
+
+test: $(BUILD_DEP) tests
 
 third-party:
 	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/third-party all

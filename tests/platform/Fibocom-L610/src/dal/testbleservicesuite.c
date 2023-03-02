@@ -5,12 +5,9 @@
 
 
 #include "boatlog.h"
-#include "boatcheck.h"
-#include "boatplatform.h"
-#include "ble_dal.h"
-#include "errorCode_dal.h"
-#include "platformDAL.h"
-#include "boatDAL.h"
+#include "../../boatcheck/boatcheck.h"
+#include "boatdal.h"
+#include "boatosal.h"
 
 static UINT32 g_bleService_lock = 0;
 
@@ -327,3 +324,23 @@ Suite *make_bleService_test_suite(void)
     return s_bleService_test;
 
 }
+
+int runBleServiceTests(void)
+{
+    SRunner *sr = NULL;
+    int failed_number = 0;
+
+    Suite *suiteBleServicetest = make_bleService_test_suite();
+
+    sr = srunner_create(suiteBleServicetest);
+
+    srunner_run_all(sr,0);
+
+
+    failed_number = srunner_ntests_failed(sr);
+
+    srunner_free(sr);
+
+    return failed_number;
+}
+
