@@ -11,8 +11,8 @@ boatQueue testQueueId;
 boatQueue taskQueueId;
 #define BOAT_QUEUE_MAX_SIZE 10
 #define BOAT_QUEUE_MAX_NUMBER 5
-BUINT8 queueMsgTx[BOAT_QUEUE_MAX_NUMBER];
-BUINT8 queueMsgRx[BOAT_QUEUE_MAX_NUMBER];
+BUINT8 queueMsgTx[BOAT_QUEUE_MAX_SIZE];
+BUINT8 queueMsgRx[BOAT_QUEUE_MAX_SIZE];
 BUINT32 queueMsgLen;
 
 BOAT_RESULT boatQueueInitQueueIdZero(boatQueue *queueRef);

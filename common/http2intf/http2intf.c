@@ -24,7 +24,8 @@
 #include "boatlog.h"
 #include "http2intf.h"
 #include "boatdal.h"
-#include "boatplatformosal.h"
+#include "boatosal.h"
+/////#include "boatplatformosal.h"
 /* protos header include */
 
 //! xx

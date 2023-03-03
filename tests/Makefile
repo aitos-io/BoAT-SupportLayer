@@ -19,6 +19,25 @@ define geto
 SRCS_o += $(foreach dir, $(DIRS), $(wildcard $(dir)/*.o))
 endef
 
+define testapp
+ifeq ($(PLATFORM_TARGET),linux-default)
+	#dependence libs
+	TESTLIBS = $(BOAT_LIB_DIR)/libboatvendor.a \
+					-lrt \
+					-lpthread \
+					$(LINK_LIBS)
+
+	TESTMAKE = $(CC) $(BOAT_CFLAGS) $(BOAT_LFLAGS) $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/linux-default/testapp.c
+	TESTO = -o 
+	
+	TESTAPP = /tesatapp
+	TESTDIR = $(BOAT_BUILD_DIR)/testapp/out
+	TESTMKDIR =  $(BOAT_MKDIR) -p 
+else
+
+endif
+endef
+
 LIBNAME = $(BOAT_LIB_DIR)/libboatvendor.a
 
 .PHONY: all $(SUBDIRS) clean $(CLEAN_SUBDIRS)
@@ -30,8 +49,9 @@ all: $(SUBDIRS)
 	$(eval $(call geto))
 	$(AR) r $(LIBNAME) $(SRCS_o)
 	$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
-
-
+	$(eval $(call testapp))
+	$(TESTMKDIR) $(TESTDIR)
+	$(TESTMAKE) $(TESTLIBS) $(TESTO) $(TESTDIR)$(TESTAPP)
 
 $(SUBDIRS):
 	make -C $@/ all	

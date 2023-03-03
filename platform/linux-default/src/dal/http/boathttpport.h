@@ -30,7 +30,7 @@ To use libcurl porting, RPC_USE_LIBCURL in boatconfig.h must set to 1.
 
 #include "boatconfig.h"
 
-#if RPC_USE_LIBCURL == 1
+
 
 #include "boatinternal.h"
 
@@ -38,11 +38,11 @@ To use libcurl porting, RPC_USE_LIBCURL in boatconfig.h must set to 1.
 //!The step to dynamically expand the receiving buffer.
 #define CURLPORT_RECV_BUF_SIZE_STEP 1024
 
-typedef struct TCurlPortContext
+typedef struct TBoatHttpPortContext
 {
     BCHAR *remote_url_str;                 //!< URL of the blockchain node, e.g. "http://a.b.com:8545"
     StringWithLen curlport_response;    //!<  Store response from remote peer
-}CurlPortContext;
+}BoatHttpPortContext;
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,7 +63,7 @@ extern "C" {
  *
  * @see CurlPortDeinit()
  ******************************************************************************/
-CurlPortContext * CurlPortInit(void);
+BoatHttpPortContext * BoatHttpPortInit(void);
 
 
 /*!****************************************************************************
@@ -81,7 +81,7 @@ CurlPortContext * CurlPortInit(void);
  *
  * @see CurlPortInit()    
  ******************************************************************************/
-void CurlPortDeinit( CurlPortContext * curlport_context_ptr );
+void BoatHttpPortDeinit( BoatHttpPortContext * curlport_context_ptr );
 
 
 
@@ -100,7 +100,7 @@ void CurlPortDeinit( CurlPortContext * curlport_context_ptr );
  * @return
  *   This function always returns BOAT_SUCCESS.
  ******************************************************************************/
-BOAT_RESULT CurlPortSetOpt(CurlPortContext * curlport_context_ptr, BCHAR *remote_url_str);
+BOAT_RESULT BoatHttpPortSetOpt(BoatHttpPortContext * curlport_context_ptr, BCHAR *remote_url_str);
 
 
 
@@ -142,7 +142,7 @@ BOAT_RESULT CurlPortSetOpt(CurlPortContext * curlport_context_ptr, BCHAR *remote
  * @see https://curl.haxx.se/libcurl/c/curl_easy_setopt.html
  * @see https://curl.haxx.se/libcurl/c/curl_easy_perform.html 
  ******************************************************************************/
-BOAT_RESULT CurlPortRequestSync( CurlPortContext * curlport_context_ptr,
+BOAT_RESULT BoatHttpPortRequestSync( BoatHttpPortContext * curlport_context_ptr,
                                  const BCHAR *request_str,
                                  BUINT32 request_len,
                                  BOAT_OUT BCHAR **response_str_ptr,
@@ -153,6 +153,5 @@ BOAT_RESULT CurlPortRequestSync( CurlPortContext * curlport_context_ptr,
 }
 #endif /* end of __cplusplus */
 
-#endif /* end of #if RPC_USE_LIBCURL == 1 */
 #endif /* end of #ifndef __CURLPORT_H__ */
 

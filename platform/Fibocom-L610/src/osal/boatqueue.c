@@ -28,17 +28,17 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
 {
 	BUINT32  fiboQueue = 0;
 	
-	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef == NULL)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }	
-	if(maxSize == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(maxSize == 0)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue maxSize is 0, invalid\r\n");
     	return BOAT_ERROR;
     }	
-	if(maxNumber == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(maxNumber == 0)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue maxNumber is 0, invalid\r\n");
     	return BOAT_ERROR;
@@ -64,12 +64,12 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
 }
 BOAT_RESULT boatQueueDelete(boatQueue *queueRef)
 {
-	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef == NULL)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
-	if(queueRef->queueId == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef->queueId == 0)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue queueId is 0 in boatQueueDelete, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
@@ -85,13 +85,13 @@ BOAT_RESULT boatQueueDelete(boatQueue *queueRef)
 }
 BOAT_RESULT boatQueueSend(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 msgLen,BUINT32 timeout)
 {
-	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef == NULL)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
 
-	if(queueRef->queueId == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef->queueId == 0)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue queueId is 0 in boatQueueSend, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;///// BOAT_DATA_INVALID
@@ -130,13 +130,13 @@ BOAT_RESULT boatQueueSend(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 msg
 
 BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 msgLen ,BUINT32 timeout)
 {
-	if(queueRef == NULL) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef == NULL)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;
     }
 
-	if(queueRef->queueId == 0) /////if((queueRef < `) || (queueRef >= BSSEND)) 
+	if(queueRef->queueId == 0)
     {
     	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue queueId is 0 in boatQueueDelete, bad address:%x,ph",(BUINT32)queueRef);
     	return BOAT_ERROR;///// BOAT_DATA_INVALID

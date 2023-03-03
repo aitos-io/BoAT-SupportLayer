@@ -61,7 +61,7 @@ extern const BCHAR *const g_log_level_name_str[];
 #else
 #define BoatLog(level, format,...)\
     do{\
-        if( level <= BOAT_LOG_LEVEL ) {BoatPrintf(0,"%s: "__FILE__":%d, %s(): "format"\n", g_log_level_name_str[level-1], __LINE__, __func__, ##__VA_ARGS__);}\
+        if( level <= BOAT_LOG_LEVEL ) {BoatPrintf("%s: "__FILE__":%d, %s(): "format"\n", g_log_level_name_str[level-1], __LINE__, __func__, ##__VA_ARGS__);}\
     }while(0)
 #endif
 

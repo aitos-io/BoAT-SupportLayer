@@ -14,7 +14,7 @@
 #include "boattypes.h"
 #include "boatkeypair.h"
 
-#define BOAT_CRYPTO_USE_SE 1
+#define BOAT_CRYPTO_USE_SE 0
 
 /**
  * @description:

@@ -223,7 +223,7 @@ Function: boatMutexLock()
     lock operation on that BoAT mutex.
 
 @param[in] timeout 
-    timeout specifies a limit on the amount of time (seconds) that the call should \n
+    timeout specifies a limit on the amount of time (in milliseconds) that the call should \n
     block if the decrement cannot be immediately performed.
 
 *******************************************************************************/
@@ -314,7 +314,7 @@ Function: boatQueueSend()
     The msgLen can not be great than the maxSize which set in boatQueueInit()
 
 @param[in] timeout 
-    The timeout specifies a limit on the amount of time (in seconds) that the call\n
+    The timeout specifies a limit on the amount of time (in milliseconds) that the call\n
     should block if the sending cannot be immediately performed.
 
 
@@ -351,10 +351,10 @@ Function: boatQueueReceive()
     boat queue.
     Fibocom API does not use this parameter
     As default, usr must define the msgPtr buffer which size equal the maxSize set in
-    boatQueueInit. fibocom will copy all data of one message.
+    boatQueueInit. boatQueueReceive() will copy all data of one message.
 
 @param[in] timeout 
-    The timeout specifies a limit on the amount of time (in seconds) that the call\n
+    The timeout specifies a limit on the amount of time (in milliseconds) that the call\n
     should block if the receiving cannot be immediately performed.
 
 *******************************************************************************/

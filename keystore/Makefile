@@ -11,7 +11,7 @@ keystore_soft:
 	make -C  soft all
 
 keystore_SE:
-	make -C SE/NXP all
+#	make -C SE/NXP all
 
 $(OBJECTS_DIR):
 	$(BOAT_MKDIR) -p $(OBJECTS_DIR)

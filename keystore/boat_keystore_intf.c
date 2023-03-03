@@ -367,7 +367,11 @@ static BOAT_RESULT sBoatPort_keyCreate_internal_generation(const BoatKeypairPriK
         return result;
     }
     keypairGenFlag[0] = 0x55;
+#if (BOAT_CRYPTO_USE_SE == 1)		///// add for BOAT_CRYPTO_USE_SE , Temporary modification , ph 2023-03-02 19:17:00
     result = BoAT_Keystore_Write_Binary_secure(keypairGenFlag, sizeof(keypairGenFlag), OFFSET_KEYPAIR_GEN_FLAG);
+#else
+    result = BoAT_Keystore_Write_Binary_secure(keypairGenFlag, sizeof(keypairGenFlag), 0);
+#endif
     if (result != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL, "write keypair gen flag fail .");

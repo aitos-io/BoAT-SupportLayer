@@ -118,11 +118,11 @@ __BOATSTATIC size_t CurlPortWriteMemoryCallback(void *data_ptr, size_t size,
     return data_size;
 }
 
-CurlPortContext *CurlPortInit(void)
+BoatHttpPortContext *BoatHttpPortInit(void)
 {
-    CurlPortContext *curlport_context_ptr;
+    BoatHttpPortContext *curlport_context_ptr;
 
-    curlport_context_ptr = BoatMalloc(sizeof(CurlPortContext));
+    curlport_context_ptr = BoatMalloc(sizeof(BoatHttpPortContext));
 
     if (curlport_context_ptr == NULL)
     {
@@ -147,7 +147,7 @@ CurlPortContext *CurlPortInit(void)
     return curlport_context_ptr;
 }
 
-void CurlPortDeinit(CurlPortContext *curlport_context_ptr)
+void BoatHttpPortDeinit(BoatHttpPortContext *curlport_context_ptr)
 {
     if (curlport_context_ptr == NULL)
     {
@@ -169,7 +169,7 @@ void CurlPortDeinit(CurlPortContext *curlport_context_ptr)
     return;
 }
 
-BOAT_RESULT CurlPortSetOpt(CurlPortContext *curlport_context_ptr, BCHAR *remote_url_str)
+BOAT_RESULT BoatHttpPortSetOpt(BoatHttpPortContext *curlport_context_ptr, BCHAR *remote_url_str)
 {
     if (curlport_context_ptr == NULL || remote_url_str == NULL)
     {
@@ -181,7 +181,7 @@ BOAT_RESULT CurlPortSetOpt(CurlPortContext *curlport_context_ptr, BCHAR *remote_
     return BOAT_SUCCESS;
 }
 
-BOAT_RESULT CurlPortRequestSync(CurlPortContext *curlport_context_ptr,
+BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *curlport_context_ptr,
                                 const BCHAR *request_str,
                                 BUINT32 request_len,
                                 BOAT_OUT BCHAR **response_str_ptr,
