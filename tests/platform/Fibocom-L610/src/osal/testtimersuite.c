@@ -9,10 +9,10 @@ boatTimer testTimerID;
 boatTimer testTimerid5,testTimerid6,testTimerid7;
 boatTask testTaskId;
 
-void boatTaskInitTimeridZero(boatTimer *Task);
-void boatTaskInitTimeridInvalid(boatTimer *timerRef);
+void boatTimerInitTimeridZero(boatTimer *Task);
+void boatTimerInitTimeridInvalid(boatTimer *timerRef);
 
-BOAT_RESULT boat_Timestamp(BSINT64 *timestamp);
+BOAT_RESULT boatTimestamp(BSINT64 *timestamp);
 
 
 void showtimestamp(void)
@@ -24,7 +24,7 @@ void showtimestamp(void)
 	} ud;
 	ud.ts = 0;
 
-	boat_Timestamp(&ud.ts);
+	boatTimestamp(&ud.ts);
 	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] timestamp[%ld] \r\n",ud.I32);
 }
 
@@ -256,7 +256,7 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_
 	BOAT_RESULT rtnVal;
 
 	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero\r\n");
-	boatTaskInitTimeridZero(&testTimerID);
+	boatTimerInitTimeridZero(&testTimerID);
 	rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,-1);
 	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero finished\r\n");
@@ -454,7 +454,7 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0025_boatTimerDestroy_timerID
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0025_boatTimerDestroy_timerIDInvalide\r\n");
 	fibo_taskSleep(3000);
-	boatTaskInitTimeridInvalid(&testTimerID);
+	boatTimerInitTimeridInvalid(&testTimerID);
 
 	
 	rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.

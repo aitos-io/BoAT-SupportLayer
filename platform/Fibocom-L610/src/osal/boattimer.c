@@ -55,12 +55,6 @@ BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 int
         }
     }
 }
-#if 0
-BOAT_RESULT boatTimer_period_new(BUINT32 ms, void (*fn)(void *arg), void *arg)
-{
-    return fibo_timer_period_new(ms, fn, arg);
-}
-#endif
 
 BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
 /////BOAT_RESULT boatTimer_free(BUINT32 timerID)
@@ -94,19 +88,19 @@ BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
 	return BOAT_ERROR;
 }
 
-BOAT_RESULT boat_Timestamp(BSINT64 *timestamp)
+BOAT_RESULT boatTimestamp(BSINT64 *timestamp)
 {
     BOAT_RESULT ret = BOAT_SUCCESS;
     *timestamp = osiEpochSecond();
     return ret;
 }
 
-void boatTaskInitTimeridZero(boatTimer *timerRef)
+void boatTimerInitTimeridZero(boatTimer *timerRef)
 {
 	timerRef->timerId = 0;
 }
 
-void boatTaskInitTimeridInvalid(boatTimer *timerRef)
+void boatTimerInitTimeridInvalid(boatTimer *timerRef)
 {
 	timerRef->timerId = 0x80ba2d00;
 }

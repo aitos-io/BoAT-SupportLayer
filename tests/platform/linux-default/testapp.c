@@ -28,7 +28,8 @@ static void runtest(char *name,testfun p)
 int main(int argc, char *argv[])
 {
 	printf("===== linux-default tests =====\n");
-	runtest("Queue",runQueueTests);
+	/////runtest("Queue",runQueueTests);
+	runtest("Timer",runTimerTests);
 	
 }
 

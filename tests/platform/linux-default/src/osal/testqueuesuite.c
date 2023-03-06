@@ -427,11 +427,11 @@ START_TEST(test_BoAT_OSAL_linuxDefault_06Queue_test_0032MultiTaskUseOneQueue)
     int ret = pthread_create(&th, &attr, queueTaskReceiveSleep2s, &queueTest);
     if (ret != 0)
     {
-        BoatLog(BOAT_LOG_NORMAL, "ERROR: Create thread_xenon_process error\n");
+        BoatLog(BOAT_LOG_NORMAL, "ERROR: Create queueTaskReceiveSleep2s error\n");
     }
     else
     {
-        BoatLog(BOAT_LOG_NORMAL, "INFO: This is the thread_xenon_process process.\n");
+        BoatLog(BOAT_LOG_NORMAL, "INFO: Create thread succ.\n");
     }
 	
 	/////fibo_thread_create(queueTaskReceiveSleep2s, "queue_sleep_2s", 1024 * 8, &queueTest, OSI_PRIORITY_NORMAL);

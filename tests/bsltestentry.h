@@ -1,6 +1,6 @@
 void testMutexEntry(void);
 void testTaskEntry(void);
-void testTimerEntry(void);
+int runTimerTests(void);
 void testI2CEntry(void);
 int runSemTests(void);
 int runQueueTests(void);

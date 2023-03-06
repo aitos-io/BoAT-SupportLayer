@@ -39,13 +39,11 @@ struct boatPlatformUART
 };
 #endif // PLATFORM_DAL_UART
 
-#define PLATFORM_DAL_I2C
 #ifndef PLATFORM_DAL_I2C
-
-
+#define PLATFORM_DAL_I2C
 struct boatPlatformI2C
 {
-    i2c_Handle i2cId; //! Linux UARTaphore descriptor
+    int i2cId; //! Linux i2c descriptor
 };
 #endif // PLATFORM_DAL_I2C
 

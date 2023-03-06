@@ -131,10 +131,17 @@ struct boat_platform_task{
 #endif
 
 //!@brief Abstract definition of timer object based on Linux
-#define PLATFORM_OSAL_TIMER
+
 #ifndef PLATFORM_OSAL_TIMER
-struct boat_platform_timer{
-    timer_t timerid; //! Linux timer descriptor
+#define PLATFORM_OSAL_TIMER
+
+typedef void (*timerCallback)(void *);
+
+struct boatPlatformTimer{
+    timer_t timerId; //! Linux timer descriptor
+    timerCallback timerCb;
+    void *argv;
+    int oneTime;
 };
 #endif
 
