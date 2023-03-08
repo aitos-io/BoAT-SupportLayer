@@ -95,7 +95,7 @@ BOAT_RESULT BoatHash(const BoatHashAlgType type, const BUINT8 *input, BUINT32 in
 //  *  for details.
 //  * @author: aitos
 //  */
-// BOAT_RESULT BoAT_getPubkey(BoatKeypairPriKeyType type, BoatKeypairPriKeyFormat format, BUINT8 *prikey, BUINT32 prikeyLen, BUINT8 *pubkey, BUINT32 *pubkeyLen);
+BOAT_RESULT BoAT_getPubkey(BoatKeypairPriKeyType type, BoatKeypairPriKeyFormat format, BUINT8 *prikey, BUINT32 prikeyLen, BUINT8 *pubkey, BUINT32 *pubkeyLen);
 
 /**
 ****************************************************************************************

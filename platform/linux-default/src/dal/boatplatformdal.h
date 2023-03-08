@@ -21,6 +21,8 @@
 * platform_dal.h defines the abstract types for boatDAL.h.
 * Do not use the types in platform.h directly.
 */
+#include <stdio.h>
+#include <sys/select.h>	///// for uart
 
 
 #ifndef __BOATPLATFORMDAL_H__
@@ -30,12 +32,16 @@
 #define BOAT_TLS_IDENTIFY_CLIENT 1
 
 //!@brief Abstract definition of uart object based on Linux
-#define PLATFORM_DAL_UART
 #ifndef PLATFORM_DAL_UART
-
+#define PLATFORM_DAL_UART
+#define UART_RD_MAX 0xFF
 struct boatPlatformUART
 {
-    hal_uart_port_t uartPort; //! Fibocom  UART descriptor
+    int uartId; //! Fibocom  UART descriptor
+    fd_set  recvFds;
+	BUINT8 rdBuf[UART_RD_MAX];
+	void (*rdCallback)(struct boatPlatformUART *uartRef,  unsigned char *data, BUINT32 len);
+	int rdBreak;
 };
 #endif // PLATFORM_DAL_UART
 

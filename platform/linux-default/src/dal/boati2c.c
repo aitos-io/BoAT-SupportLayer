@@ -1,5 +1,6 @@
 #include <linux/i2c-dev.h>
 #include <linux/i2c.h>
+#include <sys/ioctl.h>
 #include "boattypes.h"
 #include "boatlog.h"
 #include "boatdal.h"
