@@ -87,6 +87,9 @@ Function: boatUartInit()
     A boatUart struct pointer,the uartRef is the boatUart descriptor \n
     used to indicate which uart device is opened.
 
+@param[in] port
+    Port is the number of uart device, start at 0
+
 @param[in] config
     The config is the configuration parameters of uart device,including:\n
     	uart device number 

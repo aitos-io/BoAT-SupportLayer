@@ -38,7 +38,7 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
 
     if((queueRef == NULL) || (queueName == NULL) || (maxSize == 0) || (maxNumber == 0)) // CHECK PARAMETERS
     {
-		BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:	 mq_open parameter err[%lx==NULL] [%lx==NULL] [%ld==0] [%ld==0]\r\n",queueRef,(unsigned long)queueName, maxSize, maxNumber);
+		BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:	 mq_open parameter err[%p==NULL] [%p==NULL] [%d==0] [%d==0]\r\n",queueRef,queueName, maxSize, maxNumber);
         return BOAT_ERROR;
     }
     if(queueName[0] != '/')
@@ -55,7 +55,7 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
             return BOAT_ERROR;
         }
     }
-    BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    mq_open queueName[%lx] [%lx] [%s] \r\n",(unsigned long)queueName,(unsigned long)name,queueName);
+    BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    mq_open queueName[%p] [%p] [%s] \r\n",queueName,name,queueName);
     
 
     mqattr.mq_maxmsg = maxNumber;
@@ -87,7 +87,7 @@ BOAT_RESULT boatQueueInit(boatQueue *queueRef, char *queueName, BUINT32 maxSize,
         // name slash error
         else
         {
-            BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    mq_open errno name[%s] id[%lx] [%d][%02x] \r\n",queueName,(unsigned long)queueRef,errno,errno);
+            BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    mq_open errno name[%s] id[%p] [%d][%02x] \r\n",queueName,queueRef,errno,errno);
             return BOAT_ERROR;
         }
     }
@@ -131,13 +131,13 @@ BOAT_RESULT boatQueueDelete(boatQueue *queueRef)
     int ret = 0;
 	if(queueRef == NULL)
     {
-    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]:    boatQueueDelete The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]:    boatQueueDelete The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",*((int *)queueRef));
     	return BOAT_ERROR;
     }
 
     if((queueRef->queueId <= 0) || (queueRef->name == NULL))    // parameter check
     {
-		BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:	 boatQueueDelete parameter err queueId[%lx==NULL] name[%lx==NULL]\r\n",queueRef->queueId,(unsigned long)queueRef->name);
+		BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:	 boatQueueDelete parameter err queueId[%x==NULL] name[%x==NULL]\r\n",queueRef->queueId,*(int *)queueRef->name);
         return BOAT_ERROR;
     }
     ret = mq_close(queueRef->queueId);
@@ -169,10 +169,9 @@ BOAT_RESULT boatQueueSend(const boatQueue *queueRef, unsigned char *msgPtr, BUIN
 {
     int ret;
     struct mq_attr mqattr;
-    unsigned int rvprio = 0;
 	if(queueRef == NULL)
     {
-    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",*(int *)queueRef);
     	return BOAT_ERROR;
     }
 
@@ -223,7 +222,7 @@ BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 
     unsigned int rvprio = 0;
  	if(queueRef == NULL)
     {
-    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",(BUINT32)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",*(int *)queueRef);
     	return BOAT_ERROR;
     }
 

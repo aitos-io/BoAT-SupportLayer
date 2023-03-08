@@ -14,7 +14,10 @@
 #include "boatplatformosal.h"
 #include "boatlog.h"
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 /////#include "fibo_opencpu.h"
 
@@ -24,7 +27,7 @@
 int fileSize(char* filename)
 {
 	struct stat statbuf;
-	if(fstat(filename,&statbuf) ==0)
+	if(stat(filename,&statbuf) ==0)
 		return(statbuf.st_size);
 
 	return -1;

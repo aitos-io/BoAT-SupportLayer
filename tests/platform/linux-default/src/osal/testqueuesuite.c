@@ -370,7 +370,7 @@ static void *queueTaskReceiveSleep2s(void *param)
 	BUINT8 testMsgRx[BOAT_QUEUE_MAX_SIZE];
 	BUINT32 testMsgLen;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][queue][task] Testing queue task receive id[%x]\r\n",param);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][queue][task] Testing queue task receive id[%p]\r\n",param);
 
 	struct queueTestStruTask{
 		boatQueue *p;
@@ -385,7 +385,7 @@ static void *queueTaskReceiveSleep2s(void *param)
 	for (int i = 0;i < 5;i++)
 	{
 		/////sleep(50);
-		BoatLog(BOAT_LOG_NORMAL, "[boat][queue] Testing queue task receive times[%d] id[%x]\r\n",i,ptestQueueId);
+		BoatLog(BOAT_LOG_NORMAL, "[boat][queue] Testing queue task receive times[%d] id[%p]\r\n",i,ptestQueueId);
 		testMsgLen = 1;
 		rtnVal = boatQueueReceive(ptestQueueId,testMsgRx,sizeof(testMsgRx),0);
 		sleep(1);///// sleep 2 seconds
@@ -398,7 +398,7 @@ static void *queueTaskReceiveSleep2s(void *param)
 	sleep(1);///// sleep 2 seconds
 	boatQueueDelete(&taskQueueId);
 
-	return ;	
+	return NULL;	
 }
 
 
@@ -419,7 +419,6 @@ START_TEST(test_BoAT_OSAL_linuxDefault_06Queue_test_0032MultiTaskUseOneQueue)
 
 	pthread_t th;
     pthread_attr_t attr;
-    size_t stacksize;
 											
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);

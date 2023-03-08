@@ -21,6 +21,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 #include <sys/times.h>
+#include <sys/types.h>
 
 static void boatTimerDefaultThread(union sigval sigv)
 {
@@ -41,9 +42,8 @@ static void boatTimerDefaultThread(union sigval sigv)
     }
 }
 
-char *boatGetTimeStamp(void)
+void boatGetTimeStamp(char   * p)
 {
-    char *time_stamp_out = NULL;
     time_t ltime;
     struct tm *today;
     struct timeb timebuffer;
@@ -52,7 +52,7 @@ char *boatGetTimeStamp(void)
     today = localtime( &ltime );
     ftime( &timebuffer);
 
-    asprintf(&time_stamp_out, 
+    sprintf(p, 
 			"%04d%02d%02d_%02d%02d%02d_%03d", 
 			1900 + today->tm_year,
 			today->tm_mon + 1,
@@ -61,8 +61,6 @@ char *boatGetTimeStamp(void)
 			today->tm_min,
 			today->tm_sec,
 			timebuffer.millitm);
-
-    return time_stamp_out;
 }
 
 BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callbackRoutine)(void *), void *argv)
@@ -126,11 +124,11 @@ BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
 
     if(timer_delete(timerRef->timerId) == 0)
     {
-		BoatLog(0, "timer deleted (timerId=%x)", timerRef->timerId);
+		BoatLog(0, "timer deleted (timerId=%p)", timerRef->timerId);
 		memset(timerRef,0,sizeof(boatTimer));
 		return BOAT_SUCCESS;
     }
-    BoatLog(0, "timer delete fialed (timerId=%x)", timerRef->timerId);
+    BoatLog(0, "timer delete fialed (timerId=%p)", timerRef->timerId);
 	return BOAT_ERROR;
 }
 
@@ -147,7 +145,7 @@ void boatTimerInitTimeridZero(boatTimer *timerRef)
 
 void boatTimerInitTimeridInvalid(boatTimer *timerRef)
 {
-	timerRef->timerId = 0x80ba2d00;
+	timerRef->timerId = (timer_t)0x80ba2d00;
 }
 
 
