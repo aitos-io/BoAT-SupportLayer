@@ -100,7 +100,7 @@ void BoatSleepMs(BUINT32 ms);
 //!@brief Abstract definition of semaphore object based on Linux
 #ifndef PLATFORM_OSAL_SEM
 #define PLATFORM_OSAL_SEM
-struct boat_platform_sem{
+struct boatPlatformSem{
     sem_t semid; //! Linux semaphore descriptor
 };
 #endif
