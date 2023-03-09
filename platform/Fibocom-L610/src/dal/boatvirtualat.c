@@ -22,9 +22,9 @@ void dal_virtualAT_callback(BUINT8 *buf, BUINT16 len)
 /*!*****************************************************************************
 @brief Init a BoAT virtual AT channel
 
-Function: boatVirtualATOpen()
+Function: boatVirtualAtOpen()
 
-     The boatVirtualATOpen() function open/create a Virtual at channel\n
+     The boatVirtualAtOpen() function open/create a Virtual at channel\n
      used to send AT command to Module and receive AT response from Module.
 
 @return
@@ -37,7 +37,7 @@ Function: boatVirtualATOpen()
     This function is used to get AT response from Module.
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_init(BoAT_virtualAT_rx_callback fun_cb);
-BOAT_RESULT boatVirtualATOpen(boatVirtualAtRxCallback rxCallback)
+BOAT_RESULT boatVirtualAtOpen(boatVirtualAtRxCallback rxCallback)
 {
     
     if(g_virtualAT_Channel_is_used == BOAT_FALSE)
@@ -59,9 +59,9 @@ BOAT_RESULT boatVirtualATOpen(boatVirtualAtRxCallback rxCallback)
 /*!*****************************************************************************
 @brief Sending AT command to Module through virtualAT channel
 
-Function: boatVirtualATSend()
+Function: boatVirtualAtSend()
 
-     The boatVirtualATSend() sends AT command to Module.
+     The boatVirtualAtSend() sends AT command to Module.
 
 @return
     This function returns BOAT_SUCCESS if the transmission is successful.\n
@@ -76,7 +76,7 @@ Function: boatVirtualATSend()
 
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_send(char *cmd,int timeout);
-BOAT_RESULT boatVirtualATSend(char *cmd, BUINT16 len)
+BOAT_RESULT boatVirtualAtSend(char *cmd, BUINT16 len)
 {
     if(((cmd == NULL) || (len == 0)) || (strlen(cmd) != len))
     {
@@ -97,9 +97,9 @@ BOAT_RESULT boatVirtualATSend(char *cmd, BUINT16 len)
 /*!*****************************************************************************
 @brief Sending AT command to Module through virtualAT channel
 
-Function: boatVirtualATTimedSend()
+Function: boatVirtualAtTimedSend()
 
-     The boatVirtualATTimedSend() sends AT command to Module.
+     The boatVirtualAtTimedSend() sends AT command to Module.
 
 @return
     This function returns BOAT_SUCCESS if the transmission is successful.\n
@@ -118,7 +118,7 @@ Function: boatVirtualATTimedSend()
     n: set timeout time to n millisecond
 
 *******************************************************************************/
-BOAT_RESULT boatVirtualATTimedSend(char *cmd, BUINT16 len, BUINT16 timeout)
+BOAT_RESULT boatVirtualAtTimedSend(char *cmd, BUINT16 len, BUINT16 timeout)
 {
     return BOAT_ERROR_DAL_VIRTUAL_NOT_SUPPORT;
 }
@@ -126,9 +126,9 @@ BOAT_RESULT boatVirtualATTimedSend(char *cmd, BUINT16 len, BUINT16 timeout)
 /*!*****************************************************************************
 @brief Deinit a BoAT virtual AT channel
 
-Function: boatVirtualATClose()
+Function: boatVirtualAtClose()
 
-     The boatVirtualATClose() function close a virtual AT channel.
+     The boatVirtualAtClose() function close a virtual AT channel.
 
 @return
     This function returns BOAT_SUCCESS if the closing is successful.\n
@@ -137,7 +137,7 @@ Function: boatVirtualATClose()
 
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_deinit(void);
-BOAT_RESULT boatVirtualATClose(void)
+BOAT_RESULT boatVirtualAtClose(void)
 {
     if(g_virtualAT_Channel_is_used == BOAT_TRUE)
     {

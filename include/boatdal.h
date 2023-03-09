@@ -154,7 +154,7 @@ BOAT_RESULT boatUartDeinit(boatUart *uartRef);
 #ifdef PLATFORM_DAL_VIRTUALAT
 
 //!@brief DAL boat uart object descriptor
-typedef struct boatPlatformVirtualAT boatVirtualAt;
+//typedef struct boatPlatformVirtualAT boatVirtualAt;
 
 /*!*****************************************************************************
 @brief VirtualAT receieing call back function defination
@@ -258,8 +258,7 @@ Function: baotVirtualAtClose()
 
 *******************************************************************************/
 //! BOAT_RESULT BoAT_virtualAT_deinit(void);
-BOAT_RESULT baotVirtualAtClose(void);
-
+BOAT_RESULT boatVirtualAtClose(void);
 #endif
 
 #ifdef PLATFORM_DAL_BLE_SERVICE
