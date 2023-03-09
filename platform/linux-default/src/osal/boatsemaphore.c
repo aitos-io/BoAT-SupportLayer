@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #include "boatosal.h"
 #include "boattypes.h"
@@ -163,13 +164,29 @@ BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    (void)timeout;
-
-    int ret = sem_wait(&(semRef->semid));
-    if(ret != 0)
+    if(timeout > 0)
     {
-        BoatLog(BOAT_LOG_CRITICAL,"sem_wait error!");
-        return BOAT_ERROR;
+        BUINT32 loop = 0;
+        while (1)
+        {
+            if((sem_trywait(&(semRef->semid))) || (loop >= timeout))
+            {
+                break;
+            }
+            usleep(1000);
+            loop ++;
+
+        }
+        
+    }
+    else
+    {
+        int ret = sem_wait(&(semRef->semid));
+        if(ret != 0)
+        {
+            BoatLog(BOAT_LOG_CRITICAL,"sem_wait error!");
+            return BOAT_ERROR;
+        }
     }
 
     return BOAT_SUCCESS;
