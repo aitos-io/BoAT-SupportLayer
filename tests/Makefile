@@ -35,6 +35,7 @@ ifeq ($(PLATFORM_TARGET),linux-default)
 	TESTDIR = $(BOAT_BUILD_DIR)/testapp/out
 	TESTMKDIR =  $(BOAT_MKDIR) -p 
 else
+	TESTMKDIR = $(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
 
 endif
 endef
