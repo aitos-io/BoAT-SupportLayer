@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
 	printf("===== linux-default tests =====\n");
 	/////runtest("Queue",runQueueTests);
 	/////runtest("Timer",runTimerTests);
-	runtest("Timer",runUartTests);
+	//runtest("Timer",runUartTests);
+
+    runtest("sem",runSemTests);
 }
 
