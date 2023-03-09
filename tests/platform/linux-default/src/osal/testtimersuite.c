@@ -6,7 +6,9 @@
 #include "boatosal.h"
 #include "boatlog.h"
 #include "boattypes.h"
-#include "../../boatcheck/boatcheck.h"
+//#include "../../boatcheck/boatcheck.h"
+#include "check.h"
+
 
 
 boatTimer testTimerID;

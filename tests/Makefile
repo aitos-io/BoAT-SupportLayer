@@ -25,6 +25,7 @@ ifeq ($(PLATFORM_TARGET),linux-default)
 	TESTLIBS = $(BOAT_LIB_DIR)/libboatvendor.a \
 					-lrt \
 					-lpthread \
+					-lcheck \
 					$(LINK_LIBS)
 
 	TESTMAKE = $(CC) $(BOAT_CFLAGS) $(BOAT_LFLAGS) $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/linux-default/testapp.c
@@ -48,7 +49,7 @@ all: $(SUBDIRS)
 	$(eval $(call getdir))
 	$(eval $(call geto))
 	$(AR) r $(LIBNAME) $(SRCS_o)
-	$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
+	#$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
 	$(eval $(call testapp))
 	$(TESTMKDIR) $(TESTDIR)
 	$(TESTMAKE) $(TESTLIBS) $(TESTO) $(TESTDIR)$(TESTAPP)

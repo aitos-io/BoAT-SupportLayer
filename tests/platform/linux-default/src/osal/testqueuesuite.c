@@ -4,10 +4,11 @@
 #include "string.h"
 #include "pthread.h"
 #include <unistd.h>
+#include "check.h"
 
 
 #include "boatlog.h"
-#include "../../boatcheck/boatcheck.h"
+//#include "../../boatcheck/boatcheck.h"
 #include "boatosal.h"
 boatQueue testQueueId;
 boatQueue taskQueueId;
