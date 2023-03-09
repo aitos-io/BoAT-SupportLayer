@@ -169,7 +169,7 @@ BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout)
         BUINT32 loop = 0;
         while (1)
         {
-            if((sem_trywait(&(semRef->semid))) || (loop >= timeout))
+            if((!sem_trywait(&(semRef->semid))) || (loop >= timeout))
             {
                 break;
             }
