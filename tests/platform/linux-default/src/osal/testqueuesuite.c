@@ -4,10 +4,11 @@
 #include "string.h"
 #include "pthread.h"
 #include <unistd.h>
+#include "check.h"
 
 
 #include "boatlog.h"
-#include "../../boatcheck/boatcheck.h"
+//#include "../../boatcheck/boatcheck.h"
 #include "boatosal.h"
 boatQueue testQueueId;
 boatQueue taskQueueId;
@@ -548,6 +549,7 @@ Suite *makeQueuetest_suite(void)
 
     /* Add a test case to the Suite */
     suite_add_tcase(sQueuetest,tcQueuetest_api);
+	tcase_set_timeout(tcQueuetest_api,20);
 
     /* Test cases are added to the test set */
 

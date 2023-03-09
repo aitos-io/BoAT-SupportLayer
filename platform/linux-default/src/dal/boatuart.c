@@ -341,12 +341,11 @@ BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config,b
 		BoatLog(BOAT_LOG_NORMAL, "[boat][uart ] linux-default uart port number is invalid [%d],must be less than [%ld]",port,UART_PORT_MAX);
 		return BOAT_ERROR;
 	}
-	BoatLog(BOAT_LOG_NORMAL, "[boat][uart ] linux-default uart port number is invalid [%d],dev name is [%s]",port,uartDevName[port]);
 	
 	int fd = open(uartDevName[port], O_RDWR | O_NOCTTY | O_NONBLOCK);
 	if (fd == -1)
 	{
-		BoatLog(BOAT_LOG_NORMAL, "[boat][uart ] linux-default uart: %s open faild!\r\n","/dev/ttyUSB1");
+		BoatLog(BOAT_LOG_NORMAL, "[boat][uart ] linux-default uart: %s open faild!\r\n",uartDevName[port]);
 		return BOAT_ERROR;
 	}
 	uartRef->uartId = fd;
@@ -429,7 +428,6 @@ BOAT_RESULT boatUartDeinit(boatUart *uartRef)
 	}
 
 	uartRef->rdBreak = 0;
-	usleep(200 * 1000);
 	close(uartRef->uartId);
 	uartRef->uartId = 0;
 	uartRef->rdCallback = NULL;

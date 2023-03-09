@@ -55,14 +55,9 @@ struct boatPlatformI2C
 
 //!@brief Abstract definition of virtual AT object based on Linux
 
-#define PLATFORM_DAL_VIRTUALAT
 #ifndef PLATFORM_DAL_VIRTUALAT
-//! struct boatPlatformVirtualAT{
-//!    BSINT32 virtualATID; //! Fibocom-L610 virtual AT descriptor
-//! };
-
-extern void dal_virtualAT_callback(BUINT8 *buf, BUINT16 len);
-
+#define PLATFORM_DAL_VIRTUALAT
+extern void dalVirtualAtCallback(BUINT8 *buf, BUINT16 len);
 #endif
 
 #define PLATFORM_DAL_SSL

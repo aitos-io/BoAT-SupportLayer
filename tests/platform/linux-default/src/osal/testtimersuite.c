@@ -6,7 +6,9 @@
 #include "boatosal.h"
 #include "boatlog.h"
 #include "boattypes.h"
-#include "../../boatcheck/boatcheck.h"
+//#include "../../boatcheck/boatcheck.h"
+#include "check.h"
+
 
 
 boatTimer testTimerID;
@@ -348,7 +350,6 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0022_MultiTimerStartAndDestr
     rtnVal = boatTimerDestroy(&testTimerid7);///// must destroy the timer once you stop using it.
     ck_assert_int_eq(rtnVal,-1);
     closeStateDetectTask();
-    sleep(1);
     BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_linuxDefault_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer finished\r\n");
 }
 END_TEST
@@ -386,7 +387,6 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0023_periodTimerStartAndDest
     showtimestamp();
     boatTimerDestroy(&testTimerID);    ///// must destroy the timer once you stop using it.
     closeStateDetectTask();
-    sleep(1);
     BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_linuxDefault_03Timer_test_0023_periodTimerStartAndDestroy_onetime finished\r\n");
 }
 END_TEST
@@ -401,14 +401,14 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0024_MultiTimerStartAndDestr
     
     rtnVal = boatTimerStart(&testTimerid5, 0, 1500, onetimeFunc5, NULL);
     ck_assert_int_eq(rtnVal,0);
-    usleep(500);
+    usleep(500 * 1000);
     rtnVal = boatTimerStart(&testTimerid6, 0, 1500, onetimeFunc6, NULL);
     ck_assert_int_eq(rtnVal,0);
-    usleep(500);
+    usleep(500 * 1000);
     rtnVal = boatTimerStart(&testTimerid7, 0, 1500, onetimeFunc7, NULL);
     ck_assert_int_eq(rtnVal,0);
     
-    usleep(10000);
+    usleep(4000 * 1000);
 
     showtimestamp();
     rtnVal = boatTimerDestroy(&testTimerid5);///// must destroy the timer once you stop using it.
@@ -454,7 +454,7 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0025_boatTimerDestroy_timerI
 
     
     rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
-    ck_assert_int_eq(rtnVal,0);
+    ck_assert_int_eq(rtnVal,-1);
     BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_linuxDefault_03Timer_test_0025_boatTimerDestroy_timerIDInvalide finished\r\n");
 }
 END_TEST
@@ -469,8 +469,11 @@ Suite *makeTimertestSuite(void)
 
     /* Add a test case to the Suite */
     suite_add_tcase(sTimertest,tcTimertest_api);
+	
+	tcase_set_timeout(tcTimertest_api,20);
 
     /* Test cases are added to the test set */
+#if 1
 
     tcase_add_test(tcTimertest_api, test_BoAT_OSAL_linuxDefault_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer);
     tcase_add_test(tcTimertest_api, test_BoAT_OSAL_linuxDefault_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer);
@@ -489,7 +492,6 @@ Suite *makeTimertestSuite(void)
     tcase_add_test(tcTimertest_api, test_BoAT_OSAL_linuxDefault_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer);
 
     tcase_add_test(tcTimertest_api, test_BoAT_OSAL_linuxDefault_03Timer_test_0023_periodTimerStartAndDestroy_onetime);
-#if 1
     tcase_add_test(tcTimertest_api, test_BoAT_OSAL_linuxDefault_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer);
 
     tcase_add_test(tcTimertest_api, test_BoAT_OSAL_linuxDefault_03Timer_test_0025_boatTimerDestroy_timerIDInvalide); 
@@ -503,8 +505,6 @@ Suite *makeTimertestSuite(void)
 
 int runTimerTests(void)
 {
-
-#if 1
     SRunner *sr = NULL;
     int failed_number = 0;
 
@@ -520,9 +520,6 @@ int runTimerTests(void)
     srunner_free(sr);
 
     return failed_number;
-#endif
-
-    
 }
 
 

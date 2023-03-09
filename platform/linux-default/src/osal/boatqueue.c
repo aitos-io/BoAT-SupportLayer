@@ -131,11 +131,11 @@ BOAT_RESULT boatQueueDelete(boatQueue *queueRef)
     int ret = 0;
 	if(queueRef == NULL)
     {
-    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]:    boatQueueDelete The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",*((int *)queueRef));
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]:    boatQueueDelete The boatQueue is null");
     	return BOAT_ERROR;
     }
 
-    if((queueRef->queueId <= 0) || (queueRef->name == NULL))    // parameter check
+    if((queueRef->queueId == 0) || (queueRef->name == NULL))    // parameter check
     {
 		BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:	 boatQueueDelete parameter err queueId[%x==NULL] name[%x==NULL]\r\n",queueRef->queueId,*(int *)queueRef->name);
         return BOAT_ERROR;
@@ -171,7 +171,7 @@ BOAT_RESULT boatQueueSend(const boatQueue *queueRef, unsigned char *msgPtr, BUIN
     struct mq_attr mqattr;
 	if(queueRef == NULL)
     {
-    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",*(int *)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]:    boatQueueDelete The boatQueue is null");
     	return BOAT_ERROR;
     }
 
@@ -222,7 +222,7 @@ BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 
     unsigned int rvprio = 0;
  	if(queueRef == NULL)
     {
-    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]The boatQueue address is illegal in boatQueueInit, bad address:%x,ph",*(int *)queueRef);
+    	BoatLog(BOAT_LOG_NORMAL, "[boat][queue]:    boatQueueDelete The boatQueue is null");
     	return BOAT_ERROR;
     }
 
