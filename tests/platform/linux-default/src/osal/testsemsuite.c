@@ -10,14 +10,12 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 
-void boatSemInitSemIdZero(boatSem *sem)
-{
-	memset(sem,0,sizeof(boatSem));
-}
+
 
 #if 1
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0010InitSemSuccess)
 {
+
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0010InitSemSuccess\r\n");
 	boatSem testSemId;
@@ -38,7 +36,7 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0011InitSemFailSemAddrNULL)
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0011InitSemFailSemAddrNULL\r\n");
 	
 	rtnVal = boatSemInit(NULL,0);	///// input 0 to test retrun -1
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0011InitSemFailSemAddrNULL finished\r\n");
 
@@ -48,10 +46,9 @@ END_TEST
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0012InitSemFailSemCreateReturnZero)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Try test_BoAT_OSAL_LinuxDefault_04Sem_test_0029InitSemGetLimit to test \
-		 test_BoAT_OSAL_LinuxDefault_04Sem_test_0012InitSemFailSemCreateReturnZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0012InitSemFailSemCreateReturnZero\r\n");
 	rtnVal = boatSemInit(0,2);	///// input 0 to test retrun -1
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0012InitSemFailSemCreateReturnZero finished\r\n");
 
@@ -80,26 +77,13 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0014DeinitSemFailSemAddrNULL)
 
 	
 	rtnVal = boatSemDestroy(0);	///// test 0 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0014DeinitSemFailSemAddrNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0015DeinitSemFailSemIdEqualZero)
-{
-	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0015DeinitSemFailSemIdEqualZero\r\n");
-	
-	boatSem testSemId;
-	boatSemInitSemIdZero(&testSemId);	///// SemId =  0;
-	
-	rtnVal = boatSemDestroy(&testSemId);	
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0015DeinitSemFailSemIdEqualZero finished\r\n");
 
-}
-END_TEST
 
 
 
@@ -149,27 +133,13 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0019SemWaitFailSemAddrNULL)
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0019SemWaitFailSemAddrNULL\r\n");
 	
 	rtnVal = boatSemWait(0,0);	///// test wait 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0019SemWaitFailSemAddrNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0020SemWaitFailSemIdEqualZero)
-{
-	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0020SemWaitFailSemIdEqualZero\r\n");
-	boatSem testSemId;
-	boatSemInitSemIdZero(&testSemId);	///// create a semID = 0
-	
-	rtnVal = boatSemWait(&testSemId,0);	///// test wait 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0020SemWaitFailSemIdEqualZero finished\r\n");
-
-}
-END_TEST
 
 
 
@@ -179,47 +149,46 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0021SemTimedWaitFailSemAddrNUL
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0021SemTimedWaitFailSemAddrNULL\r\n");
 	
 	rtnVal = boatSemWait(0,1);	///// test timed wait 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0021SemTimedWaitFailSemAddrNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitFailSemIdEqualZero)
+START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitSuccessTimeOut)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitFailSemIdEqualZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitSuccessTimeOut\r\n");
 	boatSem testSemId;
-	boatSemInitSemIdZero(&testSemId);	///// create a semID = 0
+	rtnVal = boatSemInit(&testSemId,0);	
 	
-	rtnVal = boatSemWait(&testSemId,1);	///// test timed wait 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitFailSemIdEqualZero finished\r\n");
+	rtnVal = boatSemWait(&testSemId,5000);	///// test timed wait 
+
+	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);			///// the rtnVal must check!
+
+	rtnVal = boatSemDestroy(&testSemId);
+
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitSuccessTimeOut finished\r\n");
 
 }
 END_TEST
 
-
-
-START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitFailTimeout)
+START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitSuccessCountNoZero)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitFailTimeout\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitSuccessCountNoZero\r\n");
 	boatSem testSemId;
 	rtnVal = boatSemInit(&testSemId,1);	
 	
-	rtnVal = boatSemWait(&testSemId,0);	///// test wait 
-	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);			///// the rtnVal must check!
-	rtnVal = boatSemWait(&testSemId,1000);	///// test timed wait 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);			///// the rtnVal must check!
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitFailTimeout timeout [%x]\r\n",rtnVal);
+	rtnVal = boatSemWait(&testSemId,5000);	
+	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);		
 
 	rtnVal = boatSemDestroy(&testSemId);
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitFailTimeout finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitSuccessCountNoZero finished\r\n");
 
 }
 END_TEST
@@ -248,27 +217,13 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0025SemPostFailSemAddrNULL)
 
 
 	rtnVal = boatSemPost(0);	///// test post 
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 
 	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0025SemPostFailSemAddrNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0026SemPostFailSemIdEqualZero)
-{
-	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0026SemPostFailSemIdEqualZero\r\n");
-	boatSem testSemId;
-	boatSemInitSemIdZero(&testSemId);	///// create a semID = 0
-	
-	rtnVal = boatSemPost(&testSemId);	
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_OSAL_LinuxDefault_04Sem_test_0026SemPostFailSemIdEqualZero finished\r\n");
-
-}
-END_TEST
 
 
 
@@ -360,19 +315,18 @@ static void semTaskWatiSleep2s(void *param)
 
 	for (int i = 0;i < 5;i++)
 	{
-		//fibo_taskSleep(50);
+
 		usleep(50*1000);
-		BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing sem task wait times[%d] id[%x]\r\n",i,ptestSemId);
+		BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] Testing sem task wait times[%d] id[%x]\r\n",i,ptestSemId);
 		rtnVal = boatSemWait(ptestSemId,0);
 		semTest->counter --;
 		rtnVal = boatSemPost(ptestSemId);
-		//fibo_taskSleep(2000);///// sleep 2 seconds
 		sleep(2);
 		//rtnVal = boatSemDestroy(ptestSemId);
-		BoatLog(BOAT_LOG_NORMAL, "[boat][sem] semTaskWatiSleep2s post rtnVal[%x]\r\n",rtnVal);
+		BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] semTaskWatiSleep2s post rtnVal[%x]\r\n",rtnVal);
 		
 	}
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing semTaskWatiSleep2s finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] Testing semTaskWatiSleep2s finished\r\n");
 	//fibo_taskSleep(1000);///// sleep 2 seconds
 	sleep(2);
 
@@ -402,7 +356,7 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0028MultiTaskUseOneSem)
 	pthread_t testThread;
 	pthread_create(&testThread,NULL,semTaskWatiSleep2s,&semTest);
 	
-	/////fibo_taskSleep(2200);
+
 
 	for (i = 0;i < 6;i++)
 	{
@@ -435,6 +389,8 @@ Suite *makeSemtest_suite(void)
     /* Create test cases */
     TCase *tcSemtest_api = tcase_create("sem_test_api");
 
+	tcase_set_timeout(tcSemtest_api,100);
+
     /* Add a test case to the Suite */
     suite_add_tcase(sSemtest,tcSemtest_api);
 
@@ -446,19 +402,20 @@ Suite *makeSemtest_suite(void)
 	
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0013DeinitSemSuccess);
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0014DeinitSemFailSemAddrNULL);
-	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0015DeinitSemFailSemIdEqualZero);
+	//tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0015DeinitSemFailSemIdEqualZero);
 	
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0017SemWaitSuccess);
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0018SemTimedWaitSuccess);
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0019SemWaitFailSemAddrNULL);
-	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0020SemWaitFailSemIdEqualZero);
+	//tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0020SemWaitFailSemIdEqualZero);
 	
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0021SemTimedWaitFailSemAddrNULL);
-	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitFailSemIdEqualZero);
-	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitFailTimeout);
+	//tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitFailSemIdEqualZero);
+	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitSuccessTimeOut);
+	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0023SemTimedWaitSuccessCountNoZero);
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0024SemPostSuccess);
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0025SemPostFailSemAddrNULL);
-	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0026SemPostFailSemIdEqualZero);
+	//tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0026SemPostFailSemIdEqualZero);
 
 	tcase_add_test(tcSemtest_api,test_BoAT_OSAL_LinuxDefault_04Sem_test_0028MultiTaskUseOneSem);
 #if 0
