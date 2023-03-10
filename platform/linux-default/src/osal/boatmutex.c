@@ -154,6 +154,32 @@ Function: boatMutexLock()
     block if the decrement cannot be immediately performed.
 
 *******************************************************************************/
+
+// static void timeOutMutexTask(void *parm)
+// {
+
+//     BUINT32 timeTest = 0;//us
+
+//     struct mutexTimerStru{
+// 		boatMutex t_mutex;
+// 		BUINT32 time;
+// 	}  p_mutexTest;
+
+//     //p_mutexTest = (struct mutexTimerStru *)parm;
+//     memcpy(&p_mutexTest,(struct mutexTimerStru *)parm,sizeof(p_mutexTest));
+
+//     while(timeTest < ((p_mutexTest.time)*1000))
+//     {
+//         usleep(1000);
+//         timeTest += 1000;
+//     }
+
+//     pthread_mutex_unlock(&(p_mutexTest.t_mutex.mutexid));
+
+//     return;
+
+// }
+
 BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
 {
     if(mutexRef == NULL)
@@ -162,29 +188,29 @@ BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
+    int ret = pthread_mutex_lock(&(mutexRef->mutexid));
+    if(ret != 0)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"pthread_mutex_lock error!");
+        return BOAT_ERROR;
+    }
+    
     if(timeout > 0)
     {
-        BUINT32 loop = 0;
-        while (1)
-        {
-            if((0 == pthread_mutex_trylock(&(mutexRef->mutexid))) || ((loop*1000) >= timeout))
-            {
-                break;
-            }
-            usleep(1000);
-            loop ++;
+        // struct mutexTimerStru{
+		//     boatMutex t_mutex;
+		//     BUINT32 time;
+	    // } mutexTest;
 
-        }
+        // mutexTest.time = timeout;//ms
+        // memcpy(&(mutexTest.t_mutex),mutexRef,sizeof(boatMutex));
+
+
+        // printf("timeout = %d\n",mutexTest.time);
+
+        // pthread_t timerThread;
+	    // pthread_create(&timerThread,NULL,timeOutMutexTask,&mutexTest);
         
-    }
-    else
-    {
-        int ret = pthread_mutex_lock(&(mutexRef->mutexid));
-        if(ret != 0)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"pthread_mutex_lock error!");
-            return BOAT_ERROR;
-        }
     }
 
     return BOAT_SUCCESS;
