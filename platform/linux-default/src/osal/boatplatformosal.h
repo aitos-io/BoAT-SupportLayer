@@ -29,6 +29,7 @@
 #include <semaphore.h>
 
 #include <pthread.h>
+#include <mutex.h>
 
 #include <fcntl.h>           /* For O_* constants */
 #include <sys/stat.h>        /* For mode constants */
@@ -107,9 +108,9 @@ struct boatPlatformSem{
 #endif
 
 //!@brief Abstract definition of mutex object based on Linux
-#define PLATFORM_OSAL_MUTEX
 #ifndef PLATFORM_OSAL_MUTEX
-struct boat_platform_mutex{
+#define PLATFORM_OSAL_MUTEX
+struct boatPlatformMutex{
     pthread_mutex_t mutexid; //! Linux mutex descriptor
 };
 #endif
