@@ -50,7 +50,7 @@ all: $(SUBDIRS)
 	$(eval $(call getdir))
 	$(eval $(call geto))
 	$(AR) r $(LIBNAME) $(SRCS_o)
-	#$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
+#	$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
 	$(eval $(call testapp))
 	$(TESTMKDIR) $(TESTDIR)
 	$(TESTMAKE) $(TESTLIBS) $(TESTO) $(TESTDIR)$(TESTAPP)
