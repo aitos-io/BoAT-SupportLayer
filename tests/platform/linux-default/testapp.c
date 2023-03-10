@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 	//runtest("Queue", runQueueTests);
 	//runtest("Timer", runTimerTests);
 	//runtest("Uart", runUartTests);
-	runtest("sem", runSemTests);
+	//runtest("sem", runSemTests);
+    runtest("mutex",runMutexTests);
 }
 
