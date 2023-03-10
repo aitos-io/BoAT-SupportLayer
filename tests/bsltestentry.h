@@ -8,3 +8,5 @@ int runUartTests(void);
 
 int runBleServiceTests(void);
 int runVirtualAtTests(void);
+
+int runMutexTests(void);
