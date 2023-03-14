@@ -124,10 +124,11 @@ struct boatPlatformQueue{
 #endif
 
 //!@brief Abstract definition of task object based on Linux
-#define PLATFORM_OSAL_TASK
 #ifndef PLATFORM_OSAL_TASK
-struct boat_platform_task{
-    pthread_t taskid; //! Linux thread descriptor
+#define PLATFORM_OSAL_TASK
+#define PTHREAD_STACK_MIN 8388608
+struct boatPlatformTask{
+    pthread_t taskId; //! Linux thread descriptor
 };
 #endif
 
