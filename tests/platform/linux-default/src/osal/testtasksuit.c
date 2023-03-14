@@ -24,14 +24,13 @@ static void taskHelloThread(void *param)
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] [test] This is taskHelloThread\r\n");
 	
 	ret = pthread_getattr_np(pt,&attr);
-	printf ("ret : %d , errno : %d [%x]\r\n", ret, errno, pt);
+	printf ("ret : %d , errno : %d [%x]\r\n", ret, errno, (int)pt);
 	ret = pthread_attr_getstacksize(&attr,&stackSize);
 	printf ("thread ret : %d , errno : %d %x\r\n", ret, errno, errno);
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] This is taskHelloThread end\r\n");
 
 	boatTaskDelete(&testTaskId);
-	return 2345;
 }
 
 static void task_test_delete_thread(void *param)
@@ -104,8 +103,8 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_02Task_test_0015_boatTaskCreat_Successful
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	void *vp;
 	int retvv = pthread_join(testTaskId.taskId, (void *)&vp);
-	printf("join[%x] ret %d %d\n", testTaskId.taskId, retvv, errno);
-	printf("task return %d \n",(int *)vp);
+	printf("join[%x] ret %d %d\n", (int)testTaskId.taskId, retvv, errno);
+	printf("task return %p \n",(int *)vp);
 	printf("stacksize %ld\r\n",(long)stackSize);
 	usleep(1000 * 1000);
 	printf("stacksize %ld\r\n",(long)stackSize);
@@ -164,14 +163,16 @@ static void taskLoopSleep500msLoopnum(void *param)
 
 	if(param != NULL)
 	{
-		loopnum = (BSINT32 *)param;
+		void *p = &param;
+		BSINT32 *bsip = (BSINT32 *)p;
+		loopnum = *bsip;
 	}
 	pthread_t tt = pthread_self();
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing taskLoopSleep500msLoopnum &param[%x][%p][%p]\r\n",tt,&param,param);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing taskLoopSleep500msLoopnum &param[%x][%p][%p]\r\n", (int)tt, &param, param);
 
 	for (int i = 0;i < loopnum;i++)
 	{
-		BoatLog(BOAT_LOG_NORMAL, "[boat][task] taskLoopSleep500msLoopnum[%p][%x] loop [%d] [%x]\r\n",&param,tt,i,loopnum);
+		BoatLog(BOAT_LOG_NORMAL, "[boat][task] taskLoopSleep500msLoopnum[%p][%x] loop [%d] [%x]\r\n",&param, (int)tt, i, loopnum);
 		usleep(1000 * 500);
 		
 	}
@@ -189,8 +190,7 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_02Task_test_0021_MultiTaskUseOneTaskFunc)
 	for (int i = 0;i < MULTITASKNUM;i++)
 	{
 		
-		//rtnVal = boatTaskCreat(&testTaskIdArray[i], taskNameArray[i], 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, taskLoopSleep500msLoopnum, 10);
-		rtnVal = boatTaskCreat(&testTaskIdArray[i], "theSame", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, taskLoopSleep500msLoopnum, (void *)10);
+		rtnVal = boatTaskCreat(&testTaskIdArray[i], "theSame", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, taskLoopSleep500msLoopnum, (void *)8);
 		ck_assert_int_eq(rtnVal,0);	///// qeual 0
 		usleep(1000 * 200);
 
@@ -216,6 +216,7 @@ Suite *makeTasktest_suite(void)
 	tcase_set_timeout(tcTasktest_api,20);
 
     /* Test cases are added to the test set */
+#if 1
 	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0010_boatTaskCreat_Successful_PriorityLow);
 	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal);
 	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh);
@@ -227,10 +228,9 @@ Suite *makeTasktest_suite(void)
 	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0017_boatTaskCreat_Failed_LinuxThreadCreateFailed);
 
 	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0018_boatTaskDelete_Successful);
-#if 1
 
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0021_MultiTaskUseOneTaskFunc);
 #endif
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_LinuxDefault_02Task_test_0021_MultiTaskUseOneTaskFunc);
 
     return sTasktest;
 
