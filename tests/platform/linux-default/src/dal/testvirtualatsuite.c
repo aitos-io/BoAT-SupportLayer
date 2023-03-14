@@ -1,8 +1,8 @@
+#include <stdio.h>
+#include <pthread.h>
 #include "boatdal.h"
 #include "boatlog.h"
 #include "boattypes.h"
-#include <stdio.h>
-#include <pthread.h>
 #include "check.h"
 
 START_TEST(test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0010_boatVirtualAtOpen_Failed)
@@ -38,13 +38,13 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0012_boatVirtualAtTimedSe
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_baotVirtualAtClose_Failed)
+START_TEST(test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_boatVirtualAtClose_Failed)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_baotVirtualAtClose_Failed\r\n");
-	rtnVal = baotVirtualAtClose();
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_boatVirtualAtClose_Failed\r\n");
+	rtnVal = boatVirtualAtClose();
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_baotVirtualAtClose_Failed finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_boatVirtualAtClose_Failed finished\r\n");
 
 }
 END_TEST
@@ -69,7 +69,7 @@ Suite *makeVirtualAtTestSuite(void)
 	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0010_boatVirtualAtOpen_Failed);
 	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0011_boatVirtualAtSend_Failed);
 	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed);
-	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_baotVirtualAtClose_Failed);
+	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_boatVirtualAtClose_Failed);
 #endif
     return sVirtualAttest;
 

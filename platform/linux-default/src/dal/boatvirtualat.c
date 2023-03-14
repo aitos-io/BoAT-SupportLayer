@@ -15,7 +15,7 @@ BOAT_RESULT boatVirtualAtTimedSend(char *cmd, BUINT16 len, BUINT16 timeout)
 {
 	return BOAT_ERROR;
 }
-BOAT_RESULT baotVirtualAtClose(void)
+BOAT_RESULT boatVirtualAtClose(void)
 {
 	return BOAT_ERROR;
 }

@@ -1,5 +1,4 @@
-void testMutexEntry(void);
-void testTaskEntry(void);
+int runTaskTests();
 int runTimerTests(void);
 int runSemTests(void);
 int runQueueTests(void);

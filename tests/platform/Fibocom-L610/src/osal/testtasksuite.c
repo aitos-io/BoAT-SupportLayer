@@ -45,7 +45,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0010_boatTaskCreat_Successful_
 	ck_assert_int_eq(rtnVal,0);	///// equal  0 , successful
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0010_boatTaskCreat_Successful_PriorityLow finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -58,7 +57,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0011_boatTaskCreat_Successful_
 	ck_assert_int_eq(rtnVal,0);	///// equal  0 , successful
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -71,7 +69,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0012_boatTaskCreat_Successful_
 	ck_assert_int_eq(rtnVal,0);	///// equal  0 , successful
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -84,7 +81,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0013_boatTaskCreat_Failed_Task
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -97,7 +93,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0014_boatTaskCreat_Failed_Task
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -110,7 +105,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0015_boatTaskCreat_Failed_Task
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -123,7 +117,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0016_boatTaskCreat_Failed_Task
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -133,7 +126,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_Fibo
 		to test test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive \r\n");	
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -145,8 +137,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0018_boatTaskDelete_Successful
 	boatTaskCreat(&testTaskId, "task_test_delete", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_test_delete_thread, NULL);
 	
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0018_boatTaskDelete_Successful finished\r\n");
-	return 0;
-
 }
 END_TEST
 
@@ -160,7 +150,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0019_boatTaskDelete_Failed_Tas
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 		
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -172,7 +161,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0020_boatTaskDelete_Failed_Tas
 	rtnVal = boatTaskDelete(&testTaskId);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive finished\r\n");
-	return 0;
 }
 END_TEST
 
@@ -235,7 +223,6 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc)
 
 	}
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc finished\r\n");
-	return 0;
 }
 END_TEST
 

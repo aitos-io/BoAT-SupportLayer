@@ -247,9 +247,9 @@ BOAT_RESULT boatVirtualAtTimedSend(char *cmd, BUINT16 len, BUINT16 timeout);
 /*!*****************************************************************************
 @brief Deinit a BoAT virtual AT channel
 
-Function: baotVirtualAtClose()
+Function: boatVirtualAtClose()
 
-     The baotVirtualAtClose() function close a virtual AT channel.
+     The boatVirtualAtClose() function close a virtual AT channel.
 
 @return
     This function returns BOAT_SUCCESS if the closing is successful.\n
