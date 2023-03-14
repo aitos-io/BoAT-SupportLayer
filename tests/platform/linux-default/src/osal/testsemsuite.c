@@ -166,7 +166,7 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0022SemTimedWaitSuccessTimeOut
 
 	rtnVal = boatSemWait(&testSemId,5000);	///// test timed wait 
 
-	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);			///// the rtnVal must check!
+	ck_assert_int_eq(rtnVal,BOAT_ERROR);			///// the rtnVal must check!
 
 	rtnVal = boatSemDestroy(&testSemId);
 
