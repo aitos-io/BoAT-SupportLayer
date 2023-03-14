@@ -164,13 +164,26 @@ BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
+    int ret;
+    BOAT_RESULT result = BOAT_ERROR;
+
     if(timeout > 0)
     {
         BUINT32 loop = 0;
         while (1)
         {
-            if((0 == sem_trywait(&(semRef->semid))) || ((loop*1000) >= (timeout*1000)))
+            ret = sem_trywait(&(semRef->semid));
+            if((0 == ret) || (loop >= timeout))
             {
+                if(ret == 0)
+                {
+                    result = BOAT_SUCCESS;
+                }
+                else
+                {
+                    result = BOAT_ERROR;
+                }
+
                 break;
             }
             usleep(1000);//sleep 1ms
@@ -181,14 +194,15 @@ BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout)
     }
     else
     {
-        int ret = sem_wait(&(semRef->semid));
+        ret = sem_wait(&(semRef->semid));
         if(ret != 0)
         {
             BoatLog(BOAT_LOG_CRITICAL,"sem_wait error!");
             return BOAT_ERROR;
         }
+        result = BOAT_SUCCESS;
     }
 
-    return BOAT_SUCCESS;
+    return result;
 }
 #endif/////PLATFORM_OSAL_SEM
