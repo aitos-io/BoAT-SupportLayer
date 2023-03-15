@@ -159,7 +159,25 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0023MutexTimedLockSuccessTim
 }
 END_TEST
 
+START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0024MutexTimedLockFailTimeout)
+{
+	BOAT_RESULT rtnVal;
+	BoatLog(BOAT_LOG_VERBOSE,"Testing test_BoAT_OSAL_LinuxDefault_01Mutex_test_0023MutexTimedLockFailTimeout\r\n");
+	boatMutex testMutexId;
+	rtnVal = boatMutexInit(&testMutexId);	
+	
+	rtnVal = boatMutexLock(&testMutexId,5000);	///// test timed lock 
+	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);			///// the rtnVal must check!
 
+	rtnVal = boatMutexLock(&testMutexId,5000);	///// test timed lock 
+	ck_assert_int_eq(rtnVal,BOAT_ERROR);			///// the rtnVal must check!
+
+	rtnVal = boatMutexDestroy(&testMutexId);
+
+	BoatLog(BOAT_LOG_VERBOSE,"Testing test_BoAT_OSAL_LinuxDefault_01Mutex_test_0023MutexTimedLockFailTimeout finished\r\n");
+	
+}
+END_TEST
 
 START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0025MutexUnlockFailMutexAddrNULL)
 {
@@ -263,7 +281,7 @@ Suite *makeMutextest_suite(void)
 
 	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_LinuxDefault_01Mutex_test_0021MutexTimedLockFailMutexAddrNULL);
 	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_LinuxDefault_01Mutex_test_0023MutexTimedLockSuccessTimeout);
-
+	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_LinuxDefault_01Mutex_test_0024MutexTimedLockFailTimeout);
 	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_LinuxDefault_01Mutex_test_0025MutexUnlockFailMutexAddrNULL);
 
 	tcase_add_test(tcMutextest_api, test_BoAT_OSAL_LinuxDefault_01Mutex_test_0028MultiTaskUseOneMutex);	
