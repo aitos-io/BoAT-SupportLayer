@@ -22,6 +22,20 @@
 #ifndef __BOATCONFIG_H__
 #define __BOATCONFIG_H__
 
-#define RPC_USE_MBEDHTTPPORT 1
+
+#define  PROTOCOL_USE_ETHEREUM     0
+#define  PROTOCOL_USE_PLATON     0
+#define  PROTOCOL_USE_PLATONE     0
+#define  PROTOCOL_USE_FISCOBCOS     0
+#define  PROTOCOL_USE_HLFABRIC     0
+#define  PROTOCOL_USE_HWBCS     0
+#define  PROTOCOL_USE_CHAINMAKER_V1     0
+#define  PROTOCOL_USE_CHAINMAKER_V2     0
+#define  PROTOCOL_USE_VENACHAIN     1
+#define  PROTOCOL_USE_QUORUM     0
+#define  PROTOCOL_USE_CITA     0
+
+#define  RPC_USE_LIBCURL     1
+
 
 #endif
