@@ -26,6 +26,7 @@
 #include "boatlog.h"
 #include "boatplatformosal.h"
 #include "boat_keystore_intf.h"
+#include "boathttpport.h"
 
 #include "cJSON.h"
 

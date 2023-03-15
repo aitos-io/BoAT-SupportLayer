@@ -30,6 +30,7 @@
 #include "nist256p1.h"
 #include "boatplatformosal.h"
 #include "persiststore.h"
+#include "boat_keystore_intf.h"
 
 #define GENERATE_KEY_REPEAT_TIMES 100
 
@@ -226,7 +227,7 @@ BOAT_RESULT BoAT_recover_pubkey_soft(BoatKeypairPriKeyType type, BoatKeypairPriK
  *   for details.
  * @author: aitos
  */
-static BOAT_RESULT BoAT_GetPrikeyByIndex_soft(BUINT8 index, BoatKeypairExtraData *prikey)
+BOAT_RESULT BoAT_GetPrikeyByIndex_soft(BUINT8 index, BoatKeypairExtraData *prikey)
 {
     BOAT_RESULT result = BOAT_SUCCESS;
     BUINT8 prikeyNum = 0, prikeyIndex = 0;

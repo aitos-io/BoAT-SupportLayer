@@ -75,7 +75,34 @@ BOAT_RESULT BoAT_Keystore_Sign(BoatKeypairPriKeyType type, BUINT8 prikeyIndex, c
 ****************************************************************************************
 */
 BOAT_RESULT BoatHash(const BoatHashAlgType type, const BUINT8 *input, BUINT32 inputLen, BUINT8 *hashed, BUINT8 *hashedLen, void *rsvd);
-
+/*!****************************************************************************
+ * @brief 
+ *   elliptic curve signature function.
+ * 
+ * @details
+ *   elliptic curve signature function.
+ *
+ * @param[in] prikeyCtx 
+ *   Private key context.
+ *
+ * @param[in] digest
+ *   pointer to disgest message.
+ *
+ * @param[in] digestLen 
+ *   the length of digiest message.
+ *
+ * @param[out] signatureResult 
+ *   The buffer to stored signature result.
+ *
+ * @param rsvd 
+ *   Reserved for futrue. 
+ *
+ * @return 
+ *   Return \c BOAT_SUCCESS if generate success; otherwise return a negative error code.
+ ******************************************************************************/
+BOAT_RESULT BoatSignature(BoatKeypairPriKeyCtx prikeyCtx, 
+						  const BUINT8 *digest, BUINT32 digestLen, 
+						  BoatSignatureResult *signatureResult, void *rsvd);
 // /**
 //  * @description:
 //  * 	This function get pubkey from prikey;

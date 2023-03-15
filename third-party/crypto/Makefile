@@ -66,7 +66,7 @@ $(OBJECTS_DIR):
 	$(BOAT_MKDIR) -p $(OBJECTS_DIR)/aes
 
 $(OBJECTS_DIR)/%.o:%.c
-	$(CC) -c $(CRYPTO_CFLAGS) $< -o $@
+	$(CC) -c $(CRYPTO_CFLAGS) $< -o $@ -DUSE_NEM=0
 
 
 clean:	

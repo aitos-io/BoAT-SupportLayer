@@ -22,6 +22,7 @@ boatrlp.c contains functions to encode a stream as per RLP encoding rules.
 
 #include "boatinternal.h"
 #include "boatlog.h"
+#include "boatosal.h"
 
 //!@brief Check if the descriptor capacity has empty item
 #define RlpCheckListDescriptorsCapacity(rlp_list_descriptors_ptr) \

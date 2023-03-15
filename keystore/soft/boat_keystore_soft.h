@@ -82,7 +82,7 @@ BOAT_RESULT BoAT_sign_soft(BoatKeypairPriKeyType type, BoatKeypairPriKeyFormat f
  *   for details.
  * @author: aitos
  */
-static BOAT_RESULT BoAT_GetPrikeyByIndex_soft(BUINT8 index, BoatKeypairExtraData *prikey);
+BOAT_RESULT BoAT_GetPrikeyByIndex_soft(BUINT8 index, BoatKeypairExtraData *prikey);
 
 /**
  * @description:

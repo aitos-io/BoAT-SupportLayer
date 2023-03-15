@@ -90,13 +90,13 @@ extern const BCHAR *const g_log_level_name_str[];
 #define BoatLog_hexdump(level, title, buf, len)\
 	do{\
 		if( level <= BOAT_LOG_LEVEL ){\
-			BoatPrintf(0, "%s: %s[%03d]: ", g_log_level_name_str[level-1], title, len );\
+			BoatPrintf("%s: %s[%03d]: ", g_log_level_name_str[level-1], title, len );\
 			if( len > 0 ){\
-				for( int i = 0; i < len; i++ ){BoatPrintf(0, "%c%c", "0123456789ABCDEF" [buf[i] / 16],"0123456789ABCDEF" [buf[i] % 16] );}\
+				for( int i = 0; i < len; i++ ){BoatPrintf("%c%c", "0123456789ABCDEF" [buf[i] / 16],"0123456789ABCDEF" [buf[i] % 16] );}\
 			}else{\
-				BoatPrintf(0,"(nil)");\
+				BoatPrintf("(nil)");\
 			}\
-			BoatPrintf(0, "\n" );\
+			BoatPrintf("\n" );\
 		}\
 	}while(0)
 #endif
@@ -126,32 +126,32 @@ extern const BCHAR *const g_log_level_name_str[];
 #define BoatLog_hexasciidump(level, title, buf, len)\
 	   do{\
 		   if( level <= BOAT_LOG_LEVEL ){\
-		   BoatPrintf(0, "%s: %s[%03d]: \n", g_log_level_name_str[level-1], title, len );\
+		   BoatPrintf("%s: %s[%03d]: \n", g_log_level_name_str[level-1], title, len );\
 			   if( len > 0 ){\
 				   for( int j = 0; j < len / 16 + 1; j++ ){\
-					   BoatPrintf(0,"%08x  ", j * 16);\
+					   BoatPrintf("%08x  ", j * 16);\
 					   for( int i = 0; i < 16; i++ ){\
-						   BoatPrintf(0, "%c%c ",\
+						   BoatPrintf("%c%c ",\
 								   "0123456789ABCDEF " [(i + j * 16 < len) ? buf[i + j * 16] / 16 : 16],\
 								   "0123456789ABCDEF " [(i + j * 16 < len) ? buf[i + j * 16] % 16 : 16] );}\
-					   BoatPrintf(0, " |" );\
+					   BoatPrintf(" |" );\
 					   for( int i = 0; i < 16; i++ ){\
 						   if( i + j * 16 < len ){\
 							   if( (buf[i + j * 16] > 32) && (buf[i + j * 16] < 127) ){\
-								   BoatPrintf(0, "%c", buf[ i + j * 16] );\
+								   BoatPrintf("%c", buf[ i + j * 16] );\
 							   }else{\
-								   BoatPrintf(0, "." );\
+								   BoatPrintf("." );\
 							   }\
 						   }else{\
-						   	   BoatPrintf(0, " " );\
+						   	   BoatPrintf(" " );\
 						   }\
 					   }\
-					   BoatPrintf(0, "|\n" );\
+					   BoatPrintf("|\n" );\
 				   }\
 		   }else{\
-			   BoatPrintf(0,"(nil)");\
+			   BoatPrintf("(nil)");\
 		   }\
-		   BoatPrintf(0, "\n" );\
+		   BoatPrintf("\n" );\
 	   }\
    }while(0)
 #endif

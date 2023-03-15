@@ -27,6 +27,7 @@ http2intf.h is the header file for http2 interface.
 #include "boatplatformdal.h"
 /* nghttp2 header include */
 #include <nghttp2/nghttp2.h>
+#include "boatdal.h"
 
 /*! @defgroup http2 communication-http2
  * @{

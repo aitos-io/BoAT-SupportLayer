@@ -496,4 +496,7 @@ void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd);
 
 #endif
 
+BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certlen, BCHAR *value, size_t value_length);
+
+
 #endif

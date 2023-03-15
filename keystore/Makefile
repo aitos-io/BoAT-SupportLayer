@@ -17,7 +17,7 @@ $(OBJECTS_DIR):
 	$(BOAT_MKDIR) -p $(OBJECTS_DIR)
 
 $(OBJECTS_DIR)/%.o:%.c
-	$(CC) -c $(BOAT_CFLAGS) $< -o $@
+	$(CC) -c $(BOAT_CFLAGS) $< -o $@ -DUSE_KECCAK=1
 
 
 clean:

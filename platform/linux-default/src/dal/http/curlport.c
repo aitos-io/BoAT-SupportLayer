@@ -330,4 +330,45 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *curlport_context_ptr,
     return result;
 }
 
+/**
+****************************************************************************************
+* @brief:
+* This function init CURL_GLOBAL_DEFAULT
+* On platform linux-default, use curl
+* @return
+*  This function will return BOAT_SUCCESS if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BOAT_RESULT BoatHttpGlobalInit(void)
+{
+    CURLcode curl_result;
+
+	curl_result = curl_global_init(CURL_GLOBAL_DEFAULT);
+
+    if (curl_result != CURLE_OK)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Unable to initialize curl.");
+        return BOAT_ERROR_CURL_INIT_FAIL;
+    }
+    return BOAT_SUCCESS;
+}
+
+/**
+****************************************************************************************
+* @brief:
+* This function deinit CURL_GLOBAL_DEFAULT
+* On platform linux-default, use curl
+* @return
+*  This function has no return value
+****************************************************************************************
+*/
+BOAT_RESULT BoatHttpGlobalDeInit(void)
+{
+	curl_global_cleanup();
+    return BOAT_SUCCESS;
+}
+
+
 #endif // end of #if RPC_USE_LIBCURL == 1

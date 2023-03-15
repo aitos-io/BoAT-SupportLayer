@@ -148,6 +148,29 @@ BOAT_RESULT BoatHttpPortRequestSync( BoatHttpPortContext * curlport_context_ptr,
                                  BOAT_OUT BCHAR **response_str_ptr,
                                  BOAT_OUT BUINT32 *response_len_ptr );
 
+/**
+****************************************************************************************
+* @brief:
+* This function init CURL_GLOBAL_DEFAULT
+* On platform linux-default, use curl
+* @return
+*  This function will return BOAT_SUCCESS if executed successfully.
+*  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
+*  for details.
+****************************************************************************************
+*/
+BOAT_RESULT BoatHttpGlobalInit(void);
+	
+/**
+****************************************************************************************
+* @brief:
+* This function deinit CURL_GLOBAL_DEFAULT
+* On platform linux-default, use curl
+* @return
+*  This function has no return value
+****************************************************************************************
+*/
+BOAT_RESULT BoatHttpGlobalDeInit(void);
 
 #ifdef __cplusplus
 }

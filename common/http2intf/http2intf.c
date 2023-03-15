@@ -212,7 +212,7 @@ __BOATSTATIC int on_stream_close_callback(nghttp2_session *session, int32_t stre
     http2IntfContext *http2Context = (http2IntfContext *)user_data;
     nghttp2_session_terminate_session(session, 0);
 #if (BOAT_TLS_SUPPORT == 1)
-    BoatClose(http2Context->sockfd, &http2Context->tlsContext, NULL);
+    BoatClose(http2Context->sockfd, (boatSSlCtx **)&http2Context->tlsContext, NULL);
 #else
     BoatClose(http2Context->sockfd, NULL, NULL);
 #endif
@@ -354,7 +354,7 @@ BOAT_RESULT http2SubmitRequest(http2IntfContext *context)
     tlsPrikey = context->tlsPrikey;
     tlscert = context->tlsCert;
 #endif
-    result = BoatTlsInit(context->nodeUrl, context->hostName, context->tlsCAchain, tlsPrikey, tlscert, &context->sockfd, &context->tlsContext, NULL);
+    result = BoatTlsInit(context->nodeUrl, context->hostName, context->tlsCAchain, tlsPrikey, tlscert, &context->sockfd, (boatSSlCtx **)&context->tlsContext, NULL);
     if (result != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL, "BoatTlsInit failed.");

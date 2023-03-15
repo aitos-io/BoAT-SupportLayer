@@ -27,7 +27,7 @@
 
 
 #include <semaphore.h>
-
+#include <limits.h>
 #include <pthread.h>
 
 #include <fcntl.h>           /* For O_* constants */
@@ -126,7 +126,7 @@ struct boatPlatformQueue{
 //!@brief Abstract definition of task object based on Linux
 #ifndef PLATFORM_OSAL_TASK
 #define PLATFORM_OSAL_TASK
-#define PTHREAD_STACK_MIN 8388608
+//#define PTHREAD_STACK_MIN 8388608
 struct boatPlatformTask{
     pthread_t taskId; //! Linux thread descriptor
 };
