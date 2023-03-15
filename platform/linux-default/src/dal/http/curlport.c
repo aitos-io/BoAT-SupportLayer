@@ -28,9 +28,12 @@ To use libcurl porting, RPC_USE_LIBCURL in boatconfig.h must set to 1.
 #include "boatinternal.h"
 
 #if RPC_USE_LIBCURL == 1
-#include "rpcport.h"
-#include "curlport.h"
+/////#include "rpcport.h"
+//#include "curlport.h"
 #include "curl/curl.h"
+#include "boathttpport.h"
+#include "boatosal.h"
+#include "boatlog.h"
 
 /*!****************************************************************************
  * @brief Callback function to write received data from the peer to the user specified buffer.

@@ -37,6 +37,7 @@ extern "C" {
 typedef enum
 {
     BOAT_STORE_KEYPAIR, //!< to store keypair data
+    BOAT_STORE_NETWORK, //!< to store network data
     BOAT_STORE_PRIKEY,  //!< to store prikey data
 } BoatStoreFile;
 
