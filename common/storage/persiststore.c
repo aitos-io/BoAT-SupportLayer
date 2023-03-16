@@ -267,18 +267,36 @@ BOAT_RESULT BoATSoftRotNvramDec(BUINT8 const *data_ptr, BUINT32 data_len, BUINT8
 ******************************************************************************/
 BOAT_RESULT BoATStoreSoftRotNvram(BoatStoreFile storeFile, BUINT32 offset, BUINT8 const *data_ptr, BUINT32 data_len, BoatStoreType storeType)
 {
-    BOAT_RESULT result = BOAT_SUCCESS;
-    BUINT32 offset_base = 0;
-    BUINT32 rambufLen = 0;
-    BUINT8 *rambuf;
-
-    rambuf = RAM_BOAT_DATA;
-    rambufLen = sizeof(RAM_BOAT_DATA);
-    offset_base = BOAT_STORAGE_KEYPAIR_OFFSET;
-    if (offset + data_len > BOAT_STORAGE_KEYPAIR_MAXLEN)
-    {
-        return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
-    }
+	BOAT_RESULT result = BOAT_SUCCESS;
+	BUINT32 offset_base = 0;
+	BUINT32 rambufLen = 0;
+	BUINT8 *rambuf;
+	if (storeFile == BOAT_STORE_KEYPAIR)
+	{
+		rambuf = RAM_BOAT_DATA;
+		rambufLen = sizeof(RAM_BOAT_DATA);
+		offset_base = BOAT_STORAGE_KEYPAIR_OFFSET;
+		if (offset + data_len > BOAT_STORAGE_KEYPAIR_MAXLEN)
+		{
+			return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		}
+	}
+	else if (storeFile == BOAT_STORE_NETWORK)
+	{
+		rambuf = RAM_BOAT_NETWORK_DATA;
+		rambufLen = sizeof(RAM_BOAT_NETWORK_DATA);
+		offset_base = BOAT_STORAGE_NETWORK_OFFSET;
+	}
+	else
+	{
+		rambuf = RAM_BOAT_PRIKEY_DATA;
+		rambufLen = sizeof(RAM_BOAT_PRIKEY_DATA);
+		offset_base = BOAT_STORAGE_PRIKEY_OFFSET;
+		if (offset + data_len > BOAT_STORAGE_PRIKEY_MAXLEN)
+		{
+			return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		}
+	}
 
     if ((data_ptr == NULL) || (data_len == 0) || (storeType == BOAT_STORE_TYPE_UNKNOWN))
     {
@@ -338,18 +356,36 @@ BOAT_RESULT BoATStoreSoftRotNvram(BoatStoreFile storeFile, BUINT32 offset, BUINT
 ******************************************************************************/
 BOAT_RESULT BoatReadSoftRotNvram(BoatStoreFile storeFile, BUINT32 offset, BUINT8 *data_ptr, BUINT32 len_to_read, BoatStoreType storeType)
 {
-    BOAT_RESULT result = BOAT_SUCCESS;
-    BUINT32 offset_base = 0;
-    BUINT32 rambufLen = 0;
-    BUINT8 *rambuf;
-
-    rambuf = RAM_BOAT_DATA;
-    rambufLen = sizeof(RAM_BOAT_DATA);
-    offset_base = BOAT_STORAGE_KEYPAIR_OFFSET;
-    if (offset + len_to_read > BOAT_STORAGE_KEYPAIR_MAXLEN)
-    {
-        return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
-    }
+	BOAT_RESULT result = BOAT_SUCCESS;
+	BUINT32 offset_base = 0;
+	BUINT32 rambufLen = 0;
+	BUINT8 *rambuf;
+	if (storeFile == BOAT_STORE_KEYPAIR)
+	{
+		rambuf = RAM_BOAT_DATA;
+		rambufLen = sizeof(RAM_BOAT_DATA);
+		offset_base = BOAT_STORAGE_KEYPAIR_OFFSET;
+		if (offset + len_to_read > BOAT_STORAGE_KEYPAIR_MAXLEN)
+		{
+			return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		}
+	}
+	else if (storeFile == BOAT_STORE_NETWORK)
+	{
+		rambuf = RAM_BOAT_NETWORK_DATA;
+		rambufLen = sizeof(RAM_BOAT_NETWORK_DATA);
+		offset_base = BOAT_STORAGE_NETWORK_OFFSET;
+	}
+	else
+	{
+		rambuf = RAM_BOAT_PRIKEY_DATA;
+		rambufLen = sizeof(RAM_BOAT_PRIKEY_DATA);
+		offset_base = BOAT_STORAGE_PRIKEY_OFFSET;
+		if (offset + len_to_read > BOAT_STORAGE_PRIKEY_MAXLEN)
+		{
+			return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		}
+	}
 
     if ((data_ptr == NULL) || (len_to_read == 0) || storeType == BOAT_STORE_TYPE_UNKNOWN)
     {

@@ -156,7 +156,7 @@ BOAT_RESULT BoatHash(const BoatHashAlgType type, const BUINT8 *input, BUINT32 in
  */
 BOAT_RESULT BoAT_Keystore_store_prikey(BUINT8 keypairIndex, BUINT8 *prikey, BUINT32 prikeyLen)
 {
-#if (BOAT_CRYPTO_USE_SE == 1)
+#if (BOAT_CRYPTO_USE_SE != 1)
     return BoAT_Keystore_store_prikey_soft(keypairIndex, prikey, prikeyLen);
 #else
     return BOAT_SUCCESS;
@@ -358,7 +358,6 @@ static BOAT_RESULT sBoatPort_keyCreate_internal_generation(const BoatKeypairPriK
 {
     BOAT_RESULT result = BOAT_SUCCESS;
     BoatKeypairKeypair keypair;
-    BUINT8 keypairGenFlag[1] = {0};
     // result = BoAT_Keypair_generation(config->prikey_type,config->prikey_format,&keypair);
     result = BoAT_Keystore_Gen_Keypair(config->prikey_type, &keypair);
     if (result != BOAT_SUCCESS)
@@ -366,17 +365,17 @@ static BOAT_RESULT sBoatPort_keyCreate_internal_generation(const BoatKeypairPriK
         BoatLog(BOAT_LOG_CRITICAL, "generate private key failed.");
         return result;
     }
-    keypairGenFlag[0] = 0x55;
 #if (BOAT_CRYPTO_USE_SE == 1)		///// add for BOAT_CRYPTO_USE_SE , Temporary modification , ph 2023-03-02 19:17:00
+    BUINT8 keypairGenFlag[1] = {0};
+
+    keypairGenFlag[0] = 0x55;
     result = BoAT_Keystore_Write_Binary_secure(keypairGenFlag, sizeof(keypairGenFlag), OFFSET_KEYPAIR_GEN_FLAG);
-#else
-    result = BoAT_Keystore_Write_Binary_secure(keypairGenFlag, sizeof(keypairGenFlag), 0);
-#endif
     if (result != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL, "write keypair gen flag fail .");
         return result;
     }
+#endif
     BoatLog(BOAT_LOG_CRITICAL, "generate private key OK .");
     // 2- update private key format
     pkCtx->prikeyCtx.prikey_format = BOAT_KEYPAIR_PRIKEY_FORMAT_NATIVE;

@@ -24,32 +24,30 @@
 /******************************************************************************
                               BOAT FILE OPERATION WARPPER
 *******************************************************************************/
-int fileSize(char* filename)
-{
-	struct stat statbuf;
-	if(stat(filename,&statbuf) ==0)
-		return(statbuf.st_size);
-
-	return -1;
-}
-
 BOAT_RESULT BoatGetStorageSize(BUINT32 *size, void *rsvd)
 {
-    // BSINT32 file_fd = -1;
-    (void)rsvd;
+	FILE *file_ptr;
 
-    if (size == NULL)
-    {
-        BoatLog(BOAT_LOG_CRITICAL, "param 'size' can't be NULL.");
-        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
-    }
+	(void)rsvd;
 
-	*size = fileSize(BOAT_FILE_STOREDATA);
-	
-	if(*size == -1)
-		return BOAT_ERROR;
+	if (size == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "param which  'size' can't be NULL.");
+		return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+	}
 
-    return BOAT_SUCCESS;
+	file_ptr = fopen(BOAT_FILE_STOREDATA, "rb");
+	if (file_ptr == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to open file: %s.", BOAT_FILE_STOREDATA);
+		return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+	}
+
+	fseek(file_ptr, 0, SEEK_END);
+	*size = ftell(file_ptr);
+	fclose(file_ptr);
+
+	return BOAT_SUCCESS;
 }
 
 /**

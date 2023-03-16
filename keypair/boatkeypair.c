@@ -1041,7 +1041,18 @@ BOAT_RESULT BoatKeypairCreate(BoatKeypairPriKeyCtx_config *keypairConfig, BCHAR 
         BoatLog(BOAT_LOG_NORMAL, "keystore store keypair fail , ret = %d ", result);
         boat_throw(result, keypairdelete_exception);
     }
-
+#if (BOAT_CRYPTO_USE_SE != 1)
+    result = BoAT_Keystore_store_prikey(mKeypairDataCtx.prikeyCtx.keypair_index, mKeypairDataCtx.extraData.value, mKeypairDataCtx.extraData.value_len);
+    if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_NORMAL, "keystore store prikey fail , ret = %d ", result);
+        result = BoATIotKeypairDelete(keypairIndex);
+        BoatLog(BOAT_LOG_NORMAL, "delete keypair  ret = %d ", result);
+        boat_throw(BOAT_ERROR, keypairdelete_exception);
+    }
+	BoatLog(BOAT_LOG_NORMAL, "BoAT_Keystore_store_prikey succ %d",mKeypairDataCtx.prikeyCtx.keypair_index);
+    memset(mKeypairDataCtx.extraData.value, 0x00, mKeypairDataCtx.extraData.value_len);
+#endif
     boat_catch(keypairdelete_exception)
     {
         BoatLog(BOAT_LOG_CRITICAL, "Exception: %d", boat_exception);
