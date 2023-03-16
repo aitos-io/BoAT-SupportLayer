@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "boattypes.h"
+#include "boaterrcode.h"
+#include "boatlog.h"
 
 /**
 ****************************************************************************************
@@ -70,4 +72,35 @@ void BoatSleepMs(BUINT32 ms)
 	
 	nanosleep(&t, NULL);
 }
+
+BUINT32 random32(void)
+{
+	static BUINT32 seed = 0;
+	if (seed == 0)
+	{
+		seed = time(NULL);
+	}
+	// Linear congruential generator from Numerical Recipes
+	// https://en.wikipedia.org/wiki/Linear_congruential_generator
+	seed = 1664525 * seed + 1013904223;
+
+	return seed;
+}
+
+BOAT_RESULT BoatRandom(BUINT8 *output, BUINT32 outputLen, void *rsvd)
+{
+	/* param check */
+	if (output == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "parameter can't be NULL.");
+		return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+	}
+
+	(void)rsvd;
+
+	random_buffer(output, outputLen);
+
+	return BOAT_SUCCESS;
+}
+
 

@@ -31,6 +31,7 @@
 #include "boatplatformosal.h"
 #include "persiststore.h"
 #include "boat_keystore_intf.h"
+#include "boatosal.h"
 
 #define GENERATE_KEY_REPEAT_TIMES 100
 
