@@ -5,6 +5,7 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 #include "boatlog.h"
+#include "rand.h"
 
 /**
 ****************************************************************************************
