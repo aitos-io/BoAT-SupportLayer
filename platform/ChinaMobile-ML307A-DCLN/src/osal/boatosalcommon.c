@@ -8,11 +8,63 @@
 * @Descripttion:
 ****************************************************************************************
 */
+#include <stdint.h>
 #include "boattypes.h"
 #include "boatlog.h"
 #include "boaterrcode.h"
 
 #include "cm_os.h"
+#include "cm_ntp.h"
+#include "cm_rtc.h"
+#include "cm_mem.h"
+
+/**
+****************************************************************************************
+* @brief:
+* @return
+****************************************************************************************
+*/
+static void __boat_cm_ntp_cb(cm_ntp_event_e event, void *event_param, void *cb_param)
+{
+    if (CM_NTP_EVENT_SYNC_OK == event)
+    {
+        BoatLog(BOAT_LOG_NORMAL,"[NTP][%s] get net time %s\n", (char *)cb_param, event_param); 
+    }
+    else if (CM_NTP_EVENT_SETTIME_FAIL == event)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"[NTP][%s] get net time %s OK, but set time fail\n", (char *)cb_param, event_param); 
+    }
+    else
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"[NTP][%s] error\n", (char *)cb_param); 
+    }
+}
+
+
+long int BoatGetTimes()
+{
+
+    uint16_t port = 123;
+    uint32_t timeout = 6000;
+    uint32_t dns_priority = 1;
+    BBOOL set_rtc = 1;
+
+    cm_ntp_set_cfg(CM_NTP_CFG_SERVER, "cn.ntp.org.cn"); 
+    cm_ntp_set_cfg(CM_NTP_CFG_PORT, &port);
+    cm_ntp_set_cfg(CM_NTP_CFG_TIMEOUT, &timeout);
+    cm_ntp_set_cfg(CM_NTP_CFG_DNS, &dns_priority);
+    cm_ntp_set_cfg(CM_NTP_CFG_SET_RTC, &set_rtc);
+    cm_ntp_set_cfg(CM_NTP_CFG_CB, __boat_cm_ntp_cb);
+    cm_ntp_set_cfg(CM_NTP_CFG_CB_PARAM, "SYNCHTIME");
+
+    if (0 != cm_ntp_sync())
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"[NTP]cm_ntp_sync() fail\n");
+    }
+    uint64_t  ret = cm_rtc_get_current_time();
+    BoatLog(BOAT_LOG_NORMAL, " Currrent RTC time  = %ld", ret);
+    return ret;
+}
 
 /**
 ****************************************************************************************
@@ -24,10 +76,17 @@
 */
 uint32_t random32(void)
 {
+    static BUINT32 seed = 0;
+	if (seed == 0)
+	{
+		seed = BoatGetTimes();
+	}
+	// Linear congruential generator from Numerical Recipes
+	// https://en.wikipedia.org/wiki/Linear_congruential_generator
+	seed = 1664525 * seed + 1013904223;
 
-    BUINT8 rand[4] = {0};
-    fibo_rng_generate(rand, sizeof(rand));
-    return ((rand[0] << 24) | (rand[1] << 16) | (rand[2] << 8) | rand[3]);
+	return seed;
+
 }
 
 /**
@@ -72,7 +131,18 @@ BOAT_RESULT BoatRandom(BUINT8 *output, BUINT32 outputLen, void *rsvd)
 */
 void *BoatMalloc(size_t size)
 {
-    return (fibo_malloc(size));
+    cm_heap_stats_t heap_status={0};
+    
+    int32_t  ret = cm_mem_get_heap_stats(&heap_status);
+    if(ret == 0)
+    {
+        if(size < heap_status.free)
+        {
+            return cm_malloc(size);
+        }
+    }
+
+    return NULL;
 }
 
 /**
@@ -86,7 +156,7 @@ void *BoatMalloc(size_t size)
 */
 void BoatFree(void *mem_ptr)
 {
-    fibo_free(mem_ptr);
+    cm_free(mem_ptr);
 }
 
 /**
@@ -98,21 +168,9 @@ void BoatFree(void *mem_ptr)
 */
 void BoatSleep(BUINT32 second)
 {
-    fibo_taskSleep(1000 * second);
+    osDelay(200 * second);
 }
-/**
-****************************************************************************************
-* @brief:
-* @return
-****************************************************************************************
-*/
-long int BoatGetTimes()
-{
-    // return time(NULL);
-    long int ret = osiEpochSecond();
-    BoatLog(BOAT_LOG_NORMAL, " osiEpochSecond = %ld", ret);
-    return ret;
-}
+
 
 /**
 ****************************************************************************************
@@ -123,5 +181,5 @@ long int BoatGetTimes()
 */
 void BoatSleepMs(BUINT32 ms)
 {
-    osiDelayUS(ms * 1000);
+    osDelay(ms * 200/1000);
 }
