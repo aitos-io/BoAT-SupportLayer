@@ -112,7 +112,7 @@ struct boatPlatformTask{
 #ifndef PLATFORM_OSAL_TIMER
 #define PLATFORM_OSAL_TIMER
 struct boatPlatformTimer{
-    BUINT32 timerId; //! fibocom-L610 timer descriptor
+    osTimerId_t timerId; //! ML307A timer descriptor
 };
 #endif/////PLATFORM_OSAL_TIMER
 
