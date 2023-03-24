@@ -3,6 +3,9 @@
 
 #ifdef PLATFORM_OSAL_TIMER
 
+#include "boattypes.h"
+#include "boatlog.h"
+
 #include "cm_os.h"
 
 /*!*****************************************************************************
@@ -39,7 +42,47 @@ Function: boatTimerStart()
 @param[in] argv
     The argv is passed as the sole argument of callBackRoutine().
 *******************************************************************************/
-BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callbackRoutine)(void *), void *argv);
+BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callbackRoutine)(void *), void *argv)
+{
+    osStatus_t  status;
+    if(timerRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR;
+    }
+
+    if(intervalTime > 0)
+    {
+        timerRef->timerId = osTimerNew(callbackRoutine,osTimerPeriodic,argv,NULL);
+        if(timerRef->timerId == NULL)
+        {   
+            return BOAT_ERROR;
+        }
+        status = osTimerStart(timerRef->timerId,intervalTime);
+    }
+    else
+    {
+        timerRef->timerId = osTimerNew(callbackRoutine,osTimerOnce,argv,NULL);
+        if(timerRef->timerId == NULL)
+        {   
+            return BOAT_ERROR;
+        }
+        status = osTimerStart(timerRef->timerId,initialTime);
+    }
+
+    if(status != osOK)
+    {
+        return BOAT_ERROR;
+    }
+
+    uint32_t  ret = osTimerIsRunning(timerRef->timerId);
+    if(ret == 0)
+    {
+        return BOAT_ERROR;
+    }
+    
+    return BOAT_SUCCESS;
+}
 
 /*!*****************************************************************************
 @brief Destroy a Boat timer
@@ -59,19 +102,29 @@ Function: boatTimerDestroy()
     destroy the boat timer indicated by timerRef and deinit the timerRef.
 
 *******************************************************************************/
-BOAT_RESULT boatTimerDestroy(boatTimer *timerRef);
+BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
+{
+    osStatus_t status;
+    if(timerRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR;
+    }
 
-/*!*****************************************************************************
-@brief GET the period of a OS clock tick
+    status = osTimerStop(timerRef->timerId);
+    if(status != osOK)
+    {
+        return BOAT_ERROR;
+    }
 
-Function: boatGetTickPeriod()
+    status = osTimerDelete(timerRef->timerId);
+    if(status != osOK)
+    {
+        return BOAT_ERROR;
+    }
 
-    This function return a OS clock tick period in millisecond.
+    return BOAT_SUCCESS;
+}
 
-@return
-    This function returns a OS clock tick period in millisecond.
 
-@param[in] null
-*******************************************************************************/
-BUINT32 boatGetTickPeriod(void);
 #endif/////PLATFORM_OSAL_TIMER
