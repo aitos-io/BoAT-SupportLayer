@@ -132,8 +132,8 @@ struct boatPlatformSem{
 #ifndef PLATFORM_OSAL_QUEUE
 #define PLATFORM_OSAL_QUEUE
 struct boatPlatformQueue{
-    BUINT32 queueId; //! fibocom-L610 message queue descriptor
-    BUINT32 maxSize; //! fibocom L610 put/get message buffer size must qeual maxSize, 
+    osMessageQueueId_t queueId; //! ML307A message queue descriptor
+    BUINT32 maxSize; //! ML307A put/get message buffer size must qeual maxSize, 
 };
 #endif/////PLATFORM_OSAL_QUEUE
 
