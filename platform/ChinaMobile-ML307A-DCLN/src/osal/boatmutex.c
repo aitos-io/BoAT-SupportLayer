@@ -32,6 +32,20 @@ Function: boatMutexInit()
 BOAT_RESULT boatMutexInit(boatMutex *mutexRef)
 {
 
+    if(mutexRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
+
+    mutexRef->mutexID = osMutexNew(NULL);
+    if(mutexRef->mutexID == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Mutex init failed!");
+        return BOAT_ERROR;
+    }
+
+    return BOAT_SUCCESS;
 }
 
 
@@ -55,7 +69,21 @@ Function: boatMutexDestroy()
 *******************************************************************************/
 BOAT_RESULT boatMutexDestroy(boatMutex *mutexRef)
 {
+    osStatus_t status;
+    if(mutexRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
 
+    status = osMutexDelete(mutexRef->mutexID);
+    if(status != osOK)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Mutex Delete Failed!");
+        return BOAT_ERROR;
+    }
+
+    return BOAT_SUCCESS;
 }
 
 
@@ -80,7 +108,21 @@ Function: boatMutexUnlock()
 *******************************************************************************/
 BOAT_RESULT boatMutexUnlock(boatMutex *mutexRef)
 {
+    osStatus_t status;
+    if(mutexRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
 
+    status = osMutexRelease(mutexRef->mutexID);
+    if(status != osOK)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Mutex unlock Failed!");
+        return BOAT_ERROR;
+    }
+
+    return BOAT_SUCCESS;
 }
 
 
@@ -112,7 +154,21 @@ Function: boatMutexLock()
 *******************************************************************************/
 BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
 {
-    
+    osStatus_t status;
+    if(mutexRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
+
+    status = osMutexAcquire(mutexRef->mutexID,timeout*200/1000);
+    if(status != osOK)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Mutex lock Failed!");
+        return BOAT_ERROR;
+    }
+
+    return BOAT_SUCCESS;
 }
 
 #endif/////PLATFORM_OSAL_MUTEX
