@@ -124,7 +124,7 @@ struct boatPlatformTimer{
 #define FIBO_SEM_MUTEX
 
 struct boatPlatformSem{
-    BUINT32 semId; //! Ficocom L610 semaphore descriptor
+    osSemaphoreId_t semId; //! ML307A semaphore descriptor
 };
 #endif/////PLATFORM_OSAL_SEM
 
