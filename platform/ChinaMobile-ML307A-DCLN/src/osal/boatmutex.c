@@ -83,6 +83,8 @@ BOAT_RESULT boatMutexDestroy(boatMutex *mutexRef)
         return BOAT_ERROR;
     }
 
+    mutexRef->mutexID = NULL;
+    
     return BOAT_SUCCESS;
 }
 
@@ -112,6 +114,12 @@ BOAT_RESULT boatMutexUnlock(boatMutex *mutexRef)
     if(mutexRef == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
+
+    if(mutexRef->mutexID == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad mutexId!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
@@ -158,6 +166,12 @@ BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
     if(mutexRef == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
+
+    if(mutexRef->mutexID == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Bad mutexId!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
