@@ -96,7 +96,7 @@ void BoatSleepMs(BUINT32 ms);
 #ifndef PLATFORM_OSAL_MUTEX
 #define PLATFORM_OSAL_MUTEX
 struct boatPlatformMutex{
-    BUINT32 mutexID; //! fibocom-L610 mutex descriptor
+    osMutexId_t mutexID; //! ML307A mutex descriptor
 };
 #endif/////PLATFORM_OSAL_MUTEX
 
