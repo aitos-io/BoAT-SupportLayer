@@ -101,6 +101,8 @@ BOAT_RESULT boatSemDestroy(boatSem *semRef)
         return BOAT_ERROR;
     }
 
+    semRef->semId = NULL;
+    
     return BOAT_SUCCESS;
 
 }
