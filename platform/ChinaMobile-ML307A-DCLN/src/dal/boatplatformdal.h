@@ -25,6 +25,7 @@
 #include "cm_i2c.h"
 #include "cm_os.h"
 #include "cm_uart.h"
+#include "cm_i2c.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
@@ -46,7 +47,7 @@ struct boatPlatformUART
 
 struct boatPlatformI2C
 {
-    i2c_Handle i2cId; //! ML307 I2c descriptor
+    cm_i2c_dev_e i2cId; //! ML307 I2c descriptor
 };
 #endif // PLATFORM_DAL_I2C
 
