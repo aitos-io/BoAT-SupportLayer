@@ -12,7 +12,7 @@
 #include "boaterrcode.h"
 #include "boatlog.h"
 #include "boatdal.h"
-#include "httpclient.h"
+//#include "httpclient.h"
 #include "boatplatformdal.h"
 
 #include "cm_os.h"
@@ -152,7 +152,9 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
     server_addr.sin_addr.s_addr = inet_addr(ip);
     server_addr.sin_port = htons(atoi(port));
 
-    ret = cm_asocket_connect(sockFd,&server_addr,sizeof(server_addr));
+    
+
+    ret = cm_asocket_connect(sockFd,(const struct sockaddr *)&server_addr,sizeof(server_addr));
     if(ret != 0)
     {
         BoatLog(BOAT_LOG_CRITICAL, "asocket connect() error ,code = %d", ret);
@@ -312,7 +314,7 @@ static int ssl_recv_unblock(INT32 sock, void *buf, INT32 size, INT32 timeout)
     }
 
     FD_ZERO(&rset);
-    FD_SET(fd, &rset);
+    FD_SET(sock, &rset);
     tm.tv_sec = timeout / 1000;
     tm.tv_usec = (timeout % 1000) * 1000;
 
