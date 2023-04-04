@@ -27,6 +27,8 @@
 #include "cm_uart.h"
 #include "cm_i2c.h"
 
+#include "boattypes.h"
+
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
 
