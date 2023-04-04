@@ -43,7 +43,7 @@ static void __boat_cm_ntp_cb(cm_ntp_event_e event, void *event_param, void *cb_p
 
 long int BoatGetTimes()
 {
-
+#if 0
     uint16_t port = 123;
     uint32_t timeout = 6000;
     uint32_t dns_priority = 1;
@@ -61,6 +61,7 @@ long int BoatGetTimes()
     {
         BoatLog(BOAT_LOG_CRITICAL,"[NTP]cm_ntp_sync() fail\n");
     }
+#endif
     uint64_t  ret = cm_rtc_get_current_time();
     BoatLog(BOAT_LOG_NORMAL, " Currrent RTC time  = %ld", ret);
     return ret;
