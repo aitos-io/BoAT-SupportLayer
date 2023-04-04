@@ -8,13 +8,13 @@ static void runtest(char *name,testfun p)
     if(p == NULL)
     {
         printf("=== test Error test function is NULL ===\n");
-	return;
+    return;
     }
     if(p == NULL)
     {
         printf("=== test Error test name is NULL ===\n");
-	return;
-    }	
+    return;
+    }    
     printf("=== start run boat %s tests ===\n",name);
 
     int failed_number = p();
@@ -27,11 +27,11 @@ static void runtest(char *name,testfun p)
 
 int main(int argc, char *argv[])
 {
-	printf("===== linux-default tests =====\n");
-	//runtest("Queue", runQueueTests);
-	//runtest("Timer", runTimerTests);
-	//runtest("Uart", runUartTests);
-	//runtest("sem", runSemTests);
+    printf("===== linux-default tests =====\n");
+    //runtest("Queue", runQueueTests);
+    //runtest("Timer", runTimerTests);
+    //runtest("Uart", runUartTests);
+    //runtest("sem", runSemTests);
     //runtest("mutex",runMutexTests);
     runtest("Task/Thread", runTaskTests);
 }

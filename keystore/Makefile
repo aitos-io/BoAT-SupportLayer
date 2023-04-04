@@ -18,6 +18,7 @@ $(OBJECTS_DIR):
 
 $(OBJECTS_DIR)/%.o:%.c
 	$(CC) -c $(BOAT_CFLAGS) $< -o $@ -DUSE_KECCAK=1
+	$(BOAT_COPY) $(SOURCES) $(OBJECTS_DIR)
 
 
 clean:
