@@ -271,6 +271,8 @@ Function: BoatHttpPortRequestSync()
     wrapper function. Typically it equals to strlen(response_str_ptr).
 
 *******************************************************************************/
+
+
 BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_ptr,
                                     const BCHAR *request_str,
                                     BUINT32 request_len,
@@ -279,8 +281,12 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 {
 
     cm_httpclient_ret_code_e  ret;
+    cm_httpclient_handle_t client = NULL;
 
     BOAT_RESULT result = BOAT_ERROR;
+    cm_httpclient_sync_param_t param = {};
+    cm_httpclient_sync_response_t response = {};
+    
     boat_try_declare;
 
     if (boathttpport_context_ptr == NULL || request_str == NULL || response_str_ptr == NULL || response_len_ptr == NULL)
@@ -290,18 +296,11 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, cleanup);
     }
 
-    cm_httpclient_handle_t client = NULL;
+    
 
     if(client == NULL)
     {
-        ret = cm_httpclient_create((const uint8_t *)(boathttpport_context_ptr->remote_url_str), NULL, &client);
-        if (CM_HTTP_RET_CODE_OK != ret || NULL == client)
-        {
-            BoatLog(BOAT_LOG_CRITICAL, "Create HTTP instance ERROR.");
-            result = BOAT_ERROR_HTTP_INIT_FAIL;
-            boat_throw(result,cleanup);
-        }
-
+        
 
         cm_httpclient_cfg_t client_cfg;
         if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"https",strlen("https")))
@@ -312,7 +311,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         else if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"http",strlen("http")))
         {
             client_cfg.ssl_enable = false;                                                   //Don't use SSL，HTTP
-            client_cfg.ssl_id = 2;                                                          //Set ssl id
+            //client_cfg.ssl_id = 2;                                                          //Set ssl id
         }
         else
         {
@@ -321,9 +320,24 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, cleanup);
         }
 
+        ret = cm_httpclient_create((const uint8_t *)(boathttpport_context_ptr->remote_url_str), NULL, &client);
+        if (CM_HTTP_RET_CODE_OK != ret || NULL == client)
+        {
+            BoatLog(BOAT_LOG_CRITICAL, "Create HTTP instance ERROR.");
+            result = BOAT_ERROR_HTTP_INIT_FAIL;
+            boat_throw(result,cleanup);
+        }
+
+        BoatSleepMs(100);  //delay 100ms
+
+        ret = cm_httpclient_custom_header_set(client,"Content-Type: application/json\r\n",strlen("Content-Type: application/json\r\n"));
+        BoatLog(BOAT_LOG_CRITICAL, "Set custom header ret = %d",ret);
+
+        BoatSleepMs(100);  //delay 100ms
+
         client_cfg.cid = 0;                                                             //Can be any value
-        client_cfg.conn_timeout = HTTPCLIENT_CONNECT_TIMEOUT_DEFAULT;
-        client_cfg.rsp_timeout = HTTPCLIENT_WAITRSP_TIMEOUT_DEFAULT;
+        client_cfg.conn_timeout = HTTPCLIENT_CONNECT_TIMEOUT_MAXTIME;
+        client_cfg.rsp_timeout = HTTPCLIENT_WAITRSP_TIMEOUT_MAXTIME;
         client_cfg.dns_priority = 1;                                                    //ip v4 first
         ret = cm_httpclient_set_cfg(client, client_cfg);                 
 
@@ -334,14 +348,12 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
             boat_throw(result,cleanup);
         }
 
-        int tmp = 0;
-        cm_ssl_setopt(2 ,CM_SSL_PARAM_VERIFY, &tmp);                                    //Set ssl verify mode
+        //int tmp = 0;
+        //cm_ssl_setopt(2 ,CM_SSL_PARAM_VERIFY, &tmp);                                    //Set ssl verify mode
 
     }
 
-    cm_httpclient_sync_response_t response = {};
-
-    cm_httpclient_sync_param_t param = {};
+    BoatSleepMs(100);  //delay 100ms
     param.method = HTTPCLIENT_REQUEST_POST;
     param.path = (const uint8_t *)"/";
     param.content = (uint8_t *)request_str;
@@ -361,7 +373,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         BoatLog(BOAT_LOG_VERBOSE,"Http POST response_content: %s", response.response_content);
         BoatLog(BOAT_LOG_VERBOSE,"Http POST response_content_len is %d", response.response_content_len);
 
-        if(CM_HTTP_RET_CODE_OK == response.response_code)
+        if((200 == response.response_code) || (201 == response.response_code))
         {
             //Get response data
             if((response.response_header_len < boathttpport_context_ptr->http_response_head.string_space) && \
@@ -393,21 +405,29 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 
     }
 
-    cm_httpclient_terminate(client);
-    cm_httpclient_sync_free_data(client);                                               //Release client
-    cm_httpclient_delete(client);
-    client = NULL;
+    cm_httpclient_custom_header_free(client);
+    BoatSleepMs(100);  //delay 100ms
 
     // Exceptional Clean Up
     boat_catch(cleanup)
     {
-        if(client != NULL)
-        {
-            cm_httpclient_sync_free_data(client);  
-            cm_httpclient_delete(client);
-        }
+        
         BoatLog(BOAT_LOG_NORMAL, "Exception: %d", boat_exception);
         result = boat_exception;
+    }
+
+    if(client != NULL)
+    {
+
+            cm_httpclient_terminate(client);
+            BoatSleepMs(100);
+            cm_httpclient_sync_free_data(client);                                        //Release client
+            BoatSleepMs(100);
+            cm_httpclient_delete(client);
+            client = NULL;
+
+            BoatSleepMs(150);   //delay 150ms
+
     }
 
     return result;
