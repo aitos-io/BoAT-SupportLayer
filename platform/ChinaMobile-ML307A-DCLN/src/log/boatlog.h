@@ -64,9 +64,8 @@ extern const BCHAR *const g_log_level_name_str[];
     {                                                                                       \
         if (level <= BOAT_LOG_LEVEL)                                                        \
         {                                                                                   \
-            BoatPrintf(0," [BOAT] %s: "__FILE__                                               \
-                       ":%d, %s(): " format "\n",                                           \
-                       g_log_level_name_str[level - 1], __LINE__, __func__, ##__VA_ARGS__); \
+            BoatPrintf(0,"[BOAT]:%s(): " format "\n",                                           \
+                         __func__, ##__VA_ARGS__); \
         }                                                                                   \
     } while (0)
 #endif
