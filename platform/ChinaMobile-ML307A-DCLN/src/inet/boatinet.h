@@ -34,5 +34,6 @@ boatLogConfig.h defines options for compiling.
 #define __BOATINET_H__
 
 #include "cm_os.h"
+#include "def.h"
 
 #endif
