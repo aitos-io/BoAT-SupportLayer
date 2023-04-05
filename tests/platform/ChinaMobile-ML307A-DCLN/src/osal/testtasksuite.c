@@ -1,8 +1,9 @@
 #include "boatosal.h"
 #include "boatlog.h"
 #include "boattypes.h"
-#include "fibo_opencpu.h"
-#include "../../boatcheck/boatcheck.h"
+#include "cm_os.h"
+#include "cm_mem.h"
+#include "boatcheck.h"
 
 
 #define MULTITASKNUM 4
@@ -35,132 +36,132 @@ static void task_test_delete_thread(void *param)
 }
 
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0010_boatTaskCreat_Successful_PriorityLow)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0010_boatTaskCreat_Successful_PriorityLow)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0010_boatTaskCreat_Successful_PriorityLow\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0010_boatTaskCreat_Successful_PriorityLow\r\n");
 	
 	rtnVal = boatTaskCreat(&testTaskId, "thread_hello", 24 * 1024, BOAT_TASK_PRIORITY_LOW, task_hello_thread, NULL);
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	ck_assert_int_eq(rtnVal,0);	///// equal  0 , successful
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0010_boatTaskCreat_Successful_PriorityLow finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0010_boatTaskCreat_Successful_PriorityLow finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal\r\n");
 	
 	rtnVal = boatTaskCreat(&testTaskId, "thread_hello", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_hello_thread, NULL);
 	ck_assert_int_eq(rtnVal,0);	///// equal  0 , successful
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh\r\n");
 	
 	rtnVal = boatTaskCreat(&testTaskId, "thread_hello", 24 * 1024, BOAT_TASK_PRIORITY_HIGH, task_hello_thread, NULL);
 	ck_assert_int_eq(rtnVal,0);	///// equal  0 , successful
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL\r\n");
 	
 	rtnVal = boatTaskCreat(0, "thread_hello", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_hello_thread, NULL);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL\r\n");
 	
 	rtnVal = boatTaskCreat(&testTaskId, NULL, 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_hello_thread, NULL);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL\r\n");
 	
 	rtnVal = boatTaskCreat(&testTaskId, "thread_hello", 0, BOAT_TASK_PRIORITY_NORMAL, task_hello_thread, NULL);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL\r\n");
 	
 	rtnVal = boatTaskCreat(&testTaskId, "thread_hello", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, NULL, NULL);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive)
 {
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Try test_BoAT_OSAL_FibocomL610_02Task_test_0023_boatTaskCreat_Limit \
-		to test test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive \r\n");	
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Try test_BoAT_OSAL_ML307A_02Task_test_0023_boatTaskCreat_Limit \
+		to test test_BoAT_OSAL_ML307A_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive \r\n");	
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0018_boatTaskDelete_Successful)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0018_boatTaskDelete_Successful)
 {
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0018_boatTaskDelete_Successful \r\n");	
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0018_boatTaskDelete_Successful \r\n");	
 	
 	boatTaskCreat(&testTaskId, "task_test_delete", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_test_delete_thread, NULL);
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0018_boatTaskDelete_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0018_boatTaskDelete_Successful finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL\r\n");
 	
 	rtnVal = boatTaskDelete(0);
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
 		
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive\r\n");
 	boatTaskInitTaskidNagtive(&testTaskId);
 	rtnVal = boatTaskDelete(&testTaskId);
 	ck_assert_int_eq(rtnVal,-1);	///// equal -1 , error
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive finished\r\n");
 }
 END_TEST
 
@@ -178,12 +179,13 @@ static void task_loop_sleep_500ms_loopnum(void *param)
 	for (int i = 0;i < loopnum;i++)
 	{
 		BoatLog(BOAT_LOG_NORMAL, "[boat][task] task_loop_sleep_500ms_loopnum[%x] loop [%d] [%x]\r\n",&param,i,loopnum);
-		fibo_taskSleep(500);
+		BoatSleepMs(500);
 		
 	}
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing task_loop_sleep_500ms_loopnum finished[%x]\r\n",&param);
 
-	fibo_thread_delete();
+	//fibo_thread_delete();
+	osThreadTerminate(osThreadGetId());
 
 	return ;	
 }
@@ -197,21 +199,22 @@ static void task_loop_sleep_500ms_endlessloop(void *param)
 	while(1)
 	{
 		//BoatLog(BOAT_LOG_NORMAL, "[boat][task] task_loop_sleep_500ms_endlessloop[%x] loop [%x]\r\n",&param,i++);
-		fibo_taskSleep(50000);
+		BoatSleepMs(50000);
 		
 	}
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing task_loop_sleep_500ms_endlessloop finished\r\n");
 
-	fibo_thread_delete();
+	//fibo_thread_delete();
+	osThreadTerminate(osThreadGetId());
 
 	return ;	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0021_MultiTaskUseOneTaskFunc)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0021_MultiTaskUseOneTaskFunc\r\n");
 
 	for (int i = 0;i < MULTITASKNUM;i++)
 	{
@@ -219,36 +222,36 @@ START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc)
 		//rtnVal = boatTaskCreat(&testTaskIdArray[i], taskNameArray[i], 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_loop_sleep_500ms_loopnum, 10);
 		rtnVal = boatTaskCreat(&testTaskIdArray[i], "theSame", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_loop_sleep_500ms_loopnum, (void *)10);
 		ck_assert_int_eq(rtnVal,0);	///// qeual 0
-		fibo_taskSleep(200);
+		BoatSleepMs(200);
 
 	}
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0021_MultiTaskUseOneTaskFunc finished\r\n");
 }
 END_TEST
 
 // 检查FIBOCOM 创建 Task 的极限
-START_TEST(test_BoAT_OSAL_FibocomL610_02Task_test_0023_boatTaskCreat_Limit)
+START_TEST(test_BoAT_OSAL_ML307A_02Task_test_0023_boatTaskCreat_Limit)
 {
 	BOAT_RESULT rtnVal;
 
 	char *p = NULL;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0023_boatTaskCreat_Limit [%x]\r\n",p);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0023_boatTaskCreat_Limit [%x]\r\n",p);
 
 	for (int i = 0;i < 100;i++)
 	{
-		p = fibo_malloc(0x8000);
+		p = cm_malloc(0x8000);
 		rtnVal = boatTaskCreat(&testTaskId, "task_endlessloop", 24 * 1024, BOAT_TASK_PRIORITY_NORMAL, task_loop_sleep_500ms_endlessloop, NULL);
 		BoatLog(BOAT_LOG_NORMAL, "[boat][task] [%04d]Testing Task create rtnVal[%d][%x][%x]\r\n",i,rtnVal,testTaskId.taskId,p);	
 		if(rtnVal != 0)
 		{
 			break;
 		}
-		fibo_taskSleep(50);
+		BoatSleepMs(50);
 
 	}
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_02Task_test_0023_boatTaskCreat_Limit finished\r\n");
-	return NULL;
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_02Task_test_0023_boatTaskCreat_Limit finished\r\n");
+
 }
 END_TEST
 
@@ -265,23 +268,23 @@ Suite *makeTasktest_suite(void)
 
     /* Test cases are added to the test set */
 
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0010_boatTaskCreat_Successful_PriorityLow);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0010_boatTaskCreat_Successful_PriorityLow);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0011_boatTaskCreat_Successful_PriorityNormal);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0012_boatTaskCreat_Successful_PriorityHigh);
 
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0013_boatTaskCreat_Failed_TaskAddrNULL);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0014_boatTaskCreat_Failed_TaskNameNULL);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0015_boatTaskCreat_Failed_TaskStackNULL);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0016_boatTaskCreat_Failed_TaskFuncNULL);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0017_boatTaskCreat_Failed_FibocomTaskidNagtive);
 
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0018_boatTaskDelete_Successful);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL);
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0018_boatTaskDelete_Successful);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0019_boatTaskDelete_Failed_TaskAddrEqualNULL);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0020_boatTaskDelete_Failed_TaskidNagtive);
 
-	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0021_MultiTaskUseOneTaskFunc);
+	tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0021_MultiTaskUseOneTaskFunc);
 
-	/////tcase_add_test(tcTasktest_api, test_BoAT_OSAL_FibocomL610_02Task_test_0023_boatTaskCreat_Limit);	///// if malloc failed, the AT+SPREF= CMD cannot make the module running 
+	/////tcase_add_test(tcTasktest_api, test_BoAT_OSAL_ML307A_02Task_test_0023_boatTaskCreat_Limit);	///// if malloc failed, the AT+SPREF= CMD cannot make the module running 
 																											///// download mode,must pull high edge on the USB_BOOT pin
 	
 
