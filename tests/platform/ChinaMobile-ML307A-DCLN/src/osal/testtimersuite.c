@@ -1,8 +1,9 @@
 #include "boatosal.h"
 #include "boatlog.h"
 #include "boattypes.h"
-#include "fibo_opencpu.h"
-#include "../../boatcheck/boatcheck.h"
+#include "cm_os.h"
+#include "cm_mem.h"
+#include "boatcheck.h"
 
 
 boatTimer testTimerID;
@@ -89,7 +90,7 @@ static void task_hello_thread(void *param)
 	while(1)
 	{
 		BoatLog(BOAT_LOG_NORMAL, "[boat][task] This is task_hello_thread tastflag[%d] \r\n",testflag);
-		fibo_taskSleep(208);
+		BoatSleepMs(208);
 		if(testflag == 0)
 		{
 			BoatLog(BOAT_LOG_NORMAL, "[boat][task] Ending the task_hello_thread tastflag[%d] \r\n",testflag);
@@ -113,158 +114,158 @@ void closeStateDetectTask(void)
 }
 
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 1500, 0, onetimeFunc, NULL);
 	ck_assert_int_eq(rtnVal,0);
 	boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 500, 2500, onetimeFunc, NULL);
 	ck_assert_int_eq(rtnVal,0);
 
 	boatTimerDestroy(&testTimerID);	///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL\r\n");
 	
 	rtnVal = boatTimerStart(0, 0, 2500, onetimeFunc, NULL);
 	ck_assert_int_eq(rtnVal,-1);
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0013_boatTimerStart_Failed_doubleZero)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0013_boatTimerStart_Failed_doubleZero)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0013_boatTimerStart_Failed_doubleZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0013_boatTimerStart_Failed_doubleZero\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 0, 0, onetimeFunc, NULL);
 	ck_assert_int_eq(rtnVal,-1);
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0013_boatTimerStart_Failed_doubleZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0013_boatTimerStart_Failed_doubleZero finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 500, 0, NULL, NULL);
 	ck_assert_int_eq(rtnVal,-1);
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero)
 {
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Try test_BoAT_OSAL_FibocomL610_03Timer_test_0026_boatTimerStart_Limit \
-		to test test_BoAT_OSAL_FibocomL610_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero \r\n");	
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Try test_BoAT_OSAL_ML307A_03Timer_test_0026_boatTimerStart_Limit \
+		to test test_BoAT_OSAL_ML307A_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero \r\n");	
 
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] in L610 runtime environment the rtnVal will not be 0\r\n");
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValZero)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValZero)
 {
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Try test_BoAT_OSAL_FibocomL610_03Timer_test_0026_boatTimerStart_Limit \
-		to test test_BoAT_OSAL_FibocomL610_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValNagtive \r\n");	
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Try test_BoAT_OSAL_ML307A_03Timer_test_0026_boatTimerStart_Limit \
+		to test test_BoAT_OSAL_ML307A_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValNagtive \r\n");	
 
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] in L610 runtime environment the rtnVal will not be 0\r\n");
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValNagtive finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValNagtive finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 1500, 0, onetimeFunc, NULL);
-	fibo_taskSleep(100);
+	BoatSleepMs(100);
 	rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,0);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 0, 2500, onetimeFunc, NULL);
-	fibo_taskSleep(100);
+	BoatSleepMs(100);
 	rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,0);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL\r\n");
 	
 	rtnVal = boatTimerDestroy(0);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,-1);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero)
 {
 	BOAT_RESULT rtnVal;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero\r\n");
 	boatTimerInitTimeridZero(&testTimerID);
 	rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,-1);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero finished\r\n");
 	
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime)
 {
 	BOAT_RESULT rtnVal;
 
@@ -276,10 +277,10 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0021_onetimeTimerStartAndDest
 	
 	showtimestamp();
 	testflag = 2;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 1500, 0, onetimeFunc, NULL);
-	fibo_taskSleep(100);
+	BoatSleepMs(100);
 	ck_assert_int_eq(rtnVal,0);
 	while(1)
 	{
@@ -291,25 +292,25 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0021_onetimeTimerStartAndDest
 		else
 		{
 			BoatLog(BOAT_LOG_NORMAL, "[boat][timer] [test] This is wait flag loop [%d]\r\n",testflag);
-			fibo_taskSleep(500);
+			BoatSleepMs(500);
 		}
 	}
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	testflag = 3;
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	testflag = 2;
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	testflag = 1;
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 
 	showtimestamp();
 	boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime finished\r\n");
 	closeStateDetectTask();
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer)
 {
 	BOAT_RESULT rtnVal;
 
@@ -321,7 +322,7 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestro
 	
 	showtimestamp();
 	testflag = 2;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerid5, 1000, 0, onetimeFunc5, NULL);
 	ck_assert_int_eq(rtnVal,0);
@@ -331,7 +332,7 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestro
 	ck_assert_int_eq(rtnVal,0);
 
 	
-	fibo_taskSleep(3000);
+	BoatSleepMs(3000);
 
 	showtimestamp();
 	rtnVal = boatTimerDestroy(&testTimerid5);///// must destroy the timer once you stop using it.
@@ -340,12 +341,12 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestro
 	ck_assert_int_eq(rtnVal,0);
 	rtnVal = boatTimerDestroy(&testTimerid7);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,0);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer finished\r\n");
 	closeStateDetectTask();
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0023_periodTimerStartAndDestroy_onetime)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0023_periodTimerStartAndDestroy_onetime)
 {
 	BOAT_RESULT rtnVal;
 	
@@ -357,7 +358,7 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0023_periodTimerStartAndDestr
 
 	showtimestamp();
 	testflag = 2;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0023_periodTimerStartAndDestroy_onetime\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0023_periodTimerStartAndDestroy_onetime\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerID, 500, 500, periodtimeFunc, NULL);
 	ck_assert_int_eq(rtnVal,0);
@@ -370,25 +371,25 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0023_periodTimerStartAndDestr
 		else
 		{
 			BoatLog(BOAT_LOG_NORMAL, "[boat][timer] [test] This is wait flag loop [%d]\r\n",testflag);
-			fibo_taskSleep(100);
+			BoatSleepMs(100);
 		}
 	}
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	testflag = 13;
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	testflag = 12;
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 	testflag = 11;
-	fibo_taskSleep(1000);
+	BoatSleepMs(1000);
 
 	showtimestamp();
 	boatTimerDestroy(&testTimerID);	///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0023_periodTimerStartAndDestroy_onetime finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0023_periodTimerStartAndDestroy_onetime finished\r\n");
 	closeStateDetectTask();
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer)
 {
 	BOAT_RESULT rtnVal;
 
@@ -400,18 +401,18 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0024_MultiTimerStartAndDestro
 	
 	showtimestamp();
 	testflag = 2;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer\r\n");
 	
 	rtnVal = boatTimerStart(&testTimerid5, 0, 1500, onetimeFunc5, NULL);
 	ck_assert_int_eq(rtnVal,0);
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	rtnVal = boatTimerStart(&testTimerid6, 0, 1500, onetimeFunc6, NULL);
 	ck_assert_int_eq(rtnVal,0);
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	rtnVal = boatTimerStart(&testTimerid7, 0, 1500, onetimeFunc7, NULL);
 	ck_assert_int_eq(rtnVal,0);
 	
-	fibo_taskSleep(10000);
+	BoatSleepMs(10000);
 
 	showtimestamp();
 	rtnVal = boatTimerDestroy(&testTimerid5);///// must destroy the timer once you stop using it.
@@ -420,46 +421,46 @@ START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0024_MultiTimerStartAndDestro
 	ck_assert_int_eq(rtnVal,0);
 	rtnVal = boatTimerDestroy(&testTimerid7);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,0);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer finished\r\n");
 	closeStateDetectTask();
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0026_boatTimerStart_Limit)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0026_boatTimerStart_Limit)
 {
 	BOAT_RESULT rtnVal;
 
 	char *p=NULL;
 
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0026_boatTimerStart_Limit [%x]\r\n",p);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_03Timer_test_0026_boatTimerStart_Limit [%x]\r\n",p);
 
 	for (int i = 0;i < 200;i++)
 	{
-		p = fibo_malloc(0x8000);
+		p = cm_malloc(0x8000);
 		rtnVal = boatTimerStart(&testTimerID, 500, 1500, limitFunc, NULL);
 		BoatLog(BOAT_LOG_NORMAL, "[boat][task] [%04d]Testing timer create rtnVal[%d][%x][%x]\r\n",i,rtnVal,testTimerID.timerId,p);	
 		if(rtnVal != 0)
 		{
 			break;
 		}
-		fibo_taskSleep(50);
+		BoatSleepMs(50);
 
 	}
-	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0026_boatTimerStart_Limit finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing test_BoAT_OSAL_ML307A_03Timer_test_0026_boatTimerStart_Limit finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_OSAL_FibocomL610_03Timer_test_0025_boatTimerDestroy_timerIDInvalide)
+START_TEST(test_BoAT_OSAL_ML307A_03Timer_test_0025_boatTimerDestroy_timerIDInvalide)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0025_boatTimerDestroy_timerIDInvalide\r\n");
-	fibo_taskSleep(3000);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0025_boatTimerDestroy_timerIDInvalide\r\n");
+	BoatSleepMs(3000);
 	boatTimerInitTimeridInvalid(&testTimerID);
 
 	
 	rtnVal = boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,0);
-	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_FibocomL610_03Timer_test_0025_boatTimerDestroy_timerIDInvalide finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_ML307A_03Timer_test_0025_boatTimerDestroy_timerIDInvalide finished\r\n");
 	closeStateDetectTask();
 }
 END_TEST
@@ -477,24 +478,24 @@ Suite *makeTimertest_suite(void)
 
     /* Test cases are added to the test set */
 
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0013_boatTimerStart_Failed_doubleZero);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValZero);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0023_periodTimerStartAndDestroy_onetime);
-	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0010_boatTimerStart_Successful_onetimeTimer);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0012_boatTimerStart_Failed_timerRefNULL);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0013_boatTimerStart_Failed_doubleZero);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0014_boatTimerStart_Failed_callBackRoutineNull);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0015_boatTimerStart_Failed_onetimeTimer_rtnValZero);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0016_boatTimerStart_Failed_periodTimer_rtnValZero);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0017_boatTimerDestroy_Successful_onetimeTimer);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0018_boatTimerDestroy_Successful_periodTimer);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0019_boatTimerDestroy_Failed_timerRefNULL);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0020_boatTimerDestroy_Failed_timerIDZero);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0021_onetimeTimerStartAndDestroy_onetime);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0022_MultiTimerStartAndDestroy_onetimeTimer);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0023_periodTimerStartAndDestroy_onetime);
+	tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0024_MultiTimerStartAndDestroy_periodTimer);
 
-	/////tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0025_boatTimerDestroy_timerIDInvalide); 
-	/////tcase_add_test(tcTimertest_api, test_BoAT_OSAL_FibocomL610_03Timer_test_0026_boatTimerStart_Limit);
+	/////tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0025_boatTimerDestroy_timerIDInvalide); 
+	/////tcase_add_test(tcTimertest_api, test_BoAT_OSAL_ML307A_03Timer_test_0026_boatTimerStart_Limit);
 	
 
     return sTimertest;
