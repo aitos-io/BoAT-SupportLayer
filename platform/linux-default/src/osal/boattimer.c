@@ -124,7 +124,6 @@ BOAT_RESULT boatTimerDestroy(boatTimer *timerRef)
 
     if(timer_delete(timerRef->timerId) == 0)
     {
-		BoatLog(0, "timer deleted (timerId=%p)", timerRef->timerId);
 		memset(timerRef,0,sizeof(boatTimer));
 		return BOAT_SUCCESS;
     }
