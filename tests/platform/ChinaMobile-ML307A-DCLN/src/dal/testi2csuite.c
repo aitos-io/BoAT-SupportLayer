@@ -19,7 +19,7 @@
 
 #include "cm_os.h"
 
-#include "../../boatcheck/boatcheck.h"
+#include "boatcheck.h"
 
 boatI2c testI2CID;
 boatI2cConfig testI2CConfig;
@@ -38,396 +38,396 @@ void testI2CConfigSet(boatI2cConfig *config, BUINT32 speed, BUINT8 SlavAddrBits,
 	config->i2cSlaveDevRegisterAddrLen = SlaveRegAddrLen;	
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes\r\n");	
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes\r\n");	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 2, connect to NXP sm chip
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes\r\n");	
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes\r\n");	
 	testI2CConfigSet(&testI2CConfig, 400000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 2, connect to NXP sm chip	
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 1, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 1, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 1, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 0, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 0, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 1, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 1, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 1, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 1, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 1, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 1, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 0, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 0, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 1, 0); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 1, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 400000, 1, 2); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
-	fibo_taskSleep(500);
+	BoatSleepMs(500);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes\r\n");
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	for(BUINT8 i = 0;;i++)
 	{
@@ -435,25 +435,25 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0034_boatI2COpen_Failed_portNumb
 		rtnVal = boatI2cOpen(&testI2CID, i, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
 		if(rtnVal == BOAT_SUCCESS)
 		{
-			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes failed[%x] \r\n",i);
+			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes failed[%x] \r\n",i);
 			break;////return NULL;
 		}
 		/////ck_assert_int_eq(rtnVal,BOAT_ERROR);
 		if(i==0xff) break;
-		/////fibo_taskSleep(100);
+		/////BoatSleepMs(100);
 	}
 	/////boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes finished -- Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes finished -- Successful\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes\r\n");
 	BUINT32 counter = 0xffffffff;
 	for(BUINT32 i = 0;;i++)
 	{
@@ -462,29 +462,29 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0035_boatI2COpen_Failed_port1_sp
 		rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
 		if(rtnVal == BOAT_SUCCESS)
 		{
-			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes failed[%x] \r\n",i);
+			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes failed[%x] \r\n",i);
 			break;/////return NULL;
 		}
 		/////ck_assert_int_eq(rtnVal,BOAT_ERROR);
 		counter --;
 		if(i%0x1000000 == 0) BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing %x\n",i);
 		if(i==0xffffffff) break;
-		/////fibo_taskSleep(100);
+		/////BoatSleepMs(100);
 	}
 	/////boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] counter Testing %x\n",counter);
 	ck_assert_int_eq(counter,1);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes finished -- Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes finished -- Successful\r\n");
 	
-	return NULL;
+	return ;
 }
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes\r\n");
 	for(BUINT8 i = 0;;i++)
 	{
 		if((i==1) || (i==0)) continue;
@@ -492,26 +492,26 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0036_boatI2COpen_Failed_port1_sp
 		rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
 		if(rtnVal == BOAT_SUCCESS)
 		{
-			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes failed[%x] \r\n",i);
+			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes failed[%x] \r\n",i);
 			/////ck_assert_int_eq(rtnVal,BOAT_ERROR);
 			break;
 		}
 		
 		if(i==0xff) break;
-		/////fibo_taskSleep(100);
+		/////BoatSleepMs(100);
 	}
 	/////boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes finished -- Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes finished -- Successful\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2\r\n");
 	for(BUINT8 i = 0;;i++)
 	{
 		if((i==1) || (i==0) || (i==2)) continue;
@@ -519,70 +519,70 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0037_boatI2COpen_Failed_port1_sp
 		rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
 		if(rtnVal == BOAT_SUCCESS)
 		{
-			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2 failed[%x] \r\n",i);
+			BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2 failed[%x] \r\n",i);
 			break;/////return NULL;
 		}
 		/////ck_assert_int_eq(rtnVal,BOAT_ERROR);
 		if(i==0xff) break;
-		/////fibo_taskSleep(100);
+		/////BoatSleepMs(100);
 	}
 	/////boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2 finished -- Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2 finished -- Successful\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0047_boatI2CClose_Successful)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0047_boatI2CClose_Successful)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0047_boatI2CClose_Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0047_boatI2CClose_Successful\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
 	rtnVal = boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0047_boatI2CClose_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0047_boatI2CClose_Successful finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL\r\n");
 	
 	rtnVal = boatI2cClose(0);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero\r\n");
 	boatI2CInitI2CIDZero(&testI2CID);
 	/////testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	/////rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
 	rtnVal = boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
 #define testSlaveAddr 0x48
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0050_boatI2CMasterWrite_Successful)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0050_boatI2CMasterWrite_Successful)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  td[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0050_boatI2CMasterWrite_Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0050_boatI2CMasterWrite_Successful\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -592,17 +592,17 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0050_boatI2CMasterWrite_Successf
 		ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	}
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0050_boatI2CMasterWrite_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0050_boatI2CMasterWrite_Successful finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  td[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -612,33 +612,33 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0051_boatI2CMasterWrite_Successf
 		ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	}
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  td[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL\r\n");
 
 	rtnVal = boatI2cMasterWrite(0,testSlaveAddr,0,td,sizeof(td));//!(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 datalen)
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  td[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -663,18 +663,18 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0053_boatI2CMasterWrite_Failed_S
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  td[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -698,18 +698,18 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0054_boatI2CMasterWrite_Failed_R
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -718,19 +718,19 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0055_boatI2CMasterWrite_Failed_D
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  td[8]; 
 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -753,19 +753,19 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0056_boatI2CMasterWrite_Failed_D
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  td[8]; 
 
 
-	BoatLog(1,"[boat][log][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed\r\n");
+	BoatLog(1,"[boat][log][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -778,18 +778,18 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0057_boatI2CMasterWrite_Failed_F
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][log][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][log][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successful)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0058_boatI2CMasterRead_Successful)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0058_boatI2CMasterRead_Successful\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -800,17 +800,17 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successfu
 		/////ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	}
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0058_boatI2CMasterRead_Successful finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -820,33 +820,33 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0059_boatI2CMasterRead_Successfu
 		ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	}
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL\r\n");
 
 	rtnVal = boatI2cMasterRead(0,testSlaveAddr,0,rd,sizeof(rd));//!(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 datalen)
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -869,18 +869,18 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0061_boatI2CMasterRead_Failed_Sl
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -903,18 +903,18 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0062_boatI2CMasterRead_Failed_Re
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -926,19 +926,19 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0063_boatI2CMasterRead_Failed_Da
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  rd[8]; 
 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -961,19 +961,19 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0064_boatI2CMasterRead_Failed_Da
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed)//! slave address > 0x7f is invalid
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed)//! slave address > 0x7f is invalid
 {
 	BOAT_RESULT rtnVal = 0;
 	BOAT_RESULT rtnValOpen;
 	BUINT8  rd[8]; 
 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed\r\n");
 
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:i, register address length: 2 bytes
 	rtnValOpen = boatI2cOpen(&testI2CID, 1, testI2CConfig); //! I2C port number 1, no peripheral i2c device connected
@@ -986,18 +986,18 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0065_boatI2CMasterRead_Failed_Fi
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0066_boatI2CDataWR_NXP)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0066_boatI2CDataWR_NXP)
 {
 	BOAT_RESULT rtnVal = 0;
 	/////BUINT8  td[8]; 
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0058_boatI2CMasterRead_Successful\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -1011,17 +1011,17 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0066_boatI2CDataWR_NXP)
 		ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	}
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0058_boatI2CMasterRead_Successful finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -1032,16 +1032,16 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0067_boatI2CFicbocmReopen_ErrorR
 
 	rtnVal = boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 2, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -1053,17 +1053,17 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0068_boatI2CFicbocmReclose_Error
 	rtnVal = boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal)
 {
 	BOAT_RESULT rtnVal = 0;
 	/////BUINT8  td[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -1074,17 +1074,17 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0069_boatI2CFicbocmWrite_lenInva
 		ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	}
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal)
+START_TEST(test_BoAT_DAL_ML307A_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal)
 {
 	BOAT_RESULT rtnVal = 0;
 	BUINT8  rd[8]; 
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal\r\n");
 	
 	testI2CConfigSet(&testI2CConfig, 100000, 0, 1); //! speed:100k, slave addr bits:7, register address length: 2 bytes
 	rtnVal = boatI2cOpen(&testI2CID, 1, testI2CConfig);	//! I2C port number 1, no peripheral i2c device connected
@@ -1094,12 +1094,12 @@ START_TEST(test_BoAT_DAL_FibocomL610_01I2C_test_0070_boatI2CFicbocmRead_lenInval
 		rtnVal = boatI2cMasterRead(&testI2CID,testSlaveAddr,0,rd,sizeof(rd));//!(boatI2c *i2cRef, BUINT16 slaveAddr, BUINT32 regAddr, BUINT8 *data, BUINT16 datalen)
 		ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	}
-	fibo_taskSleep(100);
+	BoatSleepMs(100);
 	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] boatI2cOpen finished \r\n");
 	boatI2cClose(&testI2CID);///// must destroy the timer once you stop using it.
-	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_FibocomL610_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][i2c] Testing test_BoAT_DAL_ML307A_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal finished\r\n");
 	
-	return NULL;
+	return ;
 }
 
 Suite *makeI2ctest_suite(void)
@@ -1115,67 +1115,67 @@ Suite *makeI2ctest_suite(void)
 
     /* Test cases are added to the test set */
 #if 1
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0010_boatI2COpenPort1_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0011_boatI2COpenPort1_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0012_boatI2COpenPort2_Successful_speed100k_SlaveAddrBits7_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0013_boatI2COpenPort2_Successful_speed400k_SlaveAddrBits7_RegAddr2Bytes);
 
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0014_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0015_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits7_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0016_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0017_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0018_boatI2COpen_Fail_Port1_speed100k_SlaveAddrBits10_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0019_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0020_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits7_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0021_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0022_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0023_boatI2COpen_Fail_Port1_speed400k_SlaveAddrBits10_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0024_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0025_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits7_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0026_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0027_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0028_boatI2COpen_Fail_Port2_speed100k_SlaveAddrBits10_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0029_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0030_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits7_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0031_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr1Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0032_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0033_boatI2COpen_Fail_Port2_speed400k_SlaveAddrBits10_RegAddr4Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0034_boatI2COpen_Failed_portNumber_notEQ1_notEQ2_speed100k_SlaveAddrBits7_RegAddr2Bytes);
 #endif
 #if 0
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0035_boatI2COpen_Failed_port1_speed_notEQ100k_notEQ400k_SlaveAddrBits_RegAddr2Bytes);
 #endif
 #if 1
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0047_boatI2CClose_Successful);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0050_boatI2CMasterWrite_Successful);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0036_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_notEQ0_notEQ1_RegAddr2Bytes);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0037_boatI2COpen_Failed_port1_speed100k_SlaveAddrBits_SlaveAddrBits7_RegAddr_notEQ0_notEQ1_notEQ2);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0047_boatI2CClose_Successful);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0048_boatI2CClose_Failed_I2CRefNULL);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0049_boatI2CClose_Failed_I2CIDZero);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0050_boatI2CMasterWrite_Successful);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0051_boatI2CMasterWrite_Successful_DataLenZero);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0052_boatI2CMasterWrite_Failed_I2CRefNULL);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0053_boatI2CMasterWrite_Failed_SlaveAddrInvalid);//! slave address > 0x7f is invalid
 #endif
 #if 0
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0054_boatI2CMasterWrite_Failed_RegAddrInvalid);//! slave address > 0x7f is invalid
 #endif
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL);//! slave address > 0x7f is invalid
-//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid);//! slave address > 0x7f is invalid
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed);//! slave address > 0x7f is invalid
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0058_boatI2CMasterRead_Successful);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL);
-//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid);//! slave address > 0x7f is invalid
-//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid);//! slave address > 0x7f is invalid
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL);//! slave address > 0x7f is invalid
-//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid);//! slave address > 0x7f is invalid
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0055_boatI2CMasterWrite_Failed_DataNULL);//! slave address > 0x7f is invalid
+//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0056_boatI2CMasterWrite_Failed_DataLenInvalid);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0057_boatI2CMasterWrite_Failed_FibocomWriteFailed);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0058_boatI2CMasterRead_Successful);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0059_boatI2CMasterRead_Successful_DataLenZero);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0060_boatI2CMasterRead_Failed_I2CRefNULL);
+//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0061_boatI2CMasterRead_Failed_SlaveAddrInvalid);//! slave address > 0x7f is invalid
+//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0062_boatI2CMasterRead_Failed_RegAddrInvalid);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0063_boatI2CMasterRead_Failed_DataNULL);//! slave address > 0x7f is invalid
+//		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0064_boatI2CMasterRead_Failed_DataLenInvalid);//! slave address > 0x7f is invalid
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0065_boatI2CMasterRead_Failed_FibocomReadFailed);//! slave address > 0x7f is invalid
 #if 0
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0066_boatI2CDataWR_NXP);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal);
-		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_FibocomL610_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0066_boatI2CDataWR_NXP);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0067_boatI2CFicbocmReopen_ErrorRtnVal);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0068_boatI2CFicbocmReclose_ErrorRtnVal);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0069_boatI2CFicbocmWrite_lenInvalid_ErrorRtnVal);
+		tcase_add_test(tcI2ctest_api, test_BoAT_DAL_ML307A_01I2C_test_0070_boatI2CFicbocmRead_lenInvalid_ErrorRtnVal);
 #endif
 
 
