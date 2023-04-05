@@ -16,8 +16,8 @@
 #include "boatdal.h"
 #include "boatlog.h"
 #include "boattypes.h"
-#include "fibo_opencpu.h"
-#include "../../boatcheck/boatcheck.h"
+#include "cm_os.h"
+#include "boatcheck.h"
 
 boatUart testUartId;
 boatUartConfig testUartConfig;
@@ -77,11 +77,11 @@ void testUartConfigSet(boatUartConfig *config, BUINT32 baudrate, BUINT8 databit,
 	config->txBufSize = txSize;
 }
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right\r\n");
 	
 	BUINT8 databit, stopbit, parity;
 	for(databit = 5; databit <=8; databit++)
@@ -101,81 +101,81 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0010_boatUartOpen_Successful_Co
 		}
 	}
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL\r\n");
 	
 	rtnVal =boatUartInit(0, 1, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
 	/////rtnVal =boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb); // 200 port is not exist or a nagtive value
 	rtnVal =boatUartInit(0, 1, testUartConfig, testUartRxCb); // 200 port is not exist or a nagtive value
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 5);
 	rtnVal =boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 5, 0);
 	rtnVal =boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL\r\n");
 	
 	rtnVal =boatUartInit(&testUartId, 1, testUartConfig, NULL);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0018_boatUartOpen_Failed_dataBitsError)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0018_boatUartOpen_Failed_dataBitsError)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0018_boatUartOpen_Failed_dataBitsError\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0018_boatUartOpen_Failed_dataBitsError\r\n");
 	
 	for(BUINT8 i = 0; i <= 255; i++)
 	{
@@ -192,17 +192,17 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0018_boatUartOpen_Failed_dataBi
 		if(i==255) break;
 	}
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0018_boatUartOpen_Failed_dataBitsError finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0018_boatUartOpen_Failed_dataBitsError finished\r\n");
 	
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0017_boatUartOpen_Failed_stopBiteError)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0017_boatUartOpen_Failed_stopBiteError)
 {
 	BOAT_RESULT rtnVal = 0;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0017_boatUartOpen_Failed_stopBiteError\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0017_boatUartOpen_Failed_stopBiteError\r\n");
 	
 	for(BUINT8 i = 0;; i++)
 	{
@@ -216,22 +216,22 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0017_boatUartOpen_Failed_stopBi
 			break;
 		}				
 		BoatLog(BOAT_LOG_NORMAL,"[boat][uart] stopbit %d ",i);
-		fibo_taskSleep(10);
+		BoatSleepMs(10);
 		if(i==0xff) break;
 	}
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0017_boatUartOpen_Failed_stopBiteError finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0017_boatUartOpen_Failed_stopBiteError finished\r\n");
 	
 
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0016_boatUartOpen_Failed_parityError)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0016_boatUartOpen_Failed_parityError)
 {
 	BOAT_RESULT rtnVal = BOAT_ERROR;
 
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0016_boatUartOpen_Failed_parityError\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0016_boatUartOpen_Failed_parityError\r\n");
 	
 	for(BUINT8 i = 0;; i++)
 	{
@@ -248,14 +248,14 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0016_boatUartOpen_Failed_parity
 		if(i==0xff) break;
 	}
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
-	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_FibocomL610_01Uart_test_0016_boatUartOpen_Failed_parityError finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL,"[boat][uart] Testing test_BoAT_DAL_ML307A_01Uart_test_0016_boatUartOpen_Failed_parityError finished\r\n");
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0019_boatUartDeinit_Successful)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0019_boatUartDeinit_Successful)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0019_boatUartDeinit_Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0019_boatUartDeinit_Successful\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
 	rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
@@ -263,57 +263,57 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0019_boatUartDeinit_Successful)
 	rtnVal = boatUartDeinit(&testUartId);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0019_boatUartDeinit_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0019_boatUartDeinit_Successful finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL\r\n");
 	
 	rtnVal =boatUartDeinit(0);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive\r\n");
 
 	boatUartInitUartIdNagtive(&testUartId);
 	rtnVal =boatUartDeinit(&testUartId);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError\r\n");
 
 	rtnVal =boatUartDeinit(&testUartId);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError finished\r\n");
 
 }
 END_TEST
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0023_boatUartWrite_Successful)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0023_boatUartWrite_Successful)
 {
 	BOAT_RESULT rtnVal;
 	BUINT8 tdBuf[7]={0,'a','i','t','o','s',0xff};
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0023_boatUartWrite_Successful\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0023_boatUartWrite_Successful\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
 
 
@@ -328,22 +328,22 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0023_boatUartWrite_Successful)
 	{
 		
 		BoatLog(BOAT_LOG_NORMAL, "Testing waitting for answer\r\n");
-		fibo_taskSleep(2000);
+		BoatSleepMs(2000);
 		if(boatRxFlg == 1) break;
 	}
 	
 	rtnVal = boatUartDeinit(&testUartId);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0023_boatUartWrite_Successful finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0023_boatUartWrite_Successful finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0024_boatUartWrite_Successful_dataLenZero)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0024_boatUartWrite_Successful_dataLenZero)
 {
 	BOAT_RESULT rtnVal;
 	BUINT8 tdBuf[10];
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0024_boatUartWrite_Successful_dataLenZero\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0024_boatUartWrite_Successful_dataLenZero\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
 	rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
@@ -354,66 +354,66 @@ START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0024_boatUartWrite_Successful_d
 	rtnVal = boatUartDeinit(&testUartId);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0024_boatUartWrite_Successful_dataLenZero finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0024_boatUartWrite_Successful_dataLenZero finished\r\n");
 
 }
 END_TEST
 
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL)
 {
 	BOAT_RESULT rtnVal;
 	BUINT8 tdBuf[10];
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL\r\n");
 	
 	rtnVal = boatUartWrite(0, tdBuf, sizeof(tdBuf));
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL)
 {
 	BOAT_RESULT rtnVal;
 	BUINT8 tdBuf[10];
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL\r\n");
 	
 	rtnVal = boatUartWrite(&testUartId, NULL, sizeof(tdBuf));
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive)
 {
 	BOAT_RESULT rtnVal;
 	BUINT8 tdBuf[10];
 
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive\r\n");
 
 	boatUartInitUartIdNagtive(&testUartId);
 	rtnVal = boatUartWrite(&testUartId, tdBuf, sizeof(tdBuf));
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_BoAT_DAL_FibocomL610_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError)
+START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError)
 {
 	BOAT_RESULT rtnVal;
 	BUINT8 tdBuf[10];
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError\r\n");
 
 	rtnVal = boatUartWrite(&testUartId, tdBuf, sizeof(tdBuf));
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
-	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_FibocomL610_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError finished\r\n");
 
 }
 END_TEST
@@ -434,31 +434,31 @@ Suite *makeUarttest_suite(void)
     /* Test cases are added to the test set */
 #if 0
 	
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right);
 
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL);
 
 
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0019_boatUartDeinit_Successful);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError);
-	/////tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0023_boatUartWrite_Successful);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0019_boatUartDeinit_Successful);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0022_boatUartDeinit_Failed_fiboHalUartDeinitError);
+	/////tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0023_boatUartWrite_Successful);
 #endif
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0016_boatUartOpen_Failed_parityError);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0017_boatUartOpen_Failed_stopBiteError);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0018_boatUartOpen_Failed_dataBitsError);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0016_boatUartOpen_Failed_parityError);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0017_boatUartOpen_Failed_stopBiteError);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0018_boatUartOpen_Failed_dataBitsError);
 #if 0
 
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0024_boatUartWrite_Successful_dataLenZero);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_FibocomL610_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0024_boatUartWrite_Successful_dataLenZero);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive);
+	tcase_add_test(tcUarttest_api, test_BoAT_DAL_ML307A_01Uart_test_0028_boatUartWrite_Failed_fiboHalUartDeinitError);
 
 
 #endif
