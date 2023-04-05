@@ -1,288 +1,88 @@
-#include "fibo_opencpu.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-
-
-#include "boatlog.h"
-#include "../../boatcheck/boatcheck.h"
+#include <stdio.h>
+#include <pthread.h>
 #include "boatdal.h"
+#include "boatlog.h"
+#include "boattypes.h"
+#include "boatcheck.h"
 
-static UINT32 g_virtualAt_lock = 0;
-
-static int g_callback_1_flag = 0;
-static int g_callback_2_flag = 0; 
-
-static BOAT_RESULT g_openVirtualAT_result_thread1 = BOAT_ERROR;
-static BOAT_RESULT g_openVirtualAT_result_thread2 = BOAT_ERROR;
-
-static char *g_cmd = "AT\r\n";
-
-static void initThreadOpenVirtualATFlag(void)
+START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed)
 {
-    g_openVirtualAT_result_thread1 = BOAT_ERROR;
-    g_openVirtualAT_result_thread2 = BOAT_ERROR;
-}
-
-static void initCallbackFlag(void)
-{
-    g_callback_1_flag = 0;
-    g_callback_2_flag = 0;
-}
-
-
-void dalVirtualATCallback1(char *content,BUINT32 len)
-{
-    BoatLog(BOAT_LOG_NORMAL,"virtualAt callback_1=>%s,len:%d",content,len);
-    g_callback_1_flag = 1;
-    if(NULL != strstr(content,"OK"))
-    {
-        if(g_virtualAt_lock)
-        {
-            fibo_sem_signal(g_virtualAt_lock);
-        }
-    }
-
-}
-
-void dalVirtualATCallback2(char *content,BUINT32 len)
-{
-    BoatLog(BOAT_LOG_NORMAL,"virtualAt callback_2=>%s,len:%d",content,len);
-    g_callback_2_flag = 1;
-
-    if(NULL != strstr(content,"OK"))
-    {
-        if(g_virtualAt_lock)
-        {
-            fibo_sem_signal(g_virtualAt_lock);
-        }
-    }
-}
-
-
-static void openVirtualAT_in_thread1(void *param)
-{
-    BOAT_RESULT result;
-    result = boatVirtualAtOpen(dalVirtualATCallback1);
-    g_openVirtualAT_result_thread1 = result;
-
-    if(g_virtualAt_lock)
-    {
-        fibo_sem_signal(g_virtualAt_lock);
-    }
-
-    fibo_thread_delete();
-    
-}
-
-static void openVirtualAT_in_thread2(void *param)
-{
-    BOAT_RESULT result;
-    result = boatVirtualAtOpen(dalVirtualATCallback2);
-    g_openVirtualAT_result_thread2 = result;
-
-    if(g_virtualAt_lock)
-    {
-        fibo_sem_signal(g_virtualAt_lock);
-    }
-
-    fibo_thread_delete();
-    
-}
-
-static void sendVirtualAT_in_thread(void *param)
-{
-    BOAT_RESULT result;
-    result = boatVirtualAtSend(g_cmd,strlen(g_cmd));
-    ck_assert_int_eq(result,BOAT_SUCCESS);
-
-    if(g_virtualAt_lock)
-    {
-        fibo_sem_signal(g_virtualAt_lock);
-    }
-
-    fibo_thread_delete();
-}
-
-
-START_TEST(test_001_OpenVirtualAT_0001_OpenVirtualATSuccess)
-{
-
-    BOAT_RESULT  result;
-    result = boatVirtualAtOpen(dalVirtualATCallback1);
-    ck_assert_int_eq(result,BOAT_SUCCESS);
-
-    boatVirtualAtClose();
+	BOAT_RESULT rtnVal;
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed\r\n");
+	rtnVal = boatVirtualAtOpen(NULL);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_001_OpenVirtualAT_0002_OpenVirtualATFailureTwice)
+START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed)
 {
-    initThreadOpenVirtualATFlag();
-    if (g_virtualAt_lock == 0)
-    {
-        g_virtualAt_lock = fibo_sem_new(0);
-    }
-
-
-    fibo_thread_create(openVirtualAT_in_thread1, "openVirtualAT_in_thread1", 1024*1, NULL, OSI_PRIORITY_NORMAL);
-
-    fibo_sem_wait(g_virtualAt_lock);
-
-    ck_assert_int_eq(g_openVirtualAT_result_thread1,BOAT_SUCCESS);
-
-    fibo_thread_create(openVirtualAT_in_thread2, "openVirtualAT_in_thread2", 1024*1, NULL, OSI_PRIORITY_NORMAL);
-
-    fibo_sem_wait(g_virtualAt_lock);
-
-    ck_assert_int_eq(g_openVirtualAT_result_thread2,BOAT_ERROR_DAL_VIRTUAL_BUSY);
-
-    boatVirtualAtClose();
-
-    fibo_sem_free(g_virtualAt_lock);
-    g_virtualAt_lock = 0;
-
-    initThreadOpenVirtualATFlag();
+	BOAT_RESULT rtnVal;
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed\r\n");
+	rtnVal = boatVirtualAtSend(NULL, 0);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_002_SendCmd_0001_SendCmdSuccess)
+START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed)
 {
-
-    BOAT_RESULT  result;
-    initCallbackFlag();
-
-    if (g_virtualAt_lock == 0)
-    {
-        g_virtualAt_lock = fibo_sem_new(0);
-    }
-
-    result = boatVirtualAtOpen(dalVirtualATCallback1);
-    ck_assert_int_eq(result,BOAT_SUCCESS);
-    
-    result = boatVirtualAtSend(g_cmd,strlen(g_cmd));
-    ck_assert_int_eq(result,BOAT_SUCCESS);
-
-    fibo_sem_wait(g_virtualAt_lock);
-    ck_assert_int_eq(g_callback_1_flag,1);
-    ck_assert_int_eq(g_callback_2_flag,0);
-
-    boatVirtualAtClose();
-    if(g_virtualAt_lock)
-    {
-        fibo_sem_free(g_virtualAt_lock);
-        g_virtualAt_lock = 0;
-    }
-
-    initCallbackFlag();
+	BOAT_RESULT rtnVal;
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed\r\n");
+	rtnVal = boatVirtualAtTimedSend(NULL, 0, 0);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed finished\r\n");
 
 }
 END_TEST
 
-START_TEST(test_002_SendCmd_0002_SendCmdFailureNotOpen)
+START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed)
 {
-    BOAT_RESULT  result;
-    result = boatVirtualAtSend(g_cmd,strlen(g_cmd));
-    ck_assert_int_eq(result,BOAT_ERROR_DAL_VIRTUAL_CLOSED);
-}
-END_TEST
-
-START_TEST(test_002_SendCmd_0003_SendCmdFailureNotOwner)
-{
-    initThreadOpenVirtualATFlag();
-    initCallbackFlag();
-
-    if (g_virtualAt_lock == 0)
-    {
-        g_virtualAt_lock = fibo_sem_new(0);
-    }
-
-    fibo_thread_create(openVirtualAT_in_thread1, "openVirtualAT_in_thread1", 1024*1, NULL, OSI_PRIORITY_NORMAL);
-
-    fibo_sem_wait(g_virtualAt_lock);
-
-    fibo_thread_create(sendVirtualAT_in_thread, "sendVirtualAT_in_thread", 1024*1, NULL, OSI_PRIORITY_NORMAL);
-    
-    fibo_sem_wait(g_virtualAt_lock);
-
-    ck_assert_int_eq(g_callback_1_flag,1);
-    ck_assert_int_eq(g_callback_2_flag,0);
-
-    boatVirtualAtClose();
-
-    fibo_sem_free(g_virtualAt_lock);
-    g_virtualAt_lock = 0;
-
-    initCallbackFlag();
-    initThreadOpenVirtualATFlag();
-
-}
-END_TEST
-
-START_TEST(test_002_SendCmd_0004_SendCmdFailureCmdNULL)
-{
-    BOAT_RESULT  result;
-    result = boatVirtualAtSend(NULL,strlen(g_cmd));
-    ck_assert_int_eq(result,BOAT_ERROR_DAL_INVALID_ARGUMENT);
+	BOAT_RESULT rtnVal;
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed\r\n");
+	rtnVal = boatVirtualAtClose();
+	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed finished\r\n");
 
 }
 END_TEST
 
 
-START_TEST(test_002_SendCmd_0005_SendCmdFailureLenWrong)
-{
 
-    BOAT_RESULT  result;
-    result = boatVirtualAtSend(g_cmd,0);
-    ck_assert_int_eq(result,BOAT_ERROR_DAL_INVALID_ARGUMENT);
-
-}
-END_TEST
-
-START_TEST(test_003_CloseVirtualAT_0001_CloseVirtualATSuccess)
-{
-    BOAT_RESULT result;
-    result = boatVirtualAtClose();
-    ck_assert_int_eq(result,BOAT_SUCCESS);
-}
-END_TEST
-
-Suite *make_virtualAt_test_suite(void)
+Suite *makeVirtualAtTestSuite(void)
 {
     /* Create Suite */
-    Suite *s_virtualAt_test = suite_create("virtualAt_test");
+    Suite *sVirtualAttest = suite_create("virtualAt_test");
 
     /* Create test cases */
-    TCase *tc_virtualAt_test_api = tcase_create("virtualAt_test_api");
+    TCase *tcVirtualAttest_api = tcase_create("virtualAt_test_api");
 
     /* Add a test case to the Suite */
-    suite_add_tcase(s_virtualAt_test,tc_virtualAt_test_api);
+    suite_add_tcase(sVirtualAttest,tcVirtualAttest_api);
+	//tcase_set_timeout(tcVirtualAttest_api,20);
 
     /* Test cases are added to the test set */
-
-    tcase_add_test(tc_virtualAt_test_api,test_001_OpenVirtualAT_0001_OpenVirtualATSuccess);
-    tcase_add_test(tc_virtualAt_test_api,test_001_OpenVirtualAT_0002_OpenVirtualATFailureTwice);
-    tcase_add_test(tc_virtualAt_test_api,test_002_SendCmd_0001_SendCmdSuccess);
-    tcase_add_test(tc_virtualAt_test_api,test_002_SendCmd_0002_SendCmdFailureNotOpen);
-    tcase_add_test(tc_virtualAt_test_api,test_002_SendCmd_0003_SendCmdFailureNotOwner);
-    tcase_add_test(tc_virtualAt_test_api,test_002_SendCmd_0004_SendCmdFailureCmdNULL);
-    tcase_add_test(tc_virtualAt_test_api,test_002_SendCmd_0005_SendCmdFailureLenWrong);    
-    tcase_add_test(tc_virtualAt_test_api,test_003_CloseVirtualAT_0001_CloseVirtualATSuccess);
-
-    return s_virtualAt_test;
+	
+#if 1
+	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed);
+	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed);
+	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed);
+	tcase_add_test(tcVirtualAttest_api, test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed);
+#endif
+    return sVirtualAttest;
 
 }
 
-int runVirtualATTests(void)
+int runVirtualAtTests(void)
 {
     SRunner *sr = NULL;
     int failed_number = 0;
 
-    Suite *suiteVirtualATtest = make_virtualAt_test_suite();
+    Suite *suiteVirtualAtTest = makeVirtualAtTestSuite();
 
-    sr = srunner_create(suiteVirtualATtest);
+    sr = srunner_create(suiteVirtualAtTest);
 
     srunner_run_all(sr,0);
 
@@ -293,3 +93,4 @@ int runVirtualATTests(void)
 
     return failed_number;
 }
+
