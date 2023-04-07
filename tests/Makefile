@@ -1,68 +1,71 @@
 # BoAT SDK Library Objects
 
-# Generate sub-directory list
-ALLSUBDIRS := $(shell $(BOAT_FIND) . -maxdepth 1 -type d)
-ALLSUBDIRS := $(basename $(patsubst ./%,%,$(ALLSUBDIRS)))
+# # Generate sub-directory list
+# ALLSUBDIRS := $(shell $(BOAT_FIND) . -maxdepth 1 -type d)
+# ALLSUBDIRS := $(basename $(patsubst ./%,%,$(ALLSUBDIRS)))
 
-EXCLUDE_DIRS := include
-SUBDIRS := $(filter-out $(EXCLUDE_DIRS),$(ALLSUBDIRS))
+# EXCLUDE_DIRS := include
+# SUBDIRS := $(filter-out $(EXCLUDE_DIRS),$(ALLSUBDIRS))
 
-# Add _clean_ prefix to avoid clean subdir target names being confused with compile subdir targets
-CLEAN_SUBDIRS := $(addprefix _clean_,$(SUBDIRS) )
+# # Add _clean_ prefix to avoid clean subdir target names being confused with compile subdir targets
+# CLEAN_SUBDIRS := $(addprefix _clean_,$(SUBDIRS) )
 
-SRC_PATH = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/
-define getdir
-DIRS += $(shell find $(SRC_PATH) -maxdepth 3 -type d)
-endef
+# SRC_PATH = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/
+# define getdir
+# DIRS += $(shell find $(SRC_PATH) -maxdepth 3 -type d)
+# endef
 
-define geto
-SRCS_o += $(foreach dir, $(DIRS), $(wildcard $(dir)/*.o))
-endef
+# define geto
+# SRCS_o += $(foreach dir, $(DIRS), $(wildcard $(dir)/*.o))
+# endef
 
-define testapp
-ifeq ($(PLATFORM_TARGET),linux-default)
-	#dependence libs
-	TESTLIBS = $(BOAT_LIB_DIR)/libboatvendor.a \
-					-lrt \
-					-lpthread \
-					-lcheck \
-					$(LINK_LIBS)
+# define testapp
+# ifeq ($(PLATFORM_TARGET),linux-default)
+# 	#dependence libs
+# 	TESTLIBS = $(BOAT_LIB_DIR)/libboatvendor.a \
+# 					-lrt \
+# 					-lpthread \
+# 					-lcheck \
+# 					$(LINK_LIBS)
 
-	TESTMAKE = $(CC) $(BOAT_CFLAGS) $(BOAT_LFLAGS) $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/linux-default/testapp.c
-	TESTO = -o 
+# 	TESTMAKE = $(CC) $(BOAT_CFLAGS) $(BOAT_LFLAGS) $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/linux-default/testapp.c
+# 	TESTO = -o 
 	
-	TESTAPP = /tesatapp
-	TESTDIR = $(BOAT_BUILD_DIR)/testapp/out
-	TESTMKDIR =  $(BOAT_MKDIR) -p 
-else
-	TESTMKDIR = $(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
+# 	TESTAPP = /tesatapp
+# 	TESTDIR = $(BOAT_BUILD_DIR)/testapp/out
+# 	TESTMKDIR =  $(BOAT_MKDIR) -p 
+# else
+# 	TESTMKDIR = $(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
 
-endif
-endef
+# endif
+# endef
 
-LIBNAME = $(BOAT_LIB_DIR)/libboatvendor.a
+# LIBNAME = $(BOAT_LIB_DIR)/libboatvendor.a
 
-.PHONY: all $(SUBDIRS) clean $(CLEAN_SUBDIRS)
+.PHONY: all clean
 
+# Environment-specific Settings
+include $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/$(PLATFORM_TARGET)/src/check.env
 
-all: $(SUBDIRS)
+all:
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform all
 
-	$(eval $(call getdir))
-	$(eval $(call geto))
-	$(AR) r $(LIBNAME) $(SRCS_o)
-#	$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
-	$(eval $(call testapp))
-	$(TESTMKDIR) $(TESTDIR)
-	$(TESTMAKE) $(TESTLIBS) $(TESTO) $(TESTDIR)$(TESTAPP)
+# 	$(eval $(call getdir))
+# 	$(eval $(call geto))
+# 	$(AR) r $(LIBNAME) $(SRCS_o)
+# #	$(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o
+# 	$(eval $(call testapp))
+# 	$(TESTMKDIR) $(TESTDIR)
+# 	$(TESTMAKE) $(TESTLIBS) $(TESTO) $(TESTDIR)$(TESTAPP)
 
-$(SUBDIRS):
-	make -C $@/ all	
+# $(SUBDIRS):
+# 	make -C $@/ all	
 	
-$(CLEAN_SUBDIRS):
-	make -C $(patsubst _clean_%,%,$@)/ clean
+# $(CLEAN_SUBDIRS):
+# 	make -C $(patsubst _clean_%,%,$@)/ clean
 
-clean: $(CLEAN_SUBDIRS)
-
+clean:
+	make -C $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform clean
 
 
 

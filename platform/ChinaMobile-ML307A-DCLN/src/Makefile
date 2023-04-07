@@ -9,8 +9,8 @@ SRC_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/rpc/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/protos/*/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/protos/*/*/*.o) \
 				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/third-party/protobuf-c/*.o) \
-				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/dal/*.o) \
-				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/osal/*.o)
+				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/src/dal/*.o) \
+				$(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/src/osal/*.o)
 	
 
 PORT_CRYPTO_OBJECTS = $(wildcard $(BOAT_BUILD_DIR)/BoAT-SupportLayer/common/storage/*.o) \
