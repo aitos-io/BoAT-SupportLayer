@@ -91,7 +91,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0010_boatUartOpen_Successful_ConfigP
 			for(parity = 0; parity <=2; parity++)
 			{
 				testUartConfigSet(&testUartConfig, 115200, databit, stopbit, parity, 0, 0);
-				rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+				rtnVal = boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 				if(rtnVal == BOAT_ERROR)
 				{
 					break;
@@ -110,7 +110,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL\r\n");
 	
-	rtnVal =boatUartInit(0, 1, testUartConfig, testUartRxCb);
+	rtnVal =boatUartInit(0, 0, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL finished\r\n");
@@ -123,8 +123,8 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUart
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
-	/////rtnVal =boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb); // 200 port is not exist or a nagtive value
-	rtnVal =boatUartInit(0, 1, testUartConfig, testUartRxCb); // 200 port is not exist or a nagtive value
+	/////rtnVal =boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb); // 200 port is not exist or a nagtive value
+	rtnVal =boatUartInit(0, 0, testUartConfig, testUartRxCb); // 200 port is not exist or a nagtive value
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0012_boatUartInit_Failed_fiboHalUartInitError finished\r\n");
@@ -137,7 +137,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSi
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 5);
-	rtnVal =boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+	rtnVal =boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0013_boatUartOpen_Successful_rxBufSizeZero finished\r\n");
@@ -150,7 +150,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSi
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 5, 0);
-	rtnVal =boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+	rtnVal =boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0014_boatUartOpen_Successful_txBufSizeZero finished\r\n");
@@ -163,7 +163,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackN
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL\r\n");
 	
-	rtnVal =boatUartInit(&testUartId, 1, testUartConfig, NULL);
+	rtnVal =boatUartInit(&testUartId, 0, testUartConfig, NULL);
 	ck_assert_int_eq(rtnVal,BOAT_ERROR);
 	
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL finished\r\n");
@@ -182,7 +182,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0018_boatUartOpen_Failed_dataBitsErr
 		if((i >= 5) && (i <= 8)) continue;
 		
 		testUartConfigSet(&testUartConfig, 115200, i, 1, 0, 0, 0);
-		rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+		rtnVal = boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 		if(rtnVal == BOAT_SUCCESS)
 		{
 			boatUartDeinit(&testUartId);///// must destroy the uart once you stop using it.
@@ -209,7 +209,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0017_boatUartOpen_Failed_stopBiteErr
 		if((i >= 1) && (i <= 2)) continue;
 		
 		testUartConfigSet(&testUartConfig, 115200, 8, i, 0, 0, 0);
-		rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+		rtnVal = boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 		if(rtnVal == BOAT_SUCCESS)
 		{
 			boatUartDeinit(&testUartId);///// must destroy the uart once you stop using it.
@@ -238,7 +238,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0016_boatUartOpen_Failed_parityError
 		if((i >= 0) && (i <= 2)) continue;
 		
 		testUartConfigSet(&testUartConfig, 115200, 8, 1, i, 0, 0);
-		rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+		rtnVal = boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 		if(rtnVal == BOAT_SUCCESS)
 		{
 			boatUartDeinit(&testUartId);///// must destroy the uart once you stop using it.
@@ -257,7 +257,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0019_boatUartDeinit_Successful)
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0019_boatUartDeinit_Successful\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
-	rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+	rtnVal = boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 
 	rtnVal = boatUartDeinit(&testUartId);
@@ -345,7 +345,7 @@ START_TEST(test_BoAT_DAL_ML307A_01Uart_test_0024_boatUartWrite_Successful_dataLe
 	BUINT8 tdBuf[10];
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01Uart_test_0024_boatUartWrite_Successful_dataLenZero\r\n");
 	testUartConfigSet(&testUartConfig, 115200, 8, 1, 0, 0, 0);
-	rtnVal = boatUartInit(&testUartId, 1, testUartConfig, testUartRxCb);
+	rtnVal = boatUartInit(&testUartId, 0, testUartConfig, testUartRxCb);
 	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 
 	rtnVal = boatUartWrite(&testUartId, tdBuf, 0);
