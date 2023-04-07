@@ -69,7 +69,11 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
 
     BSINT32 count = 0;
     BSINT32 size = 0;
+    BSINT32 totalLen = 0;
+    BUINT8 *tmp_write_buf = NULL;
     BUINT8 *buf_zero = NULL;
+
+    int32_t ret;
 
     (void)rsvd;
 
@@ -79,53 +83,130 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
     
-
-    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_WBPLUS);
-    if(file_fd < 0)
+    ret = cm_fs_exist(BOAT_FILE_STOREDATA);
+    if(ret == 0)
     {
-        BoatLog(BOAT_LOG_CRITICAL, "Failed to open/create file: %s.", BOAT_FILE_STOREDATA);
-        return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+        //file is not exist
+        file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_WB);
+        if(file_fd < 0)
+        {
+            BoatLog(BOAT_LOG_CRITICAL, "Failed to open file: %s.", BOAT_FILE_STOREDATA);
+            return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+        }
+
+        cm_fs_seek(file_fd,offset,CM_FS_SEEK_SET);
+    
+        count = cm_fs_write(file_fd,writeBuf,writeLen);
+        cm_fs_close(file_fd);
+        if (count != writeLen)
+        {
+            BoatLog(BOAT_LOG_CRITICAL, "Failed to write file: %s.", BOAT_FILE_STOREDATA);
+            return BOAT_ERROR_STORAGE_FILE_WRITE_FAIL;
+        }
+        return BOAT_SUCCESS;
     }
-
-    /* write to file-system */
-    size = cm_fs_filesize(BOAT_FILE_STOREDATA);
-    BoatLog(BOAT_LOG_CRITICAL, "cm_fs_filesize get size is %d",size);
-    if (size < offset)
+    else
     {
-        /*move to the end of the file*/
-        cm_fs_seek(file_fd,0,CM_FS_SEEK_END);
-        buf_zero = BoatMalloc(offset - size);
-        if (NULL == buf_zero)
+        //file exist
+        //read all first,then write
+        file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_RB);
+        if(file_fd < 0)
+        {
+            BoatLog(BOAT_LOG_CRITICAL, "Failed to open file: %s.", BOAT_FILE_STOREDATA);
+            return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+        }
+
+        /* write to file-system */
+        size = cm_fs_filesize(BOAT_FILE_STOREDATA);
+        BoatLog(BOAT_LOG_CRITICAL, "cm_fs_filesize get size is %d",size);
+
+        tmp_write_buf = cm_malloc(size+offset+writeLen);
+        if(tmp_write_buf == NULL)
         {
             cm_fs_close(file_fd);
             return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
         }
-        memset(buf_zero, 0x00, offset - size);
-        count = cm_fs_write(file_fd,buf_zero,offset - size);
-        BoatFree(buf_zero);
-        if (count != (offset - size))
+        memset(tmp_write_buf,0U,size+offset+writeLen);
+
+        count = cm_fs_read(file_fd,tmp_write_buf,size);
+        if(count != size)
         {
+            BoatLog(BOAT_LOG_CRITICAL, "Failed to read file: %s.", BOAT_FILE_STOREDATA);
             cm_fs_close(file_fd);
+            cm_free(tmp_write_buf);
+            tmp_write_buf = NULL;
+            return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+        }
+
+        cm_fs_close(file_fd);
+
+        if (size < offset)
+        {
+            /*move to the end of the file*/
+            //cm_fs_seek(file_fd,0,CM_FS_SEEK_END);
+            buf_zero = BoatMalloc(offset - size);
+            if (NULL == buf_zero)
+            {
+                cm_free(tmp_write_buf);
+                tmp_write_buf = NULL;
+                return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+            }
+            memset(buf_zero, 0x00, offset - size);
+            //count = cm_fs_write(file_fd,buf_zero,offset - size);
+            memcpy(tmp_write_buf + count,buf_zero,offset - size);
+
+            BoatFree(buf_zero);
+            buf_zero = NULL;
+
+            memcpy(tmp_write_buf + count + offset - size,writeBuf,writeLen);
+
+            totalLen = offset + writeLen;
+
+        }
+        else
+        {
+            // if (cm_fs_seek(file_fd,offset,CM_FS_SEEK_SET) < 0)
+            // {
+            //     BoatLog(BOAT_LOG_CRITICAL, "file seek err ");
+            // }
+            memcpy(tmp_write_buf + offset,writeBuf,writeLen);
+            if(size >= (offset + writeLen))
+            {
+                totalLen = size;
+            }
+            else
+            {
+                totalLen = offset + writeLen;
+            }
+        }
+
+        file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_WB);
+        if(file_fd < 0)
+        {
+            BoatLog(BOAT_LOG_CRITICAL, "Failed to open file: %s.", BOAT_FILE_STOREDATA);
+            cm_free(tmp_write_buf);
+            tmp_write_buf = NULL;
+            return BOAT_ERROR_STORAGE_FILE_OPEN_FAIL;
+        }
+
+    
+        count = cm_fs_write(file_fd,tmp_write_buf,totalLen);
+        cm_fs_close(file_fd);
+        if (count != totalLen)
+        {
             BoatLog(BOAT_LOG_CRITICAL, "Failed to write file: %s.", BOAT_FILE_STOREDATA);
+            cm_free(tmp_write_buf);
+            tmp_write_buf = NULL;
             return BOAT_ERROR_STORAGE_FILE_WRITE_FAIL;
         }
-        cm_fs_seek(file_fd,0,CM_FS_SEEK_END);
+
+        cm_free(tmp_write_buf);
+        tmp_write_buf = NULL;
+        return BOAT_SUCCESS;
+        
     }
-    else
-    {
-        if (cm_fs_seek(file_fd,offset,CM_FS_SEEK_SET) < 0)
-        {
-            BoatLog(BOAT_LOG_CRITICAL, "file seek err ");
-        }
-    }
-    count = cm_fs_write(file_fd,writeBuf,writeLen);
-    cm_fs_close(file_fd);
-    if (count != writeLen)
-    {
-        BoatLog(BOAT_LOG_CRITICAL, "Failed to write file: %s.", BOAT_FILE_STOREDATA);
-        return BOAT_ERROR_STORAGE_FILE_WRITE_FAIL;
-    }
-    return BOAT_SUCCESS;
+
+    
 }
 
 /**
@@ -160,7 +241,7 @@ BOAT_RESULT BoatReadStorage(BUINT32 offset, BUINT8 *readBuf, BUINT32 readLen, vo
     }
 
     /* read from file-system */
-    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_ABPLUS);
+    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_RB);
     if (file_fd >= 0)
     {
         /*move to the end of the file*/
