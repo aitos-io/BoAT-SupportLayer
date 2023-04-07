@@ -16,6 +16,7 @@
 #include "boatdal.h"
 #include "boatlog.h"
 #include "boattypes.h"
+#include "boatplatformosal.h"
 
 #include "cm_os.h"
 
