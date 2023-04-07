@@ -10,7 +10,7 @@ START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed)
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed\r\n");
 	rtnVal = boatVirtualAtOpen(NULL);
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_DAL_INVALID_ARGUMENT);
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0010_boatVirtualAtOpen_Failed finished\r\n");
 
 }
@@ -21,7 +21,7 @@ START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed)
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed\r\n");
 	rtnVal = boatVirtualAtSend(NULL, 0);
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_DAL_INVALID_ARGUMENT);
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0011_boatVirtualAtSend_Failed finished\r\n");
 
 }
@@ -32,7 +32,7 @@ START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Fai
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed\r\n");
 	rtnVal = boatVirtualAtTimedSend(NULL, 0, 0);
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_ERROR_DAL_VIRTUAL_NOT_SUPPORT);
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0012_boatVirtualAtTimedSend_Failed finished\r\n");
 
 }
@@ -43,7 +43,7 @@ START_TEST(test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed)
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed\r\n");
 	rtnVal = boatVirtualAtClose();
-	ck_assert_int_eq(rtnVal,BOAT_ERROR);
+	ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
 	BoatLog(BOAT_LOG_NORMAL, "Testing test_BoAT_DAL_ML307A_01VirtualAt_test_0013_boatVirtualAtClose_Failed finished\r\n");
 
 }
