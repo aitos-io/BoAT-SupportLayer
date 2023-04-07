@@ -234,7 +234,10 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0028MultiTaskUseOneMutex)
 
 	boatMutex testMutexId;
 
-	boatMutexInit(&testMutexId);
+	BOAT_RESULT result = BOAT_ERROR;
+
+	result = boatMutexInit(&testMutexId);
+	ck_assert_int_eq(result,BOAT_SUCCESS);
 
 	//fibo_thread_create(mutex_task_lock_sleep_2s, "mutex_sleep_2s", 1024 * 8, (void *)&testMutexId, OSI_PRIORITY_NORMAL);
 	//pthread_t testThread;
