@@ -80,7 +80,7 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
     }
     
 
-    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_WB);
+    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_WBPLUS);
     if(file_fd < 0)
     {
         BoatLog(BOAT_LOG_CRITICAL, "Failed to open/create file: %s.", BOAT_FILE_STOREDATA);
@@ -89,6 +89,7 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
 
     /* write to file-system */
     size = cm_fs_filesize(BOAT_FILE_STOREDATA);
+    BoatLog(BOAT_LOG_CRITICAL, "cm_fs_filesize get size is %d",size);
     if (size < offset)
     {
         /*move to the end of the file*/
@@ -159,7 +160,7 @@ BOAT_RESULT BoatReadStorage(BUINT32 offset, BUINT8 *readBuf, BUINT32 readLen, vo
     }
 
     /* read from file-system */
-    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_RB);
+    file_fd = cm_fs_open(BOAT_FILE_STOREDATA,CM_FS_ABPLUS);
     if (file_fd >= 0)
     {
         /*move to the end of the file*/
