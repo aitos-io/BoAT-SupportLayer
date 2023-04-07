@@ -54,6 +54,10 @@ Function: boatVirtualAtOpen()
 //! BOAT_RESULT BoAT_virtualAT_init(BoAT_virtualAT_rx_callback fun_cb);
 BOAT_RESULT boatVirtualAtOpen(boatVirtualAtRxCallback rxCallback)
 {
+    if(rxCallback == NULL)
+    {
+        return BOAT_ERROR_DAL_INVALID_ARGUMENT;
+    }
 
     if(g_virtualAT_Channel_is_used == BOAT_FALSE)
     {
