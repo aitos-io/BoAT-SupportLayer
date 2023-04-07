@@ -88,6 +88,8 @@ static void cm_serial_uart_callback(void *param, uint32_t type)
     {
         //Read uart data
         ret = cm_uart_read(g_ML307_port,g_recvBuf_ptr,g_recvBuf_len,1000);
+        BoatLog(BOAT_LOG_CRITICAL,"cm_uart_read get data =>%s",g_recvBuf_ptr);
+        BoatLog(BOAT_LOG_CRITICAL,"cm_uart_read get data len=%d",ret);
         if(ret < 0)
         {
             BoatLog(BOAT_LOG_CRITICAL,"UART read data Failed");
@@ -143,8 +145,8 @@ BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config,b
 
     boatUartRecvCallback = rxCallback; 
 
-    cm_iomux_set_pin_func(OPENCPU_TEST_UARTTX_IOMUX);
-    cm_iomux_set_pin_func(OPENCPU_TEST_UARTRX_IOMUX);
+   // cm_iomux_set_pin_func(OPENCPU_TEST_UARTTX_IOMUX);
+   // cm_iomux_set_pin_func(OPENCPU_TEST_UARTRX_IOMUX);
 
     ret = cm_uart_register_event(uartRef->uartPort, &uartEvent); 
     if(ret != 0)
