@@ -11,7 +11,7 @@ $(OBJECTS_DIR):
 	$(BOAT_MKDIR) -p $(OBJECTS_DIR)
 
 $(OBJECTS_DIR)/%.o:%.c
-	$(CC) -c $(CHECK_CFLAGS) $(CHECK_INC) $< -o $@
+	$(CC) -c $(BOAT_CFLAGS) $< -o $@
 	$(BOAT_COPY) $(SOURCES) $(OBJECTS_DIR)
 
 
