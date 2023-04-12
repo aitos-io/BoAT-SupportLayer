@@ -10,3 +10,4 @@ int runVirtualAtTests(void);
 
 int runMutexTests(void);
 int runKeystoreSoftTests(void);
+int runKeystoreIntfTests(void);

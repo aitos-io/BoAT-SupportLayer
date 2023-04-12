@@ -35,5 +35,6 @@ int main(int argc, char *argv[])
     //runtest("mutex",runMutexTests);
     //runtest("Task/Thread", runTaskTests);
     runtest("KeystoreSoft",runKeystoreSoftTests);
+    runtest("KeystoreIntf",runKeystoreIntfTests);
 }
 

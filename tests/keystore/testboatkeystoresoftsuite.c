@@ -65,23 +65,23 @@ END_TEST
 Suite *makeKeystoreSofttest_suite(void)
 {
     /* Create Suite */
-    Suite *sKeystorSofttest = suite_create("keystore_soft");
+    Suite *sKeystoreSofttest = suite_create("keystore_soft");
 
     /* Create test cases */
-    TCase *sKeystorSofttest_api = tcase_create("keystore_soft_api");
+    TCase *sKeystoreSofttest_api = tcase_create("keystore_soft_api");
 
-	tcase_set_timeout(sKeystorSofttest_api,100);
+	tcase_set_timeout(sKeystoreSofttest_api,100);
 
     /* Add a test case to the Suite */
-    suite_add_tcase(sKeystorSofttest,sKeystorSofttest_api);
+    suite_add_tcase(sKeystoreSofttest,sKeystoreSofttest_api);
 
     /* Test cases are added to the test set */
 
-	tcase_add_test(sKeystorSofttest_api,test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs);
-	tcase_add_test(sKeystorSofttest_api,test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs);
+	tcase_add_test(sKeystoreSofttest_api,test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs);
+	tcase_add_test(sKeystoreSofttest_api,test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs);
 
 
-    return sKeystorSofttest;
+    return sKeystoreSofttest;
 
 }
 #endif
