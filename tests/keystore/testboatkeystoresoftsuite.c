@@ -16,7 +16,7 @@ START_TEST(test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_paramete
 {
 
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs\r\n");
 	BUINT8 *pubkey = NULL;
 	BUINT8 *digest = NULL;
 	const BUINT8 *signature = NULL;
@@ -26,13 +26,41 @@ START_TEST(test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_paramete
 
 	ck_assert_int_eq(rtnVal,BOAT_ERROR_COMMON_INVALID_ARGUMENT);
 	
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem] Testing test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs finished\r\n");
+	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs finished\r\n");
 
 }
 END_TEST
 
+START_TEST(test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs)
+{
 
+	BOAT_RESULT rtnVal;
+	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs\r\n");
+	BUINT8 *pubkey = NULL;
+	BUINT8 *digest = NULL;
+	const BUINT8 *signature = NULL;
+	BUINT8 Prefix = 0;
+	for(int i = 0; i < (BOAT_MAX_KEYPAIR_NUM  + 2); i++)
+	{
+		rtnVal = BoAT_DeletePrikeyByIndex_soft(i);
+		if (i == 0)
+		{
+			ck_assert_int_eq(rtnVal,BOAT_SUCCESS);
+		}
+		else if(i < BOAT_MAX_KEYPAIR_NUM + 1)
+		{
+			ck_assert_int_eq(rtnVal,BOAT_ERROR_STORAGE_FILE_OPEN_FAIL);
+		}
+		else
+		{
+			ck_assert_int_eq(rtnVal,BOAT_ERROR);
+		}
+	}
+	
+	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs finished\r\n");
 
+}
+END_TEST
 
 Suite *makeKeystoreSofttest_suite(void)
 {
@@ -50,6 +78,7 @@ Suite *makeKeystoreSofttest_suite(void)
     /* Test cases are added to the test set */
 
 	tcase_add_test(sKeystorSofttest_api,test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs);
+	tcase_add_test(sKeystorSofttest_api,test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs);
 
 
     return sKeystorSofttest;
