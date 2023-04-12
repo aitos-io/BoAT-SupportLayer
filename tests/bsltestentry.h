@@ -9,3 +9,4 @@ int runBleServiceTests(void);
 int runVirtualAtTests(void);
 
 int runMutexTests(void);
+int runKeystoreSoftTests(void);

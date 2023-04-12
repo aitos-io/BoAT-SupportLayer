@@ -10,7 +10,8 @@ SUBDIRS := $(filter-out $(EXCLUDE_DIRS),$(ALLSUBDIRS))
 # Add _clean_ prefix to avoid clean subdir target names being confused with compile subdir targets
 CLEAN_SUBDIRS := $(addprefix _clean_,$(SUBDIRS) )
 
-SRC_PATH = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/
+SRC_PATH = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/ \
+	   $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/keystore/
 define getdir
 DIRS += $(shell $(BOAT_FIND) $(SRC_PATH) -maxdepth 3 -type d)
 endef
