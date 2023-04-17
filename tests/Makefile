@@ -63,7 +63,8 @@ $(CLEAN_SUBDIRS):
 	make -C $(patsubst _clean_%,%,$@)/ clean
 
 clean: $(CLEAN_SUBDIRS)
-
+	-$(BOAT_RM) `$(BOAT_FIND) -name \*.gcda`
+	-$(BOAT_RM) `$(BOAT_FIND) -name \*.gcno`
 
 
 
