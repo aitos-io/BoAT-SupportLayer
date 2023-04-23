@@ -18,7 +18,7 @@
 static BBOOL g_virtualAT_Channel_is_used = BOAT_FALSE;
 
 
-BUINT32 (* dalVirtualAtCallback)(char *content,BUINT32 len);
+static BUINT32 (* dalVirtualAtCallback)(char *content,BUINT32 len);
 
 static unsigned char at_data[256]={0};  
 
