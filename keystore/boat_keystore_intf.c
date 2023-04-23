@@ -174,7 +174,7 @@ BOAT_RESULT BoAT_Keystore_store_prikey(BUINT8 keypairIndex, BUINT8 *prikey, BUIN
  */
 BOAT_RESULT BoAT_DeletePrikeyByIndex(BUINT8 index)
 {
-#if (BOAT_CRYPTO_USE_SE == 1)
+#if (BOAT_CRYPTO_USE_SE != 1)
     return BoAT_DeletePrikeyByIndex_soft(index);
 #else
     return BOAT_SUCCESS;
