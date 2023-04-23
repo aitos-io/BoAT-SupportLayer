@@ -23,7 +23,7 @@
 */
 #include <stdio.h>
 //#include <sys/select.h>	///// for uart
-
+#include "drv_uart.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
@@ -34,15 +34,15 @@
 //!@brief Abstract definition of uart object based on Linux
 #ifndef PLATFORM_DAL_UART
 #define PLATFORM_DAL_UART
-// #define UART_RD_MAX 0xFF
-// struct boatPlatformUART
-// {
-//     int uartId; //! Fibocom  UART descriptor
-//     fd_set  recvFds;
-// 	BUINT8 rdBuf[UART_RD_MAX];
-// 	void (*rdCallback)(struct boatPlatformUART *uartRef,  unsigned char *data, BUINT32 len);
-// 	int rdBreak;
-// };
+#define UART_RD_MAX 0xFF
+struct boatPlatformUART
+{
+    drvUart_t *uartId; //! Unisoc-8850  UART descriptor
+    // fd_set  recvFds;
+	// BUINT8 rdBuf[UART_RD_MAX];
+	// void (*rdCallback)(struct boatPlatformUART *uartRef,  unsigned char *data, BUINT32 len);
+	// int rdBreak;
+};
 #endif // PLATFORM_DAL_UART
 
 #ifndef PLATFORM_DAL_I2C
