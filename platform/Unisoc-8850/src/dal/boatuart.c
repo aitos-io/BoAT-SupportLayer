@@ -42,11 +42,26 @@
 #include "drv_names.h"
 #include "drv_uart.h"
 
-static void _drvCallback(void *param, uint32_t evt)
+static drvUart_t *g_uart_dev = NULL;
+static BUINT8 g_rcv_buf[1024]={0};
+static boatUart *g_boat_uart_dev = NULL;
+
+static void (*boatUartRecvCallback)(boatUart *uartRef,  unsigned char *data, BUINT32 len);
+
+static void _uartCallback(void *param, uint32_t evt)
 {
-    atDeviceUart_t *uart = (atDeviceUart_t *)param;
-    uart->pending_event |= evt;
-    osiWorkEnqueue(uart->work, osiSysWorkQueueHighPriority());
+    if(evt & DRV_UART_EVENT_RX_ARRIVED)
+    {
+        if(g_uart_dev != NULL)
+        {
+            int len = drvUartReceive(g_uart_dev,g_rcv_buf,1024);
+            if(len > 0)
+            {
+                boatUartRecvCallback(g_boat_uart_dev,g_rcv_buf,len);
+            }
+        }
+        
+    }
 }
 
 BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config, boatUartRxCallback rxCallback)
@@ -70,18 +85,72 @@ BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config, 
 
     drvcfg.event_cb = _uartCallback;
 
+    boatUartRecvCallback = rxCallback;
 
+    drvUart_t *uart = drvUartCreate(port,&drvcfg);
+    if(uart == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"drvUartCreate failed!");
+        return BOAT_ERROR;
+    }
+
+
+    bool ret = drvUartOpen(uart);
+    if(ret == false)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"drvUartOpen failed!");
+        return BOAT_ERROR;
+    }
+
+    uartRef->uartId = uart;
+    g_uart_dev = uart;
+    g_boat_uart_dev = uartRef;
+
+    return BOAT_SUCCESS;
 
 }
 
 
 BOAT_RESULT boatUartWrite(boatUart *uartRef, unsigned char *data, BUINT32 len)
 {
+    if((uartRef == NULL) || (data == NULL))
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"bad params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
 
+    if(uartRef->uartId == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Wrong uart id!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
+
+    int send_len = drvUartSend(uartRef->uartId,data,len);
+    if(send_len != len)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Uart write failed!");
+        return BOAT_ERROR;
+    }
+
+    return BOAT_SUCCESS;
 }
 
 
 BOAT_RESULT boatUartDeinit(boatUart *uartRef)
 {
+    if(uartRef == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"bad params!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
 
+    if(uartRef->uartId == NULL)
+    {
+        BoatLog(BOAT_LOG_CRITICAL,"Wrong uart id!");
+        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
+    }
+
+    drvUartClose(uartRef->uartId);
+
+    return BOAT_SUCCESS;
 }
