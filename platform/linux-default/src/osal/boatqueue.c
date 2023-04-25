@@ -228,7 +228,7 @@ BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 
 
     if((queueRef->queueId <= 0) || (queueRef->name == NULL) || (msgPtr == NULL))    // parameter check
     {
-        BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    boatQueueReceive parameter err [%d][%s][%s]\r\n",queueRef->queueId,queueRef->name,(char *)msgPtr);
+        BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    boatQueueReceive parameter err [%d][%s][%p]\r\n",queueRef->queueId,queueRef->name,msgPtr);
         return BOAT_ERROR;
     }
     if(timeout == 0)
@@ -247,7 +247,7 @@ BOAT_RESULT boatQueueReceive(const boatQueue *queueRef, BUINT8 *msgPtr, BUINT32 
     if(ret == -1)
     {
         BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    boatQueueReceive err [%d][%02x]\r\n",errno,errno);
-        BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    boatQueueReceive parameter [%d][%s][%s]\r\n",queueRef->queueId,queueRef->name,(char *)msgPtr);
+        BoatLog(BOAT_LOG_CRITICAL,"[boat][queue]:    boatQueueReceive parameter [%d][%s][%p]\r\n",queueRef->queueId,queueRef->name,msgPtr);
         if(errno == EAGAIN )
             return BOAT_ERROR; // NEED ERRCODE IN boaterrcode.h
         return BOAT_ERROR; // NEED ERROCDE IN boaterrcode.h
