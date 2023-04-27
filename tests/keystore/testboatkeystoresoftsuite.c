@@ -9,6 +9,7 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 #include "boatkeypair.h"
+#include "boat_keystore_soft.h"
 
 
 #if 1
@@ -36,10 +37,7 @@ START_TEST(test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_par
 
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_01soft_test_0011_BoAT_DeletePrikeyByIndex_soft_parameter_inputs\r\n");
-	BUINT8 *pubkey = NULL;
-	BUINT8 *digest = NULL;
-	const BUINT8 *signature = NULL;
-	BUINT8 Prefix = 0;
+
 	for(int i = 0; i < (BOAT_MAX_KEYPAIR_NUM  + 2); i++)
 	{
 		rtnVal = BoAT_DeletePrikeyByIndex_soft(i);

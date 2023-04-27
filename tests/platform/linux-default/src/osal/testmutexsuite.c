@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "boatosal.h"
 #include "boatlog.h"
 #include "boattypes.h"
@@ -60,15 +61,6 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0014DeinitMutexFailMutexAddr
 }
 END_TEST
 
-
-static void mutexTaskUnlockAfter5s(void *arg)
-{
-
-	sleep(5);
-	boatMutexUnlock((boatMutex *)arg);
-	BoatLog(BOAT_LOG_VERBOSE,"mutexTaskUlockAfter5s Unlock success");
-	return ;
-}
 
 START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0017MutexLockSuccess)
 {
@@ -196,16 +188,16 @@ END_TEST
 
 
 
-static void mutex_task_lock_sleep_2s(void *param)
+static void *mutex_task_lock_sleep_2s(void *param)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_VERBOSE,"Testing mutex task lock id[%x]\r\n",param);
+	BoatLog(BOAT_LOG_VERBOSE,"Testing mutex task lock id[%p]\r\n",param);
 	boatMutex *ptestMutexId = (boatMutex *)param;
 
 	for (int i = 0;i < 5;i++)
 	{
 		usleep(2000);
-		BoatLog(BOAT_LOG_VERBOSE,"Testing mutex task lock times[%d] id[%x]\r\n",i,ptestMutexId);
+		BoatLog(BOAT_LOG_VERBOSE,"Testing mutex task lock times[%d] id[%p]\r\n",i,ptestMutexId);
 		//fibo_taskSleep(800);
 		//rtnVal = boatMutexInit(ptestMutexId);
 		//ck_assert_int_eq(rtnVal,0);
@@ -220,7 +212,7 @@ static void mutex_task_lock_sleep_2s(void *param)
 	sleep(2);
 
 
-	return ;	
+	return NULL;	
 }
 
 START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0028MultiTaskUseOneMutex)
@@ -233,8 +225,13 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_01Mutex_test_0028MultiTaskUseOneMutex)
 	boatMutexInit(&testMutexId);
 
 	//fibo_thread_create(mutex_task_lock_sleep_2s, "mutex_sleep_2s", 1024 * 8, (void *)&testMutexId, OSI_PRIORITY_NORMAL);
-	pthread_t testThread;
-	pthread_create(&testThread,NULL,mutex_task_lock_sleep_2s,&testMutexId);
+	pthread_t th;
+    pthread_attr_t attr;
+											
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	
+	pthread_create(&th,&attr,mutex_task_lock_sleep_2s,&testMutexId);
 	
 	for (int i = 0;i < 6;i++)
 	{

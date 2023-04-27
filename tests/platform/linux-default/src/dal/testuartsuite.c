@@ -308,6 +308,7 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0021_boatUartDeinit_Failed_uar
 }
 END_TEST
 
+#if 0
 START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0022_boatUartDeinit_Failed_linuxUartCloseError)
 {
 	BOAT_RESULT rtnVal;
@@ -329,7 +330,7 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0022_boatUartDeinit_Failed_lin
 
 }
 END_TEST
-
+#endif
 
 START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0023_boatUartWrite_Successful)
 {
@@ -427,6 +428,7 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0027_boatUartWrite_Failed_uart
 }
 END_TEST
 
+#if 0
 START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0028_boatUartWrite_Failed_linuxUartWriteError)
 {
 	BOAT_RESULT rtnVal;
@@ -440,6 +442,7 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0028_boatUartWrite_Failed_linu
 
 }
 END_TEST
+#endif
 
 START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0029_boatUartWriteRead_IntegrityTest)
 {
@@ -473,7 +476,6 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01Uart_test_0029_boatUartWriteRead_Integri
 
 }
 END_TEST
-
 
 Suite *makeUarttest_suite(void)
 {

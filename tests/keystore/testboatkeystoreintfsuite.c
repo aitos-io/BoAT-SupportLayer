@@ -9,7 +9,10 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 #include "boatkeypair.h"
+#include "boat_keystore_intf.h"
 
+BOAT_RESULT BoatPort_keyQuery(const BoatKeypairPriKeyCtx_config *config, BoatKeypairPriKeyCtx *pkCtx);
+BOAT_RESULT BoatPort_keyDelete(BoatKeypairPriKeyCtx *pkCtx);
 
 #if 1
 START_TEST(test_BoAT_keystore_02intf_test_0010_BoAT_Keystore_Write_Binary_secure_parameter_inputs)
@@ -17,10 +20,7 @@ START_TEST(test_BoAT_keystore_02intf_test_0010_BoAT_Keystore_Write_Binary_secure
 
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_02intf_test_0010_BoAT_Keystore_Write_Binary_secure_parameter_inputs\r\n");
-	BUINT8 *pubkey = NULL;
-	BUINT8 *digest = NULL;
-	const BUINT8 *signature = NULL;
-	BUINT8 Prefix = 0;
+
 	
 	rtnVal = BoAT_Keystore_Write_Binary_secure(NULL, 0, 0);
 
@@ -36,10 +36,7 @@ START_TEST(test_BoAT_keystore_02intf_test_0011_BoAT_Keystore_read_Binary_secure_
 
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_02intf_test_0011_BoAT_Keystore_read_Binary_secure_parameter_inputs\r\n");
-	BUINT8 *pubkey = NULL;
-	BUINT8 *digest = NULL;
-	const BUINT8 *signature = NULL;
-	BUINT8 Prefix = 0;
+
 	
 	rtnVal = BoAT_Keystore_read_Binary_secure(NULL, 0, 0);
 
@@ -74,10 +71,6 @@ START_TEST(test_BoAT_keystore_02intf_test_0013_BoatPort_keyQuery_parameter_input
 
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_02intf_test_0013_BoatPort_keyQuery_parameter_inputs\r\n");
-	BUINT8 *pubkey = NULL;
-	BUINT8 *digest = NULL;
-	const BUINT8 *signature = NULL;
-	BUINT8 Prefix = 0;
 	
 	rtnVal = BoatPort_keyQuery(NULL, NULL);
 
@@ -93,10 +86,6 @@ START_TEST(test_BoAT_keystore_02intf_test_0014_BoatPort_keyDelete_parameter_inpu
 
 	BOAT_RESULT rtnVal;
 	BoatLog(BOAT_LOG_NORMAL, "[boat][keystroe soft] Testing test_BoAT_keystore_02intf_test_0014_BoatPort_keyDelete_parameter_inputs\r\n");
-	BUINT8 *pubkey = NULL;
-	BUINT8 *digest = NULL;
-	const BUINT8 *signature = NULL;
-	BUINT8 Prefix = 0;
 	
 	rtnVal = BoatPort_keyDelete(NULL);
 

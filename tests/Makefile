@@ -11,7 +11,9 @@ SUBDIRS := $(filter-out $(EXCLUDE_DIRS),$(ALLSUBDIRS))
 CLEAN_SUBDIRS := $(addprefix _clean_,$(SUBDIRS) )
 
 SRC_PATH = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/$(PLATFORM_TARGET)/ \
-	   $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/keystore/
+	   $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/keystore/ \
+	   $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/keypair/
+	   
 define getdir
 DIRS += $(shell $(BOAT_FIND) $(SRC_PATH) -maxdepth 3 -type d)
 endef

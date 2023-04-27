@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-
+#include <unistd.h>
 
 #include "boatlog.h"
 #include "check.h"
@@ -300,10 +300,10 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0027ReuseSingleSem)
 END_TEST
 #endif
 
-static void semTaskWatiSleep2s(void *param)
+static void *semTaskWatiSleep2s(void *param)
 {
 	BOAT_RESULT rtnVal;
-	BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] Testing sem task wait id[%x]\r\n",param);
+	BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] Testing sem task wait id[%p]\r\n",param);
 
 	struct semTestStruTask{
 		void *p;
@@ -317,7 +317,7 @@ static void semTaskWatiSleep2s(void *param)
 	{
 
 		usleep(50*1000);
-		BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] Testing sem task wait times[%d] id[%x]\r\n",i,ptestSemId);
+		BoatLog(BOAT_LOG_NORMAL, "[boat][sem][task] Testing sem task wait times[%d] id[%p]\r\n",i,ptestSemId);
 		rtnVal = boatSemWait(ptestSemId,0);
 		semTest->counter --;
 		rtnVal = boatSemPost(ptestSemId);
@@ -332,7 +332,7 @@ static void semTaskWatiSleep2s(void *param)
 
 	//fibo_thread_delete();
 	pthread_exit(NULL);
-	return ;	
+	return NULL;	
 }
 
 
@@ -354,7 +354,11 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0028MultiTaskUseOneSem)
 
 	//fibo_thread_create(semTaskWatiSleep2s, "sem_sleep_2s", 1024 * 8, &semTest, OSI_PRIORITY_NORMAL);
 	pthread_t testThread;
-	pthread_create(&testThread,NULL,semTaskWatiSleep2s,&semTest);
+    pthread_attr_t attr;
+											
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	pthread_create(&testThread,&attr,semTaskWatiSleep2s,&semTest);
 	
 
 
