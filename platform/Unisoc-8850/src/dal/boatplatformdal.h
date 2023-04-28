@@ -24,6 +24,7 @@
 #include <stdio.h>
 //#include <sys/select.h>	///// for uart
 #include "drv_uart.h"
+#include "drv_i2c.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
@@ -37,7 +38,7 @@
 #define UART_RD_MAX 0xFF
 struct boatPlatformUART
 {
-    drvUart_t *uartId; //! Unisoc-8850  UART descriptor
+    drvI2cMaster_t *uartId; //! Unisoc-8850  UART descriptor
     // fd_set  recvFds;
 	// BUINT8 rdBuf[UART_RD_MAX];
 	// void (*rdCallback)(struct boatPlatformUART *uartRef,  unsigned char *data, BUINT32 len);
@@ -49,7 +50,7 @@ struct boatPlatformUART
 #define PLATFORM_DAL_I2C
 struct boatPlatformI2C
 {
-    int i2cId; //! Linux i2c descriptor
+    int i2cInstance; //! 8850 i2c descriptor
 };
 #endif // PLATFORM_DAL_I2C
 
