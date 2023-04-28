@@ -104,7 +104,7 @@ void BoatSleepMs(BUINT32 ms);
 #ifndef PLATFORM_OSAL_SEM
 #define PLATFORM_OSAL_SEM
 struct boatPlatformSem{
-    sem_t semid; //! Linux semaphore descriptor
+    osiSemaphore_t *semid; //! 8850 semaphore descriptor
 };
 #endif
 
@@ -112,7 +112,7 @@ struct boatPlatformSem{
 #ifndef PLATFORM_OSAL_MUTEX
 #define PLATFORM_OSAL_MUTEX
 struct boatPlatformMutex{
-    pthread_mutex_t mutexid; //! Linux mutex descriptor
+    osiMutex_t *mutexid; //! 8850 mutex descriptor
 };
 #endif
 
@@ -120,7 +120,7 @@ struct boatPlatformMutex{
 #ifndef PLATFORM_OSAL_QUEUE
 #define PLATFORM_OSAL_QUEUE
 struct boatPlatformQueue{
-    mqd_t queueId; //! Linux message queue descriptor
+    osiMessageQueue_t *queueId; //! 8850 message queue descriptor
     char *name; //! The name of message queue
 };
 #endif
