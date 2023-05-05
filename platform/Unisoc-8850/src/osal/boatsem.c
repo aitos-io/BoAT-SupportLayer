@@ -178,11 +178,11 @@ BOAT_RESULT boatSemWait(boatSem *semRef,BUINT32 timeout)
 
     if(timeout > 0)
     {
-        ret = osiSemaphoreTryAcquire(semRef->semid,timeout);
+        ret = osiSemaphoreTryAcquire(semRef->semId,timeout);
     }
     else
     {
-        ret = osiSemaphoreAcquire(semRef->semid);
+        ret = osiSemaphoreAcquire(semRef->semId);
     }
 
 
