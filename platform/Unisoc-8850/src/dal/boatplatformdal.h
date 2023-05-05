@@ -65,12 +65,14 @@ struct boatPlatformI2C
 #ifndef PLATFORM_DAL_SSL
 #define PLATFORM_DAL_SSL
 
+#include "mbedtls/net_sockets.h"
+
 struct boatPlatformSSL
 {
-    void *ssl_net;
-    void *ssl_ctx;
-    void *ssl_cfg;
-    void *ssl_crt;
+    mbedtls_net_context *ssl_net;
+    mbedtls_ssl_context *ssl_ctx;
+    mbedtls_ssl_config *ssl_cfg;
+    mbedtls_x509_crt *ssl_crt;
 };
 
 #endif
