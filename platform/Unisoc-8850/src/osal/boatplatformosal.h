@@ -26,14 +26,14 @@
 #define __BOATPLATFORMOSAL_H__
 
 
-#include <semaphore.h>
-#include <limits.h>
-#include <pthread.h>
+//#include <semaphore.h>
+//#include <limits.h>
+//#include <pthread.h>
 
-#include <fcntl.h>           /* For O_* constants */
-#include <sys/stat.h>        /* For mode constants */
-#include <mqueue.h>
-#include <time.h>
+// #include <fcntl.h>           /* For O_* constants */
+// #include <sys/stat.h>        /* For mode constants */
+// #include <mqueue.h>
+// #include <time.h>
 
 #include "osi_api.h"
 
@@ -104,7 +104,7 @@ void BoatSleepMs(BUINT32 ms);
 #ifndef PLATFORM_OSAL_SEM
 #define PLATFORM_OSAL_SEM
 struct boatPlatformSem{
-    osiSemaphore_t *semid; //! 8850 semaphore descriptor
+    osiSemaphore_t *semId; //! 8850 semaphore descriptor
 };
 #endif
 
@@ -112,7 +112,7 @@ struct boatPlatformSem{
 #ifndef PLATFORM_OSAL_MUTEX
 #define PLATFORM_OSAL_MUTEX
 struct boatPlatformMutex{
-    osiMutex_t *mutexid; //! 8850 mutex descriptor
+    osiMutex_t *mutexId; //! 8850 mutex descriptor
 };
 #endif
 
