@@ -38,8 +38,8 @@ BOAT_RESULT boatMutexInit(boatMutex *mutexRef)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    mutexRef->mutexID = osiMutexCreate();
-    if(mutexRef->mutexID == NULL)
+    mutexRef->mutexId = osiMutexCreate();
+    if(mutexRef->mutexId == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Mutex init failed!");
         return BOAT_ERROR;
@@ -76,15 +76,15 @@ BOAT_RESULT boatMutexDestroy(boatMutex *mutexRef)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(mutexRef->mutexid == NULL)
+    if(mutexRef->mutexId == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad mutex id!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    osiMutexDelete(mutexRef->mutexID);
+    osiMutexDelete(mutexRef->mutexId);
 
-    mutexRef->mutexID = NULL;
+    mutexRef->mutexId = NULL;
     
     return BOAT_SUCCESS;
 }
@@ -118,13 +118,13 @@ BOAT_RESULT boatMutexUnlock(boatMutex *mutexRef)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(mutexRef->mutexID == NULL)
+    if(mutexRef->mutexId == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad mutexId!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    osiMutexUnlock(mutexRef->mutexID);
+    osiMutexUnlock(mutexRef->mutexId);
 
 
     return BOAT_SUCCESS;
@@ -166,7 +166,7 @@ BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(mutexRef->mutexID == NULL)
+    if(mutexRef->mutexId == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad mutexId!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
@@ -175,7 +175,7 @@ BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
     if(timeout > 0)
     {
         bool ret;
-        ret = osiMutexTryLock(mutexRef->mutexid,timeout);
+        ret = osiMutexTryLock(mutexRef->mutexId,timeout);
         if(ret == false)
         {
             BoatLog(BOAT_LOG_CRITICAL,"Mutex lock Failed!");
@@ -184,7 +184,7 @@ BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
     }
     else
     {
-        osiMutexLock(mutexRef->mutexid);
+        osiMutexLock(mutexRef->mutexId);
     }
 
     
