@@ -5,7 +5,7 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 #include "boatlog.h"
-#include "rand.h"
+//#include "rand.h"
 
 
 #include "osi_api.h"
