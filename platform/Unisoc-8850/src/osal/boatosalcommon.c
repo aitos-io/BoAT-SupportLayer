@@ -56,9 +56,9 @@ void BoatSleep(BUINT32 second)
 * @return
 ****************************************************************************************
 */
-long int BoatGetTimes(void)
+BUINT64 BoatGetTimes(void)
 {
-	return time(NULL);
+	return osiEpochTime();
 }
 
 /**
