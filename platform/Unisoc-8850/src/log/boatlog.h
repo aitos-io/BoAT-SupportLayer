@@ -42,7 +42,7 @@ boatLogConfig.h defines options for compiling.
 #define BOAT_LOG_LEVEL BOAT_LOG_VERBOSE
 
 // void BoatPrintf(char* fmt, ...);
-#define BoatPrintf OSI_LOGI
+#define BoatPrintf OSI_PRINTFI
 extern const BCHAR *const g_log_level_name_str[];
 
 /*!****************************************************************************
@@ -63,9 +63,8 @@ extern const BCHAR *const g_log_level_name_str[];
     {                                                                                       \
         if (level <= BOAT_LOG_LEVEL)                                                        \
         {                                                                                   \
-            BoatPrintf(0," [BOAT] %s: "__FILE__                                               \
-                       ":%d, %s(): " format "\n",                                           \
-                       g_log_level_name_str[level - 1], __LINE__, __func__, ##__VA_ARGS__); \
+            BoatPrintf(" [BOAT] : "format" \n ",                                           \
+                         ##__VA_ARGS__); \
         }                                                                                   \
     } while (0)
 #endif
