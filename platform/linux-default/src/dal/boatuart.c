@@ -54,7 +54,7 @@
 
 #define FIBO_UART_MAX 5
 
-const char *uartDevName[]={"/dev/ttyS0", "/dev/ttyUSB0", "/dev/ttyUSB1"};
+const char *uartDevName[]={"/dev/ttyS0", "/dev/ttyS2", "/dev/ttyUSB1"};
 #define UART_PORT_MAX  (sizeof(uartDevName) / (sizeof(char *)))
 /////answer code: 00 61 69 74 6F 73 FF
 /**
