@@ -281,8 +281,9 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 
     BBOOL ret = BOAT_FALSE;
     nHttp_info *http_info = NULL;
-    char *URL_tag = "URL_1";
-    char *CONTENT_TYPE_tag = "CONTENT_TYPE";
+    char *CID_tag = "CID";
+    char *URL_tag = "URL";
+    char *CONTENT_TYPE_tag = "CONTENT";
     char *TIME_OUT_tag = "TIMEOUT";
     char *USER_DATA_tag = "USERDATA";
     BOAT_RESULT result = BOAT_ERROR;
@@ -331,6 +332,16 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
             result = BOAT_ERROR_HTTP_GENERAL;
             boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
         }
+
+        ret = Http_para(http_info,CID_tag,"1");
+        if(ret == BOAT_FALSE)
+        {
+            BoatLog(BOAT_LOG_CRITICAL,"Http_para CID failed!");
+            result = BOAT_ERROR_HTTP_GENERAL;
+            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
+        }
+
+        BoatLog(BOAT_LOG_NORMAL,"URL=>%s",boathttpport_context_ptr->remote_url_str);
 
         ret = Http_para(http_info,URL_tag,boathttpport_context_ptr->remote_url_str);
         if(ret == BOAT_FALSE)
