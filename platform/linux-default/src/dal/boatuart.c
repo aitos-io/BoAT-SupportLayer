@@ -271,6 +271,7 @@ int uart_set(int fd, int baudrate, int bits, char parity, int stop, char flow)
      *  ISIG: 使终端产生的信号起作用。（比如按ctrl+c可以使程序退出）
      */
     termios_uart.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+    termios_uart.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
 
     /**
      * 设置等待时间和最小接收字符
