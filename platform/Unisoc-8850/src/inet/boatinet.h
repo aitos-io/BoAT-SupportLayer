@@ -33,4 +33,5 @@ boatLogConfig.h defines options for compiling.
 #ifndef __BOATINET_H__
 #define __BOATINET_H__
 #include "osi_api.h"
+#include "lwip/def.h"
 #endif

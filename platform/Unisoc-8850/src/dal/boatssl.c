@@ -112,6 +112,7 @@ BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certl
 
 BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 {
+	BoatLog(BOAT_LOG_NORMAL, "===enter BoatConnect function ,address is %s",address);
     int                connectfd = -1;
     char               ip[64];
     char               port[8];
@@ -136,17 +137,24 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
     memcpy(ip  , address, (int)(ptr - address));
     memcpy(port, ptr + 1, strlen(address) - (int)(ptr - address));
 
+	BoatLog(BOAT_LOG_NORMAL, "ip is %s",ip);
+	BoatLog(BOAT_LOG_NORMAL, "port is %s",port);
+
     if ((he = gethostbyname(ip)) == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL, "gethostbyname() error");
         return -1;
     }
 
+	BoatLog(BOAT_LOG_NORMAL, "111111111");
+
     if ((connectfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         BoatLog(BOAT_LOG_CRITICAL, "socket() error");
         return -1;
     }
+
+	BoatLog(BOAT_LOG_NORMAL, "socket() connect fd = %d",connectfd);
 
     struct timeval timeout = {0, 500*1000};
     setsockopt(connectfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(struct timeval));
@@ -157,12 +165,16 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
     server.sin_port = htons(atoi(port));
     server.sin_addr = *((struct in_addr *)(he->h_addr_list[0])); 
 
+	BoatLog(BOAT_LOG_NORMAL, "server family is %d,port is %d",server.sin_family,server.sin_port);
+
     if (connect(connectfd, (struct sockaddr *)&server,sizeof(struct sockaddr)) < 0)
     {
         BoatLog(BOAT_LOG_CRITICAL, "connect() error");
         close(connectfd);
         return -1;
     }
+	BoatLog(BOAT_LOG_NORMAL, "socket connect success!");
+
     if (0 != getsockname(connectfd, &localaddr, &addrlen))
     {
         BoatLog(BOAT_LOG_CRITICAL, "getsockname() error");
@@ -192,20 +204,20 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 	//! @todo BoatTlsInit implementation in crypto default.
 	// return BOAT_ERROR;
 	BOAT_RESULT retval = BOAT_SUCCESS;
-
-	boatSSlCtx *platform_ssl_ctx = *tlsContext;
-
+	boatSSlCtx *platform_ssl_ctx = NULL;
 	mbedtls_entropy_context entropy;
     mbedtls_ctr_drbg_context ctr_drbg;
 
-	mbedtls_net_context *ssl_net = NULL;
-	mbedtls_ssl_context *ssl_ctx = NULL;
-	mbedtls_ssl_config *ssl_cfg = NULL;
-	mbedtls_x509_crt *ssl_crt = NULL;
-
-
 	BOAT_RESULT result = BOAT_SUCCESS;
 	boat_try_declare;
+
+	platform_ssl_ctx = BoatMalloc(sizeof(boatSSlCtx));
+	if(platform_ssl_ctx == NULL)
+	{
+		result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		BoatLog(BOAT_LOG_NORMAL, "Malloc boat_ssl_ctx failed. ");
+		boat_throw(result, BoatTlsInit_exception);
+	}
 
 	platform_ssl_ctx->ssl_net = BoatMalloc(sizeof(mbedtls_net_context));
 	if(platform_ssl_ctx->ssl_net == NULL)
@@ -232,7 +244,8 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 		boat_throw(result, BoatTlsInit_exception);
 	}
 	
-	platform_ssl_ctx->ssl_crt = BoatMalloc(sizeof(mbedtls_ssl_config));
+
+	platform_ssl_ctx->ssl_crt = BoatMalloc(sizeof(mbedtls_x509_crt));
 	if(platform_ssl_ctx->ssl_crt == NULL)
 	{
 		result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
@@ -240,19 +253,18 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 		boat_throw(result, BoatTlsInit_exception);
 	}
 
-
 	retval = BoatConnect(address, NULL);
 	if (retval < BOAT_SUCCESS)
 	{
+		result = BOAT_ERROR;
 		BoatLog(BOAT_LOG_NORMAL, "socket connect fail ");
 		boat_throw(result, BoatTlsInit_exception);
 	}
-	*socketfd = retval;
 
+	*socketfd = retval;
 
 	mbedtls_entropy_init(&entropy);
     mbedtls_ctr_drbg_init(&ctr_drbg);
-
 	mbedtls_net_init(platform_ssl_ctx->ssl_net);
 	mbedtls_ssl_init(platform_ssl_ctx->ssl_ctx);
 	mbedtls_ssl_config_init(platform_ssl_ctx->ssl_cfg);
@@ -300,8 +312,8 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
         boat_throw(result, BoatTlsInit_exception);
     }
 
-	ssl_net->fd = *socketfd;
-	mbedtls_ssl_set_bio(platform_ssl_ctx->ssl_ctx, platform_ssl_ctx->ssl_net, mbedtls_net_send, mbedtls_net_recv, NULL);
+	platform_ssl_ctx->ssl_net->fd = *socketfd;
+	mbedtls_ssl_set_bio(platform_ssl_ctx->ssl_ctx, platform_ssl_ctx->ssl_net, mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout);
 	result = mbedtls_ssl_handshake(platform_ssl_ctx->ssl_ctx);
 	if (result != BOAT_SUCCESS)
     {
@@ -310,10 +322,6 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
     }
 	BoatLog(BOAT_LOG_NORMAL, "ret = ssl_handshake SUCCESSED!");
 
-	// (mbedtls_net_context *)(platform_ssl_ctx->ssl_net) = ssl_net;
-	// (mbedtls_ssl_context *)(platform_ssl_ctx->ssl_ctx) = ssl_ctx;
-	// (mbedtls_ssl_config *)(platform_ssl_ctx->ssl_cfg) = ssl_cfg;
-	// (mbedtls_x509_crt *)(platform_ssl_ctx->ssl_crt) = ssl_crt;
 
 	/* boat catch handle */
 	boat_catch(BoatTlsInit_exception)
@@ -329,28 +337,45 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 			platform_ssl_ctx->ssl_net = NULL;
 		}
 
-		if(ssl_ctx != NULL)
+		if(platform_ssl_ctx->ssl_ctx != NULL)
 		{
 			mbedtls_ssl_free(platform_ssl_ctx->ssl_ctx);
 			BoatFree(platform_ssl_ctx->ssl_ctx);
 			platform_ssl_ctx->ssl_ctx = NULL;
 		}
 
-		if(ssl_cfg != NULL)
+		if(platform_ssl_ctx->ssl_cfg != NULL)
 		{
 			mbedtls_ssl_config_free(platform_ssl_ctx->ssl_cfg);
 			BoatFree(platform_ssl_ctx->ssl_cfg);
 			platform_ssl_ctx->ssl_cfg = NULL;
 		}
 
-		if(ssl_crt != NULL)
+		if(platform_ssl_ctx->ssl_crt != NULL)
 		{
 			mbedtls_x509_crt_free(platform_ssl_ctx->ssl_crt);
 			BoatFree(platform_ssl_ctx->ssl_crt);
 			platform_ssl_ctx->ssl_crt = NULL;
 		}
-		
+
+		if(platform_ssl_ctx != NULL)
+		{
+			BoatFree(platform_ssl_ctx);
+			platform_ssl_ctx = NULL;
+		}
+
+		mbedtls_entropy_free(&entropy);
+    	mbedtls_ctr_drbg_free(&ctr_drbg);
+
+		*tlsContext = NULL;
+
+		return result;
+				
 	}
+
+	BoatLog(BOAT_LOG_NORMAL, "TlsInit success!");
+
+	*tlsContext = platform_ssl_ctx;
 	
 	mbedtls_entropy_free(&entropy);
     mbedtls_ctr_drbg_free(&ctr_drbg);
@@ -368,7 +393,7 @@ BSINT32 BoatSend(BSINT32 sockfd, boatSSlCtx *tlsContext, const BUINT8 *buf, size
 	//! @todo BOAT_TLS_SUPPORT implementation in crypto default.
 	if (tlsContext == NULL)
 	{
-		BoatLog(BOAT_LOG_CRITICAL, "tlsContext  can't be NULL.");
+		BoatLog(BOAT_LOG_CRITICAL, "<BoatSend>tlsContext  can't be NULL.");
 		return -1;
 	}
 	//return SSL_write((SSL *)tlsContext, buf, len);
@@ -386,7 +411,7 @@ BSINT32 BoatRecv(BSINT32 sockfd, boatSSlCtx *tlsContext, BUINT8 *buf, size_t len
 	//! @todo BOAT_TLS_SUPPORT implementation in crypto default.
 	if (tlsContext == NULL)
 	{
-		BoatLog(BOAT_LOG_CRITICAL, "tlsContext  can't be NULL.");
+		BoatLog(BOAT_LOG_CRITICAL, "<BoatRecv>tlsContext  can't be NULL.");
 		return -1;
 	}
 	//return SSL_read((SSL *)tlsContext, buf, len);
@@ -424,6 +449,9 @@ void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd)
 		mbedtls_x509_crt_free((mbedtls_x509_crt *)((*tlsContext)->ssl_crt));
 		BoatFree((*tlsContext)->ssl_crt);
 		(*tlsContext)->ssl_crt = NULL;
+
+		BoatFree(*tlsContext);
+		*tlsContext = NULL;
 	}
 
 #endif

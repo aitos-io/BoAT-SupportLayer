@@ -54,6 +54,8 @@ To use boat HTTP RPC porting, RPC_USE_BOATHTTPPORT in boatoptions.h must set to 
 
 #include "http_api.h"
 
+#include "httpclient.h"
+
 /*!*****************************************************************************
 @brief Initialize boat HTTP RPC context.
 
@@ -270,24 +272,17 @@ Function: BoatHttpPortRequestSync()
     wrapper function. Typically it equals to strlen(response_str_ptr).
 
 *******************************************************************************/
-
-
 BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_ptr,
                                     const BCHAR *request_str,
                                     BUINT32 request_len,
                                     BOAT_OUT BCHAR **response_str_ptr,
                                     BOAT_OUT BUINT32 *response_len_ptr)
 {
-
-    BBOOL ret = BOAT_FALSE;
-    nHttp_info *http_info = NULL;
-    char *CID_tag = "CID";
-    char *URL_tag = "URL";
-    char *CONTENT_TYPE_tag = "CONTENT";
-    char *TIME_OUT_tag = "TIMEOUT";
-    char *USER_DATA_tag = "USERDATA";
     BOAT_RESULT result = BOAT_ERROR;
-
+    httpclient_t client = {0};
+    httpclient_data_t client_data = {0};
+    BSINT32 response_code;
+    BSINT32 ret;
     
     boat_try_declare;
 
@@ -298,124 +293,58 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, cleanup);
     }
 
-    if(http_info == NULL)
+    memset(&client, 0x00, sizeof(client));
+    memset(&client_data, 0x00, sizeof(client_data));
+
+    client.timeout_in_sec = 30;
+    
+    client_data.is_more = false;
+
+    client_data.header_buf = boathttpport_context_ptr->http_response_head.string_ptr;
+    client_data.header_buf_len = boathttpport_context_ptr->http_response_head.string_space;
+    memset(client_data.header_buf, 0, client_data.header_buf_len);
+
+    client_data.response_buf = boathttpport_context_ptr->http_response_body.string_ptr;
+    client_data.response_buf_len = boathttpport_context_ptr->http_response_body.string_space;
+    memset(client_data.response_buf, 0, client_data.response_buf_len);
+
+    client_data.post_buf = request_str;
+    client_data.post_buf_len = strlen(request_str);
+
+    client_data.post_content_type = "application/json";
+
+    BoatLog(BOAT_LOG_VERBOSE, "[HTTP]POST Start\n");
+    ret = httpclient_post(&client, boathttpport_context_ptr->remote_url_str, &client_data);
+    if (ret < 0)
     {
-        http_info = Init_Http();
-        if(http_info == NULL)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Init_Http failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-
-        if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"https",strlen("https")))
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Not support HTTPS yet!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-        else if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"http",strlen("http")))
-        {
-           
-        }
-        else
-        {
-            BoatLog(BOAT_LOG_CRITICAL, "Url format is Wrong.");
-            result = BOAT_ERROR_COMMON_INVALID_ARGUMENT;
-            boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, cleanup);
-        }
-
-        if(strlen(boathttpport_context_ptr->remote_url_str) >= SIZE_HTTP_USR)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http URL is too long!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-        ret = Http_para(http_info,CID_tag,"1");
-        if(ret == BOAT_FALSE)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http_para CID failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-        BoatLog(BOAT_LOG_NORMAL,"URL=>%s",boathttpport_context_ptr->remote_url_str);
-
-        ret = Http_para(http_info,URL_tag,boathttpport_context_ptr->remote_url_str);
-        if(ret == BOAT_FALSE)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http_para URL failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-        ret = Http_para(http_info,CONTENT_TYPE_tag,"Content-Type: application/json\r\n");
-        if(ret == BOAT_FALSE)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http_para Content-Type failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-        ret = Http_para(http_info,TIME_OUT_tag,"60");
-        if(ret == BOAT_FALSE)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http_para Time-out failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-        ret = Http_para(http_info,USER_DATA_tag,request_str);
-        if(ret == BOAT_FALSE)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http_para User-data failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-        
-        ret = Http_postn(http_info);
-        if(ret == BOAT_FALSE)
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http_para POST failed!");
-            result = BOAT_ERROR_HTTP_GENERAL;
-            boat_throw(BOAT_ERROR_HTTP_GENERAL, cleanup);
-        }
-
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_code is %d", http_info->status_code);
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_content: %s", http_info->user_data);
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_content_len is %d", http_info->content_length);
-
-        if((200 == http_info->status_code) || (201 == http_info->status_code))
-        {
-            //Get response data
-            if(http_info->content_length < boathttpport_context_ptr->http_response_body.string_space)
-            {
-                //memcpy(boathttpport_context_ptr->http_response_head.string_ptr,response.response_header,response.response_header_len);
-                //boathttpport_context_ptr->http_response_head.string_len = response.response_header_len;
-
-                memcpy(boathttpport_context_ptr->http_response_body.string_ptr,http_info->user_data,http_info->content_length);
-                boathttpport_context_ptr->http_response_body.string_len = http_info->content_length;
-
-                *response_str_ptr = boathttpport_context_ptr->http_response_body.string_ptr;
-                *response_len_ptr = boathttpport_context_ptr->http_response_body.string_len;
-
-                result = BOAT_SUCCESS;
-            }
-            else
-            {
-                BoatLog(BOAT_LOG_CRITICAL,"Http response message is too long!");
-                result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
-            }
-        }
-        else
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http Response code is Wrong!");
-            result = BOAT_ERROR_HTTP_POST_FAIL;
-        }
+        BoatLog(BOAT_LOG_VERBOSE, "[HTTP]POST Failed:%d\n", ret);
     }
+    else
+    {
+        BoatLog(BOAT_LOG_VERBOSE, "[HTTP]POST:\n%s\n", client_data.response_buf);
 
+        boathttpport_context_ptr->http_response_body.string_len = client_data.response_buf_len;
+        
+        response_code = httpclient_get_response_code(&client);
+        
+        if (response_code == 200 || response_code == 201)
+        {
+            *response_str_ptr = boathttpport_context_ptr->http_response_body.string_ptr;
+            *response_len_ptr = boathttpport_context_ptr->http_response_body.string_len;
+            
+            BoatLog(BOAT_LOG_VERBOSE, "Post: %s", request_str);
+            BoatLog(BOAT_LOG_VERBOSE, "Result Code: %d", response_code);
+            BoatLog(BOAT_LOG_VERBOSE, "Response: %s", *response_str_ptr);
+
+            result = BOAT_SUCCESS;
+        }
+        else
+        {
+            result = BOAT_ERROR_HTTP_POST_FAIL - response_code;
+            BoatLog(BOAT_LOG_NORMAL, "HTTP POST fails with response code %d.", response_code);
+        }  
+        
+    }
     // Exceptional Clean Up
     boat_catch(cleanup)
     {
@@ -424,15 +353,10 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         result = boat_exception;
     }
 
-    if(http_info != NULL)
-    {
-        Term_Http(http_info);
-        http_info = NULL;
-    }
-
 
     return result;
 }
+
 
 /**
 ****************************************************************************************

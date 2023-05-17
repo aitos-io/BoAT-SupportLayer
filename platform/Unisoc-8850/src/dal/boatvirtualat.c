@@ -45,6 +45,9 @@ BOAT_RESULT boatVirtualAtOpen(boatVirtualAtRxCallback rxCallback)
     osiPipeSetReaderCallback(g_at_tx_pipe, OSI_PIPE_EVENT_RX_ARRIVED,
                              prvVirtAtRespCallback, g_at_tx_pipe);
 
+	// osiPipeSetReaderCallback(g_at_tx_pipe, OSI_PIPE_EVENT_RX_ARRIVED,
+    //                          prvVirtAtRespCallback, g_at_rx_pipe);
+
     atDeviceVirtConfig_t cfg = {
         .name = OSI_MAKE_TAG('V', 'A', 'T', '1'),
         .rx_pipe = g_at_rx_pipe,
@@ -56,7 +59,12 @@ BOAT_RESULT boatVirtualAtOpen(boatVirtualAtRxCallback rxCallback)
 
 	dalVirtualAtCallback = rxCallback;
 
-	return atDeviceOpen(g_device);
+	if(atDeviceOpen(g_device) == false)
+	{
+		return BOAT_ERROR;
+	}
+
+	return BOAT_SUCCESS;
 }
 BOAT_RESULT boatVirtualAtSend(char *cmd, BUINT16 len)
 {
@@ -66,6 +74,7 @@ BOAT_RESULT boatVirtualAtSend(char *cmd, BUINT16 len)
 		return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
 	}
 	int write_len = osiPipeWriteAll(g_at_rx_pipe,cmd,len,OSI_WAIT_FOREVER);
+	//int write_len = osiPipeWriteAll(g_at_tx_pipe,cmd,len,OSI_WAIT_FOREVER);
 	if(write_len != len)
 	{
 		BoatLog(BOAT_LOG_CRITICAL,"VirtualAT write failed!");
