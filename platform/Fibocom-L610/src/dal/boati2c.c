@@ -18,6 +18,7 @@
 #include "boatlog.h"
 //! #include "i2c_hal.h"
 #include "boatdal.h"
+#include "boatplatformosal.h"
 
 //! static HAL_I2C_BPS_T bsp1_1 = {2, 0};
 // drvI2cSlave_t drv_i2c = {0x48, 0, 0, false, false};
