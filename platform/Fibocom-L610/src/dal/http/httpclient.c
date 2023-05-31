@@ -32,6 +32,7 @@
 #include "lwip/netdb.h"
 #include "lwip/tcp.h"
 #include "lwip/err.h"
+#include "boatlog.h"
 
 #include "fibo_opencpu.h"
 
@@ -57,6 +58,8 @@
 
 #define HTTPCLIENT_MAX_SOC_TIMEOUT (10 * 60) // 10 min
 
+#define BOAT_HTTPCLIENT_SSL_ENABLE
+
 // static int httpclient_parse_host(char *url, char *host, size_t maxhost_len);
 static int httpclient_parse_url(const char *url, char *scheme, size_t max_scheme_len, char *host, size_t maxhost_len, int *port, char *path, size_t max_path_len);
 static int httpclient_tcp_send_all(int sock_fd, char *data, int length);
@@ -66,16 +69,13 @@ static int httpclient_retrieve_content(httpclient_t *client, char *data, int len
 static int httpclient_response_parse(httpclient_t *client, char *data, int len, httpclient_data_t *client_data);
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE
 static int httpclient_ssl_conn(httpclient_t *client, char *host);
-static int httpclient_ssl_send_all(const char *data, size_t length);
+static int httpclient_ssl_send_all(httpclient_t *client, const char *data, size_t length);
 
 static int httpclient_ssl_close(httpclient_t *client);
 #endif
 
-#ifdef BOAT_HTTPCLIENT_SSL_ENABLE
-ssl_ctx_t boat_ssl_ctx;
-WOLFSSL *boat_ssl;
-#endif
-static void httpclient_base64enc(char *out, const char *in)
+static void
+httpclient_base64enc(char *out, const char *in)
 {
     const char code[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     int i = 0, x = 0, l = 0;
@@ -155,142 +155,142 @@ unsigned short boat_htons(unsigned short n)
     return ((n & 0xff) << 8) | ((n & 0xff00) >> 8);
 }
 
-// int ip4addr_aton(const char *cp, ip4_addr_t *addr)
-// {
-//     u32_t val;
-//     u8_t base;
-//     char c;
-//     u32_t parts[4];
-//     u32_t *pp = parts;
+int ip4addr_aton1(const char *cp, ip4_addr_t *addr)
+{
+    u32_t val;
+    u8_t base;
+    char c;
+    u32_t parts[4];
+    u32_t *pp = parts;
 
-//     c = *cp;
-//     for (;;)
-//     {
-//         /*
-//          * Collect number up to ``.''.
-//          * Values are specified as for C:
-//          * 0x=hex, 0=octal, 1-9=decimal.
-//          */
-//         if (!isdigit(c))
-//         {
-//             return 0;
-//         }
-//         val = 0;
-//         base = 10;
-//         if (c == '0')
-//         {
-//             c = *++cp;
-//             if (c == 'x' || c == 'X')
-//             {
-//                 base = 16;
-//                 c = *++cp;
-//             }
-//             else
-//             {
-//                 base = 8;
-//             }
-//         }
-//         for (;;)
-//         {
-//             if (isdigit(c))
-//             {
-//                 val = (val * base) + (u32_t)(c - '0');
-//                 c = *++cp;
-//             }
-//             else if (base == 16 && isxdigit(c))
-//             {
-//                 val = (val << 4) | (u32_t)(c + 10 - (islower(c) ? 'a' : 'A'));
-//                 c = *++cp;
-//             }
-//             else
-//             {
-//                 break;
-//             }
-//         }
-//         if (c == '.')
-//         {
-//             /*
-//              * Internet format:
-//              *  a.b.c.d
-//              *  a.b.c   (with c treated as 16 bits)
-//              *  a.b (with b treated as 24 bits)
-//              */
-//             if (pp >= parts + 3)
-//             {
-//                 return 0;
-//             }
-//             *pp++ = val;
-//             c = *++cp;
-//         }
-//         else
-//         {
-//             break;
-//         }
-//     }
-//     /*
-//      * Check for trailing characters.
-//      */
-//     if (c != '\0' && !isspace(c))
-//     {
-//         return 0;
-//     }
-//     /*
-//      * Concoct the address according to
-//      * the number of parts specified.
-//      */
-//     switch (pp - parts + 1)
-//     {
+    c = *cp;
+    for (;;)
+    {
+        /*
+         * Collect number up to ``.''.
+         * Values are specified as for C:
+         * 0x=hex, 0=octal, 1-9=decimal.
+         */
+        if (!isdigit(c))
+        {
+            return 0;
+        }
+        val = 0;
+        base = 10;
+        if (c == '0')
+        {
+            c = *++cp;
+            if (c == 'x' || c == 'X')
+            {
+                base = 16;
+                c = *++cp;
+            }
+            else
+            {
+                base = 8;
+            }
+        }
+        for (;;)
+        {
+            if (isdigit(c))
+            {
+                val = (val * base) + (u32_t)(c - '0');
+                c = *++cp;
+            }
+            else if (base == 16 && isxdigit(c))
+            {
+                val = (val << 4) | (u32_t)(c + 10 - (islower(c) ? 'a' : 'A'));
+                c = *++cp;
+            }
+            else
+            {
+                break;
+            }
+        }
+        if (c == '.')
+        {
+            /*
+             * Internet format:
+             *  a.b.c.d
+             *  a.b.c   (with c treated as 16 bits)
+             *  a.b (with b treated as 24 bits)
+             */
+            if (pp >= parts + 3)
+            {
+                return 0;
+            }
+            *pp++ = val;
+            c = *++cp;
+        }
+        else
+        {
+            break;
+        }
+    }
+    /*
+     * Check for trailing characters.
+     */
+    if (c != '\0' && !isspace(c))
+    {
+        return 0;
+    }
+    /*
+     * Concoct the address according to
+     * the number of parts specified.
+     */
+    switch (pp - parts + 1)
+    {
 
-//     case 0:
-//         return 0; /* initial nondigit */
+    case 0:
+        return 0; /* initial nondigit */
 
-//     case 1: /* a -- 32 bits */
-//         break;
+    case 1: /* a -- 32 bits */
+        break;
 
-//     case 2: /* a.b -- 8.24 bits */
-//         if (val > 0xffffffUL)
-//         {
-//             return 0;
-//         }
-//         if (parts[0] > 0xff)
-//         {
-//             return 0;
-//         }
-//         val |= parts[0] << 24;
-//         break;
+    case 2: /* a.b -- 8.24 bits */
+        if (val > 0xffffffUL)
+        {
+            return 0;
+        }
+        if (parts[0] > 0xff)
+        {
+            return 0;
+        }
+        val |= parts[0] << 24;
+        break;
 
-//     case 3: /* a.b.c -- 8.8.16 bits */
-//         if (val > 0xffff)
-//         {
-//             return 0;
-//         }
-//         if ((parts[0] > 0xff) || (parts[1] > 0xff))
-//         {
-//             return 0;
-//         }
-//         val |= (parts[0] << 24) | (parts[1] << 16);
-//         break;
+    case 3: /* a.b.c -- 8.8.16 bits */
+        if (val > 0xffff)
+        {
+            return 0;
+        }
+        if ((parts[0] > 0xff) || (parts[1] > 0xff))
+        {
+            return 0;
+        }
+        val |= (parts[0] << 24) | (parts[1] << 16);
+        break;
 
-//     case 4: /* a.b.c.d -- 8.8.8.8 bits */
-//         if (val > 0xff)
-//         {
-//             return 0;
-//         }
-//         if ((parts[0] > 0xff) || (parts[1] > 0xff) || (parts[2] > 0xff))
-//         {
-//             return 0;
-//         }
-//         val |= (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8);
-//         break;
-//     default:
-//         break;
-//     }
-//     if (addr)
-//     {
-//         ip4_addr_set_u32(addr, val);
-//     }
-//     return 1;
-// }
+    case 4: /* a.b.c.d -- 8.8.8.8 bits */
+        if (val > 0xff)
+        {
+            return 0;
+        }
+        if ((parts[0] > 0xff) || (parts[1] > 0xff) || (parts[2] > 0xff))
+        {
+            return 0;
+        }
+        val |= (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8);
+        break;
+    default:
+        break;
+    }
+    if (addr)
+    {
+        ip4_addr_set_u32(addr, val);
+    }
+    return 1;
+}
 
 static int getHostByIpOrName(char *hostorip_str, GAPP_TCPIP_ADDR_T *addr)
 {
@@ -317,7 +317,7 @@ static int getHostByIpOrName(char *hostorip_str, GAPP_TCPIP_ADDR_T *addr)
     }
     else
     {
-        ip4addr_aton(hostorip_str, &addr->sin_addr.u_addr.ip4);
+        ip4addr_aton1(hostorip_str, &addr->sin_addr.u_addr.ip4);
         addr->sin_addr.u_addr.ip4.addr = boat_htonl(addr->sin_addr.u_addr.ip4.addr);
     }
 
@@ -394,6 +394,7 @@ int httpclient_conn(httpclient_t *client, char *host)
 
     if (client->socket < 0)
     {
+        BoatLog(BOAT_LOG_NORMAL, " socket creat fail");
         return HTTPCLIENT_ERROR_CONN;
     }
 
@@ -405,6 +406,7 @@ int httpclient_conn(httpclient_t *client, char *host)
     }
     else
     {
+        BoatLog(BOAT_LOG_NORMAL, " socket connect fail");
         fibo_sock_close(client->socket);
         return HTTPCLIENT_ERROR_CONN;
     }
@@ -738,7 +740,7 @@ int httpclient_send_header(httpclient_t *client, char *url, int method, httpclie
     {
         DBG("Enter PolarSSL_write");
 
-        if (httpclient_ssl_send_all(send_buf, len) != len)
+        if (httpclient_ssl_send_all(client, send_buf, len) != len)
         {
             ERR("SSL_write failed");
             return HTTPCLIENT_ERROR;
@@ -776,7 +778,7 @@ int httpclient_send_userdata(httpclient_t *client, httpclient_data_t *client_dat
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE
         if (client->is_http == false)
         {
-            if (httpclient_ssl_send_all(client_data->post_buf, client_data->post_buf_len) != client_data->post_buf_len)
+            if (httpclient_ssl_send_all(client, client_data->post_buf, client_data->post_buf_len) != client_data->post_buf_len)
             {
                 ERR("SSL_write failed");
                 return HTTPCLIENT_ERROR;
@@ -804,6 +806,64 @@ int httpclient_send_userdata(httpclient_t *client, httpclient_data_t *client_dat
     }
 
     return HTTPCLIENT_OK;
+}
+
+static int ssl_recv_unblock(INT32 sock, void *buf, INT32 size, INT32 timeout)
+{
+    struct timeval tm = {0};
+    fd_set rset;
+    // BUINT8 *temp = buf;
+
+    int fd = fibo_ssl_sock_get_fd(sock);
+
+    int ret = fibo_ssl_sock_recv(sock, buf, size);
+    if (ret > 0)
+    {
+        BoatLog(BOAT_LOG_VERBOSE, "recv data size:%d", ret);
+        return ret;
+    }
+    else if (ret < 0)
+    {
+        BoatLog(BOAT_LOG_VERBOSE, "recv data fail ");
+        if (fibo_get_ssl_errcode() == 0)
+        {
+            return 0;
+        }
+        return ret;
+    }
+
+    FD_ZERO(&rset);
+    FD_SET(fd, &rset);
+    tm.tv_sec = timeout / 1000;
+    tm.tv_usec = (timeout % 1000) * 1000;
+
+    ret = select(fd + 1, &rset, NULL, NULL, timeout > 0 ? &tm : NULL);
+    if (ret < 0)
+    {
+        BoatLog(BOAT_LOG_VERBOSE, "select failed:%s", strerror(errno));
+        return -1;
+    }
+    else if (ret == 0)
+    {
+        BoatLog(BOAT_LOG_VERBOSE, "select timeout");
+        return -1;
+    }
+    else
+    {
+        ret = fibo_ssl_sock_recv(sock, buf, size);
+        if (ret >= 0)
+        {
+            // BoatLog(BOAT_LOG_VERBOSE, "recv data size:%d", ret);
+            return ret;
+        }
+        else if (ret < 0)
+        {
+            BoatLog(BOAT_LOG_VERBOSE, "recv data fail");
+            return ret;
+        }
+    }
+    BoatLog(BOAT_LOG_VERBOSE, "recv data 111 fail");
+    return -1;
 }
 
 int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, int *p_read_len) /* 0 on success, err code on failure */
@@ -854,15 +914,15 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
                 // nb_flag = 1;
                 // lwip_ioctl(client->socket, FIONBIO, &nb_flag);
                 boat_sys_log("httpread:readlen:%d,min_len:%d", readLen, min_len);
-                ret = wolfSSL_read(boat_ssl, (unsigned char *)buf + readLen, max_len - readLen);
+                ret = ssl_recv_unblock(client->socket, (unsigned char *)buf + readLen, min_len - readLen, 10 * 1000);
                 boat_sys_log("httpread:ret:%d", ret);
             }
             else
             {
-                // nb_flag = 0;
-                // lwip_ioctl(client->socket, FIONBIO, &nb_flag);
+                nb_flag = 0;
+                lwip_ioctl(client->socket, FIONBIO, &nb_flag);
                 boat_sys_log("httpread1:readlen:%d,max_len:%d", readLen, max_len);
-                ret = wolfSSL_read(boat_ssl, (unsigned char *)buf + readLen, max_len - readLen);
+                ret = ssl_recv_unblock(client->socket, (unsigned char *)buf + readLen, max_len - readLen, 10 * 1000);
                 boat_sys_log("httpread2:ret:%d", ret);
             }
         }
@@ -1231,7 +1291,7 @@ int httpclient_response_parse(httpclient_t *client, char *data, int len, httpcli
             key_ptr = data;
             value_ptr = colon_ptr + strlen(": ");
 
-            DBG("Read header : %.*s: %.*s", key_len, key_ptr, value_len, value_ptr);
+            // DBG("Read header : %.*s: %.*s", key_len, key_ptr, value_len, value_ptr);
             if (0 == strncasecmp(key_ptr, "Content-Length", key_len))
             {
                 sscanf(value_ptr, "%d[^\r]", &(client_data->response_content_len));
@@ -1306,7 +1366,9 @@ HTTPCLIENT_RESULT httpclient_connect(httpclient_t *client, char *url)
 
     client->socket = -1;
     if (client->is_http)
+    {
         ret = httpclient_conn(client, host);
+    }
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE
     else
     {
@@ -1321,9 +1383,10 @@ HTTPCLIENT_RESULT httpclient_connect(httpclient_t *client, char *url)
 HTTPCLIENT_RESULT httpclient_send_request(httpclient_t *client, char *url, int method, httpclient_data_t *client_data)
 {
     int ret = HTTPCLIENT_ERROR_CONN;
-
-    if (client->socket < 0)
+    BoatLog(BOAT_LOG_NORMAL, "client->socket = %d ", client->socket);
+    if (client->socket == -1)
     {
+        BoatLog(BOAT_LOG_NORMAL, "test 000");
         return (HTTPCLIENT_RESULT)ret;
     }
 
@@ -1349,7 +1412,7 @@ HTTPCLIENT_RESULT httpclient_recv_response(httpclient_t *client, httpclient_data
     // TODO: header format:  name + value must not bigger than HTTPCLIENT_CHUNK_SIZE.
     char buf[HTTPCLIENT_CHUNK_SIZE] = {0}; // char buf[HTTPCLIENT_CHUNK_SIZE*2] = {0};
     boat_sys_log("http start recv response");
-    if (client->socket < 0)
+    if (client->socket == -1)
     {
         return (HTTPCLIENT_RESULT)ret;
     }
@@ -1493,13 +1556,13 @@ static void httpclient_debug(void *ctx, int level, const char *file, int line, c
     DBG("%s", str);
 }
 
-static int httpclient_ssl_send_all(const char *data, size_t length)
+static int httpclient_ssl_send_all(httpclient_t *client, const char *data, size_t length)
 {
     size_t written_len = 0;
 
     while (written_len < length)
     {
-        int ret = wolfSSL_write(boat_ssl, (unsigned char *)(data + written_len), (length - written_len));
+        int ret = fibo_ssl_sock_send(client->socket, (unsigned char *)(data + written_len), (length - written_len));
         if (ret > 0)
         {
             written_len += ret;
@@ -1520,80 +1583,98 @@ static int httpclient_ssl_send_all(const char *data, size_t length)
 
 static int httpclient_ssl_conn(httpclient_t *client, char *host)
 {
-    const char *pers = "https";
-    int value, ret = 0;
-    uint32_t flags;
-    char port[10] = {0};
-    struct addrinfo hints, *addr_list, *cur;
-    struct timeval timeout;
-    timeout.tv_sec = client->timeout_in_sec > HTTPCLIENT_MAX_SOC_TIMEOUT ? HTTPCLIENT_MAX_SOC_TIMEOUT : client->timeout_in_sec;
-    timeout.tv_usec = 0;
+    // const char *pers = "https";
+    int ret = 0;
+    // uint32_t flags;
+    // char port[10] = {0};
+    // struct addrinfo hints, *addr_list, *cur;
+    // struct timeval timeout;
+    // timeout.tv_sec = client->timeout_in_sec > HTTPCLIENT_MAX_SOC_TIMEOUT ? HTTPCLIENT_MAX_SOC_TIMEOUT : client->timeout_in_sec;
+    // timeout.tv_usec = 0;
 
     boat_sys_log("ssl conn starts");
     /* Do name resolution with both IPv6 and IPv4 */
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-    snprintf(port, sizeof(port), "%d", client->remote_port);
-    if (getaddrinfo(host, port, &hints, &addr_list) != 0)
+    // memset(&hints, 0, sizeof(hints));
+    // hints.ai_family = AF_UNSPEC;
+    // hints.ai_socktype = SOCK_STREAM;
+    // hints.ai_protocol = IPPROTO_TCP;
+    // snprintf(port, sizeof(port), "%d", client->remote_port);
+    // if (getaddrinfo(host, port, &hints, &addr_list) != 0)
+    // {
+    //     boat_sys_log("ssl dns failed");
+    //     return -1;
+    // }
+
+    // for (cur = addr_list; cur != NULL; cur = cur->ai_next)
+    // {
+    //     // client->socket = (int)socket(cur->ai_family, cur->ai_socktype,
+    //     //                              cur->ai_protocol);
+    //     client->socket = fibo_ssl_sock_create();
+    //     if (client->socket < 0)
+    //     {
+    //         ret = -1;
+    //         continue;
+    //     }
+    //     if (client->timeout_in_sec > 0)
+    //     {
+    //         lwip_setsockopt(client->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    //         lwip_setsockopt(client->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
+    //     }
+    //     if (connect(client->socket, cur->ai_addr, cur->ai_addrlen) == 0)
+    //     {
+    //         ret = 0;
+    //         DBG("ssl tcp connect ok\n");
+    //         break;
+    //     }
+
+    //     close(client->socket);
+    //     ret = -1;
+    // }
+    // freeaddrinfo(addr_list);
+    // if (ret == -1)
+    // {
+    //     DBG("ssl tcp connect failed\n");
+    //     return -1;
+    // }
+    // set_ssl_ctx_default(&boat_ssl_ctx);
+    // wolf_ssl_init(&boat_ssl_ctx);
+
+    // boat_ssl = wolfSSL_new(boat_ssl_ctx.wolf_ctx);
+
+    // SSL_set_fd(boat_ssl, client->socket);
+    fibo_set_ssl_chkmode(0);
+    // ret = fibo_write_ssl_file("TRUSTFILE", certCA, strlen(certCA));
+    client->socket = fibo_ssl_sock_create();
+    if (client->socket == -1)
     {
-        boat_sys_log("ssl dns failed");
+        BoatLog(BOAT_LOG_NORMAL, "creat ssl sock fail");
         return -1;
     }
-
-    for (cur = addr_list; cur != NULL; cur = cur->ai_next)
+    BoatLog(BOAT_LOG_NORMAL, "ssl connect host = %s , port = %d", host, client->remote_port);
+    if ((fibo_ssl_sock_connect(client->socket, host, client->remote_port)) == 0)
     {
-        client->socket = (int)socket(cur->ai_family, cur->ai_socktype,
-                                     cur->ai_protocol);
-        if (client->socket < 0)
-        {
-            ret = -1;
-            continue;
-        }
-        if (client->timeout_in_sec > 0)
-        {
-            lwip_setsockopt(client->socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-            lwip_setsockopt(client->socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
-        }
-        if (connect(client->socket, cur->ai_addr, cur->ai_addrlen) == 0)
-        {
-            ret = 0;
-            DBG("ssl tcp connect ok\n");
-            break;
-        }
-
-        close(client->socket);
-        ret = -1;
-    }
-    freeaddrinfo(addr_list);
-    if (ret == -1)
-    {
-        DBG("ssl tcp connect failed\n");
-        return -1;
-    }
-    set_ssl_ctx_default(&boat_ssl_ctx);
-    wolf_ssl_init(&boat_ssl_ctx);
-
-    boat_ssl = wolfSSL_new(boat_ssl_ctx.wolf_ctx);
-
-    SSL_set_fd(boat_ssl, client->socket);
-    if ((SSL_connect(boat_ssl)) == WOLFSSL_SUCCESS)
-    {
-        boat_sys_log("WOLFSSL_CONNECT_SUCCESS");
+        BoatLog(BOAT_LOG_NORMAL, "SSL_CONNECT_SUCCESS");
+        ret = 0;
     }
     else
     {
-        boat_sys_log("WOLFSSL_CONNECT_ERROR");
-        wolfSSL_free(boat_ssl);
+        BoatLog(BOAT_LOG_NORMAL, "SSL_CONNECT_ERROR");
+        fibo_ssl_sock_close(client->socket);
+        ret = -1;
+        return ret;
     }
+    /// get ssl socket fd
+    int fd = fibo_ssl_sock_get_fd(client->socket);
+
+    // set sock fd to unblock
+    fibo_sock_lwip_fcntl(fd, F_SETFL, fibo_sock_lwip_fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
     return ret;
 }
 
 static int httpclient_ssl_close(httpclient_t *client)
 {
-    close(client->socket);
-    wolfSSL_free(boat_ssl);
+    fibo_ssl_sock_close(client->socket);
+    // wolfSSL_free(boat_ssl);
     return 0;
 }
 #endif
