@@ -47,45 +47,20 @@ typedef struct TBoatHttpPortContext
 } BoatHttpPortContext;
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-    BoatHttpPortContext *BoatHttpPortInit(void);
+BoatHttpPortContext *BoatHttpPortInit(void);
 
-    void BoatHttpPortDeinit(BoatHttpPortContext *boathttpport_context_ptr);
+void BoatHttpPortDeinit(BoatHttpPortContext *boathttpport_context_ptr);
 
-    BOAT_RESULT BoatHttpPortSetOpt(BoatHttpPortContext *boathttpport_context_ptr, BCHAR *remote_url_str);
+BOAT_RESULT BoatHttpPortSetOpt(BoatHttpPortContext *boathttpport_context_ptr, BCHAR *remote_url_str);
 
-    BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_ptr,
-                                        const BCHAR *request_str,
-                                        BUINT32 request_len,
-                                        BOAT_OUT BCHAR **response_str_ptr,
-                                        BOAT_OUT BUINT32 *response_len_ptr);
-
-    /**
-    ****************************************************************************************
-    * @brief:
-    * This function init CURL_GLOBAL_DEFAULT
-    * On platform L610, don't need to init this param
-    * @return
-    *  This function will return BOAT_SUCCESS if executed successfully.
-    *  Otherwise it returns one of the error codes. Refer to header file boaterrcode.h
-    *  for details.
-    ****************************************************************************************
-    */
-    BOAT_RESULT BoatHttpGlobalInit(void);
-
-    /**
-    ****************************************************************************************
-    * @brief:
-    * This function deinit CURL_GLOBAL_DEFAULT
-    * On platform L610, don't need to init this param
-    * @return
-    *  This function has no return value
-    ****************************************************************************************
-    */
-    void BoatHttpGlobalDeInit(void);
+BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_ptr,
+                                    const BCHAR *request_str,
+                                    BUINT32 request_len,
+                                    BOAT_OUT BCHAR **response_str_ptr,
+                                    BOAT_OUT BUINT32 *response_len_ptr);
 
 #ifdef __cplusplus
 }
