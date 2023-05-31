@@ -351,6 +351,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
     return result;
 }
 
+
 /**
 ****************************************************************************************
 * @brief:
@@ -380,5 +381,4 @@ void BoatHttpGlobalDeInit(void)
 {
     return BOAT_SUCCESS;
 }
-
 // #endif // end of #if RPC_USE_BOATHTTPPORT == 1
