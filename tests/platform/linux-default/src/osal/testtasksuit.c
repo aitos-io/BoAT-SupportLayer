@@ -180,7 +180,6 @@ static void taskLoopSleep500msLoopnum(void *param)
 
 	return ;	
 }
-END_TEST
 
 START_TEST(test_BoAT_OSAL_LinuxDefault_02Task_test_0021_MultiTaskUseOneTaskFunc)
 {
