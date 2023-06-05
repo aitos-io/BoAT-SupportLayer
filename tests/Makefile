@@ -29,6 +29,8 @@ ifeq ($(PLATFORM_TARGET),linux-default)
 					-lrt \
 					-lpthread \
 					-lcheck \
+					-lm\
+					-lsubunit\
 					$(LINK_LIBS)
 
 	TESTMAKE = $(CC) $(BOAT_CFLAGS) $(BOAT_LFLAGS) $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/linux-default/testapp.c
