@@ -462,7 +462,7 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0025_boatTimerDestroy_timerI
 END_TEST
 #endif
 
-Suite *makeTimertestSuite(void)
+Suite *makeTimertest_suite(void)
 {
     /* Create Suite */
     Suite *sTimertest = suite_create("timer_test");
@@ -503,25 +503,3 @@ Suite *makeTimertestSuite(void)
     return sTimertest;
 
 }
-
-
-int runTimerTests(void)
-{
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteTimertest = makeTimertestSuite();
-
-    sr = srunner_create(suiteTimertest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-}
-
-

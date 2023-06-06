@@ -11,8 +11,6 @@
 #include "boatkeypair.h"
 #include "boat_keystore_soft.h"
 
-
-#if 1
 START_TEST(test_BoAT_keystore_01soft_test_0010_BoAT_recover_pubkey_soft_parameter_inputs)
 {
 
@@ -82,29 +80,3 @@ Suite *makeKeystoreSofttest_suite(void)
     return sKeystoreSofttest;
 
 }
-#endif
-
-int runKeystoreSoftTests(void)
-{
-
-#if 1
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteKeystoreSofttest = makeKeystoreSofttest_suite();
-
-    sr = srunner_create(suiteKeystoreSofttest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-#endif
-
-	
-}
-

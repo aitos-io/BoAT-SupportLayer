@@ -49,8 +49,6 @@ START_TEST(test_BoAT_DAL_LinuxDefault_01VirtualAt_test_0013_boatVirtualAtClose_F
 }
 END_TEST
 
-
-
 Suite *makeVirtualAtTestSuite(void)
 {
     /* Create Suite */
@@ -74,23 +72,3 @@ Suite *makeVirtualAtTestSuite(void)
     return sVirtualAttest;
 
 }
-
-int runVirtualAtTests(void)
-{
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteVirtualAtTest = makeVirtualAtTestSuite();
-
-    sr = srunner_create(suiteVirtualAtTest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-}
-

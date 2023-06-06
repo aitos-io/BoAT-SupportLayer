@@ -593,24 +593,3 @@ Suite *makeQueuetest_suite(void)
     return sQueuetest;
 
 }
-
-
-int runQueueTests(void)
-{
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteQueuetest = makeQueuetest_suite();
-
-    sr = srunner_create(suiteQueuetest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-}
-

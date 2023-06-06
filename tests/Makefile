@@ -36,8 +36,8 @@ ifeq ($(PLATFORM_TARGET),linux-default)
 	TESTMAKE = $(CC) $(BOAT_CFLAGS) $(BOAT_LFLAGS) $(BOAT_BASE_DIR)/BoAT-SupportLayer/tests/platform/linux-default/testapp.c
 	TESTO = -o 
 	
-	TESTAPP = /tesatapp
-	TESTDIR = $(BOAT_BUILD_DIR)/testapp/out
+	TESTAPP = /testapp
+	TESTDIR = $(BOAT_BUILD_DIR)/BoAT-SupportLayer/tests/
 	TESTMKDIR =  $(BOAT_MKDIR) -p 
 else
 	TESTMKDIR = $(AR) r $(LIBNAME) $(BOAT_BASE_DIR)/boatcheck/*.o

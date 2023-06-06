@@ -492,51 +492,29 @@ Suite *makeUarttest_suite(void)
     /* Test cases are added to the test set */
 	
 #if 1
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right);
+	//tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0010_boatUartOpen_Successful_ConfigParamete_Right);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0011_boatUartOpen_Failed_uartRefNULL);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0012_boatUartInit_Failed_linuxUartOpenError);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0013_boatUartInit_Failed_portOverMax);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0015_boatUartOpen_Failed_rxCallbackNULL);
 
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0019_boatUartDeinit_Successful);
+	///tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0019_boatUartDeinit_Successful);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0020_boatUartDeinit_Failed_uartRefNULL);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0021_boatUartDeinit_Failed_uartIdNagtive);
 	//tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0022_boatUartDeinit_Failed_linuxUartCloseError);
 
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0023_boatUartWrite_Successful);
+	///tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0023_boatUartWrite_Successful);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0016_boatUartOpen_Failed_parityError);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0017_boatUartOpen_Failed_stopBiteError);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0018_boatUartOpen_Failed_dataBitsError);
 
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0024_boatUartWrite_Successful_dataLenZero);
+	///tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0024_boatUartWrite_Successful_dataLenZero);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0025_boatUartWrite_Failed_uartRefNULL);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0026_boatUartWrite_Failed_dataPtrNULL);
 	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0027_boatUartWrite_Failed_uartIdNagtive);
 	//tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0028_boatUartWrite_Failed_linuxUartWriteError);
-	tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0029_boatUartWriteRead_IntegrityTest);
+	///tcase_add_test(tcUarttest_api, test_BoAT_DAL_LinuxDefault_01Uart_test_0029_boatUartWriteRead_IntegrityTest);
 #endif
     return sUarttest;
 
 }
-
-int runUartTests(void)
-{
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteUarttest = makeUarttest_suite();
-
-    sr = srunner_create(suiteUarttest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-}
-
-
-

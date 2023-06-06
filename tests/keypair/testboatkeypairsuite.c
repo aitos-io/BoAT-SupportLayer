@@ -113,24 +113,3 @@ Suite *makeKeypairtest_suite(void)
     return sKeypairtest;
 
 }
-
-
-int runKeypairTests(void)
-{
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteKeypairtest = makeKeypairtest_suite();
-
-    sr = srunner_create(suiteKeypairtest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-}
-

@@ -14,7 +14,6 @@
 BOAT_RESULT BoatPort_keyQuery(const BoatKeypairPriKeyCtx_config *config, BoatKeypairPriKeyCtx *pkCtx);
 BOAT_RESULT BoatPort_keyDelete(BoatKeypairPriKeyCtx *pkCtx);
 
-#if 1
 START_TEST(test_BoAT_keystore_02intf_test_0010_BoAT_Keystore_Write_Binary_secure_parameter_inputs)
 {
 
@@ -122,30 +121,3 @@ Suite *makeKeystoreIntftest_suite(void)
     return sKeystoreIntftest;
 
 }
-#endif
-
-int runKeystoreIntfTests(void)
-{
-
-#if 1
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteKeystoreIntftest = makeKeystoreIntftest_suite();
-
-    sr = srunner_create(suiteKeystoreIntftest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-#endif
-
-	
-}
-
-
