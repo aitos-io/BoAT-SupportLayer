@@ -234,25 +234,3 @@ Suite *makeTasktest_suite(void)
     return sTasktest;
 
 }
-
-
-int runTaskTests(void)
-{
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteTasktest = makeTasktest_suite();
-
-    sr = srunner_create(suiteTasktest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-}
-
-

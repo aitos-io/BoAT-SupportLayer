@@ -1,15 +1,13 @@
-int runTaskTests();
-int runTimerTests(void);
-int runSemTests(void);
-int runQueueTests(void);
-int runI2cTests(void);
-int runUartTests(void);
-
-int runBleServiceTests(void);
-int runVirtualAtTests(void);
-
-int runMutexTests(void);
-int runKeystoreSoftTests(void);
-int runKeystoreIntfTests(void);
-int runKeypairTests(void);
-
+#include "check.h"
+Suite *makeTasktest_suite(void);
+Suite *makeTimertest_suite(void);
+Suite *makeSemtest_suite(void);
+Suite *makeQueuetest_suite(void);
+Suite *makeI2ctest_suite(void);
+Suite *makeUarttest_suite(void);
+Suite *make_bleService_test_suite(void);
+Suite *makeVirtualAtTestSuite(void);
+Suite *makeMutextest_suite(void);
+Suite *makeKeypairtest_suite(void);
+Suite *makeKeystoreSofttest_suite(void);
+Suite *makeKeystoreIntftest_suite(void);

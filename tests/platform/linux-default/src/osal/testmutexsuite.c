@@ -286,30 +286,3 @@ Suite *makeMutextest_suite(void)
     return sMutextest;
 
 }
-
-
-int runMutexTests(void)
-{
-
-#if 1
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteMutextest = makeMutextest_suite();
-
-    sr = srunner_create(suiteMutextest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-#endif
-
-	
-}
-
-

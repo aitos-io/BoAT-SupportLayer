@@ -10,9 +10,6 @@
 #include "boattypes.h"
 #include "boaterrcode.h"
 
-
-
-#if 1
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0010InitSemSuccess)
 {
 
@@ -69,7 +66,6 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0013DeinitSemSuccess)
 }
 END_TEST
 
-#if 1
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0014DeinitSemFailSemAddrNULL)
 {
 	BOAT_RESULT rtnVal;
@@ -139,9 +135,6 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0019SemWaitFailSemAddrNULL)
 
 }
 END_TEST
-
-
-
 
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0021SemTimedWaitFailSemAddrNULL)
 {
@@ -224,11 +217,6 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0025SemPostFailSemAddrNULL)
 }
 END_TEST
 
-
-
-
-
-
 #if 0
 
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0030SemTimedWaitFailSemIdInvalid)
@@ -277,7 +265,6 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0029SemPostFailSemIdInvalid)
 END_TEST
 
 
-// 多次打开关闭锁查看其ID 变化
 START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0027ReuseSingleSem)
 {
 	BOAT_RESULT rtnVal;
@@ -382,9 +369,6 @@ START_TEST(test_BoAT_OSAL_LinuxDefault_04Sem_test_0028MultiTaskUseOneSem)
 }
 END_TEST
 
-#endif
-
-
 Suite *makeSemtest_suite(void)
 {
     /* Create Suite */
@@ -436,29 +420,4 @@ Suite *makeSemtest_suite(void)
 
     return sSemtest;
 
-}
-#endif
-
-int runSemTests(void)
-{
-
-#if 1
-    SRunner *sr = NULL;
-    int failed_number = 0;
-
-    Suite *suiteSemtest = makeSemtest_suite();
-
-    sr = srunner_create(suiteSemtest);
-
-    srunner_run_all(sr,0);
-
-
-    failed_number = srunner_ntests_failed(sr);
-
-    srunner_free(sr);
-
-    return failed_number;
-#endif
-
-	
 }
