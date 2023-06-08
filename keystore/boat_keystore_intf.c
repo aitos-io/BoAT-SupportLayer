@@ -384,7 +384,7 @@ static BOAT_RESULT sBoatPort_keyCreate_internal_generation(const BoatKeypairPriK
     pkCtx->prikeyCtx.prikey_type = config->prikey_type;
     pkCtx->extraData.value_len = keypair.prikey.value_len;
     memcpy(pkCtx->extraData.value, keypair.prikey.value, keypair.prikey.value_len);
-    memcpy(pkCtx->prikeyCtx.pubkey_content, keypair.pubkey.value + 1, 64);
+    memcpy(pkCtx->prikeyCtx.pubkey_content, keypair.pubkey.value, 64);
 
     return result;
 }

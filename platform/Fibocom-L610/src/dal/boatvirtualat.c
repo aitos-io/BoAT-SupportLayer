@@ -16,7 +16,9 @@ static BBOOL g_virtualAT_Channel_is_used = BOAT_FALSE;
 
 void dal_virtualAT_callback(BUINT8 *buf, BUINT16 len)
 {
-    dalVirtualAtCallback((char *)buf,(BUINT32)len);
+	if (dalVirtualAtCallback)
+    	dalVirtualAtCallback((char *)buf,(BUINT32)len);
+	
 }
 
 /*!*****************************************************************************
