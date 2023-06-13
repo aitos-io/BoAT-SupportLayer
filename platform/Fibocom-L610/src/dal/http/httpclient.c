@@ -58,7 +58,7 @@
 
 #define HTTPCLIENT_MAX_SOC_TIMEOUT (10 * 60) // 10 min
 
-#define BOAT_HTTPCLIENT_SSL_ENABLE
+//#define BOAT_HTTPCLIENT_SSL_ENABLE
 
 // static int httpclient_parse_host(char *url, char *host, size_t maxhost_len);
 static int httpclient_parse_url(const char *url, char *scheme, size_t max_scheme_len, char *host, size_t maxhost_len, int *port, char *path, size_t max_path_len);

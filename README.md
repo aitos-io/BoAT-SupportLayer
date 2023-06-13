@@ -1,36 +1,36 @@
-## ***BoAT Support Layer 是什么***
-***BoAT Support Layer***是什么？必须了解***BoAT Infra Arch***是什么
-    
-## ***BoAT Infra Arch 是什么***
-***BoAT Infra Arch*** 即BoAT基础架构,是一个跨平台应用框架，通过抽象不同平台的应用接口，为应用提供统一的跨平台应用抽象接口，应用程序可以通过调用这些抽象接口快速实现在不同平台之间移植。
+## BoAT Support Layer?
 
-***BoAT Infra Arch***包含四层结构
-    
-1.平台层，提供基础的系统支持，向上层提供各个平台的系统应用接口。
-    
-2.***BoAT Support Layer***层，是***BoAT Infra Arch***架构的核心层，***BoAT Support Layer***向上层提供统一的跨平台应用抽象接口，并按照不同平台提供的系统API接口实现不同平台的跨平台应用抽象接口的实例，即跨平台应用抽象接口在不同平台的具体实现。
+To understand the ***BoAT Support Layer***, it's necessary to first understand the ***BoAT Infra Arch***.
 
-3.***Composable BoAT Core*** 可组合BoAT核心层，熟悉BoAT的朋友会知道这就是曾经BoAT功能的核心组件，***Composable BoAT Core***使用***BoAT Support Layer***提供的跨平台应用抽象接口实现BoAT的核心功能，包括对不同区块链上链、查询等操作的支持。
+The ***BoAT Infra Arch*** is a cross-platform application framework that provides a unified cross-platform application abstraction interface for BoAT applications by abstracting different application APIs of diverse platforms. BoAT applications can quickly realize portability between different platforms by calling these abstract interfaces.
 
-4.应用层，可以直接使用***BoAT Support Layer***提供的跨平台应用抽象接口实现应用功能，也可以调用***Composable BoAT Core***提供的区块链操作接口实现对各种区块链的访问。
+The ***BoAT Infra Arch*** consists of four layers:
 
-## ***BoAT Support Layer*** 实现什么功能
-***BoAT Support Layer***是***BoAT Infra Arch***架构的核心支柱层，基于***BoAT Infra Arch***架构的所有应用程序的实现都是以***BoAT Support Layer***层为基础。***BoAT Support Layer***向上为应用层和 ***Composable BoAT Core***层提供统一的跨平台应用抽象接口，向下按照不同平台提供的系统API接口实现抽象接口的具体实例，应用程序通过调用统一的跨平台应用抽象接口，间接调用适配平台的系统API接口实现应用功能。
+1. The ***OS*** platform layer provides basic operating system support and system call API interfaces of each ***OS*** platform for the upper layer.
 
-## ***BoAT Support Layer***组件
-***OSAL：***
+2. The ***BoAT Support Layer*** is the core layer of the ***BoAT Infra Arch*** architecture which provides a unified cross-platform application abstraction interface to the upper layer. It implements instances of cross-platform application abstraction interfaces according to system call API interfaces provided by different platforms. The cross-platform abstraction interface is compiled and selected through conditional compilation and provided for upper layer calls.
 
-操作系统抽象层，定义底层平台操作系统相关抽象对象的跨平台应用抽象接口，按照接口定义实现不同平台操作系统抽象对象接口的实例，通常包含 ***semaphore***、***task***、***timer***、***queue***等系统功能抽象对象
-	
-***DAL：***
+3. The ***Composable BoAT Core*** is the core component of BoAT's functionality which is implemented using the cross-platform application abstraction interface provided by the ***BoAT Support Layer***. It supports various blockchain operations, such as on-chain transactions and queries, etc.
 
-驱动抽象层，定义平台相关驱动的抽象对象的跨平台应用抽象接口，按照接口定义实现不同平台操作系统抽象对象接口的实例，通常包含uart、i2c、虚拟AT、storage等
-	
-***BoAT Common Components：***
+4. The Application layer can implement application functionality directly using the cross-platform application abstraction interface provided by the ***BoAT Support Layer***. It can also use the blockchain operation interface provided by the ***Composable BoAT Core***, which is called the ***BoAT Engine***, to interact with various blockchains.
 
-***BoAT***通用组件，包含区块链应用相关的跨平台应用通用接口，不仅仅提供给区块链应用使用，也可以为其他应用调用，包含***keypair***、***keystore***、***third-party***以及其他common组件
+## What Functions does the BoAT Support Layer Implement?
+The ***BoAT Support Layer*** is the core pillar layer of the ***BoAT Infra Arch*** architecture. All applications implemented based on the ***BoAT Infra Arch*** architecture are based on the ***BoAT Support Layer*** layer. The ***BoAT Support Layer*** provides unified cross-platform application abstraction interfaces to the application layer and the Composable BoAT Core layer. The layer below it provides the concrete instances of the abstract interfaces based on the system APIs provided by different platforms. Applications call the unified cross-platform application abstraction interface to indirectly call the system APIs that are adapted to the platform to implement the application functions.
 
-## 目录说明
+## BoAT Support Layer Components
+***OSAL（Operating System Abstraction Layer）:***
+
+The ***Operating System Abstraction Layer*** defines cross-platform application abstraction interfaces for platform-specific operational system-related abstract objects. The interface is implemented according to different platform operating system abstract object interfaces. Generally, it includes system functional abstraction objects such as semaphores, tasks, timers, and queues.
+
+***DAL（Driver Abstraction Layer）:***
+
+The ***Driver Abstraction Layer*** defines cross-platform application abstraction interfaces for platform-specific driver abstract objects. The interface is implemented according to the interface definition of different platform operating system abstract object interfaces. Generally, it includes system functional abstraction objects such as UART, I2C, virtual AT, and storage.
+
+***BoAT Common Components:***
+
+The BoAT Common Components include cross-platform application common interfaces related to blockchain applications. They are not only used by blockchain applications, but can also be called by other applications. They include ***keypair***, ***keystore***, ***third-party***, and other common components.
+
+## Directory Description
 ### BoAT-SupportLayer
 ```
 <BoAT-SupportLayer>
@@ -58,9 +58,8 @@
 |   \---protobuf-c    |     protobuf interface
 |   \---protos        |     protos interface
 |   +---rlp           |     RLP encoder
-
 ```
-## 使用说明
-BoAT-SupportLayer 的编译和应用参考 BoAT-ProjectTemplate的README_cn.md
+## Usage Instructions
+Refer to the README.md of BoAT-ProjectTemplate for the compilation and application of BoAT-SupportLayer.
 
-https://github.com/aitos-io/BoAT-ProjectTemplate/blob/dev/README_cn.md
+https://github.com/aitos-io/BoAT-ProjectTemplate/blob/dev/README.md
