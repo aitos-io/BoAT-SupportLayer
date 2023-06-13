@@ -18,13 +18,13 @@ The ***BoAT Infra Arch*** consists of four layers:
 The ***BoAT Support Layer*** is the core pillar layer of the ***BoAT Infra Arch*** architecture. All applications implemented based on the ***BoAT Infra Arch*** architecture are based on the ***BoAT Support Layer*** layer. The ***BoAT Support Layer*** provides unified cross-platform application abstraction interfaces to the application layer and the Composable BoAT Core layer. The layer below it provides the concrete instances of the abstract interfaces based on the system APIs provided by different platforms. Applications call the unified cross-platform application abstraction interface to indirectly call the system APIs that are adapted to the platform to implement the application functions.
 
 ## BoAT Support Layer Components
-***OSAL:***
+***OSAL（Operating System Abstraction Layer）:***
 
-The Operating System Abstraction Layer defines cross-platform application abstraction interfaces for platform-specific operational system-related abstract objects. The interface is implemented according to different platform operating system abstract object interfaces. Generally, it includes system functional abstraction objects such as semaphores, tasks, timers, and queues.
+The ***Operating System Abstraction Layer*** defines cross-platform application abstraction interfaces for platform-specific operational system-related abstract objects. The interface is implemented according to different platform operating system abstract object interfaces. Generally, it includes system functional abstraction objects such as semaphores, tasks, timers, and queues.
 
-***DAL:***
+***DAL（Driver Abstraction Layer）:***
 
-The Driver Abstraction Layer defines cross-platform application abstraction interfaces for platform-specific driver abstract objects. The interface is implemented according to the interface definition of different platform operating system abstract object interfaces. Generally, it includes system functional abstraction objects such as UART, I2C, virtual AT, and storage.
+The ***Driver Abstraction Layer*** defines cross-platform application abstraction interfaces for platform-specific driver abstract objects. The interface is implemented according to the interface definition of different platform operating system abstract object interfaces. Generally, it includes system functional abstraction objects such as UART, I2C, virtual AT, and storage.
 
 ***BoAT Common Components:***
 
