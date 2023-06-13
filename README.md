@@ -1,18 +1,18 @@
-## What is the BoAT Support Layer?
-What is the ***BoAT Support Layer***? It is necessary to understand what the ***BoAT Infra Arch*** is.
+## BoAT Support Layer?
 
-## What is the BoAT Infra Arch?
-The ***BoAT Infra Arch***, or BoAT Infrastructure Architecture, is a cross-platform application framework that provides a unified cross-platform application abstraction interface by abstracting different platform application interfaces. Applications can quickly port between different platforms by calling these abstract interfaces.
+To understand the ***BoAT Support Layer***, it's necessary to first understand the ***BoAT Infra Arch***.
+
+The ***BoAT Infra Arch*** is a cross-platform application framework that provides a unified cross-platform application abstraction interface for BoAT applications by abstracting different application APIs of diverse platforms. BoAT applications can quickly realize portability between different platforms by calling these abstract interfaces.
 
 The ***BoAT Infra Arch*** consists of four layers:
 
-1. The platform layer, which provides basic system support and platform-specific APIs to the upper layers.
+1. The ***OS*** platform layer provides basic operating system support and system call API interfaces of each ***OS*** platform for the upper layer.
 
-2. The ***BoAT Support Layer***, which is the core layer of the ***BoAT Infra Arch*** architecture. The ***BoAT Support Layer*** provides a unified cross-platform application abstraction interface to the upper layer, and implements different platform-specific cross-platform application abstraction interface instances based on the system APIs provided by different platforms.
+2. The ***BoAT Support Layer*** is the core layer of the ***BoAT Infra Arch*** architecture which provides a unified cross-platform application abstraction interface to the upper layer. It implements instances of cross-platform application abstraction interfaces according to system call API interfaces provided by different platforms. The cross-platform abstraction interface is compiled and selected through conditional compilation and provided for upper layer calls.
 
-3. The Composable BoAT Core, which is the core component of the BoAT's features. The Composable BoAT Core uses the cross-platform application abstraction interface provided by the ***BoAT Support Layer*** to implement BoAT's core functions, including support for different blockchain upload and inquiry operations.
+3. The ***Composable BoAT Core*** is the core component of BoAT's functionality which is implemented using the cross-platform application abstraction interface provided by the ***BoAT Support Layer***. It supports various blockchain operations, such as on-chain transactions and queries, etc.
 
-4. The application layer, which can directly implement application functions through the cross-platform application abstraction interface provided by the ***BoAT Support Layer***, or access various blockchains by calling the blockchain operation interface provided by the Composable BoAT Core.
+4. The Application layer can implement application functionality directly using the cross-platform application abstraction interface provided by the ***BoAT Support Layer***. It can also use the blockchain operation interface provided by the ***Composable BoAT Core***, which is called the ***BoAT Engine***, to interact with various blockchains.
 
 ## What Functions does the BoAT Support Layer Implement?
 The ***BoAT Support Layer*** is the core pillar layer of the ***BoAT Infra Arch*** architecture. All applications implemented based on the ***BoAT Infra Arch*** architecture are based on the ***BoAT Support Layer*** layer. The ***BoAT Support Layer*** provides unified cross-platform application abstraction interfaces to the application layer and the Composable BoAT Core layer. The layer below it provides the concrete instances of the abstract interfaces based on the system APIs provided by different platforms. Applications call the unified cross-platform application abstraction interface to indirectly call the system APIs that are adapted to the platform to implement the application functions.
@@ -28,7 +28,7 @@ The Driver Abstraction Layer defines cross-platform application abstraction inte
 
 ***BoAT Common Components:***
 
-The BoAT Common Components include cross-platform application common interfaces related to blockchain applications. They are not only used by blockchain applications, but can also be called by other applications. They include keypair, keystore, third-party, and other common components.
+The BoAT Common Components include cross-platform application common interfaces related to blockchain applications. They are not only used by blockchain applications, but can also be called by other applications. They include ***keypair***, ***keystore***, ***third-party***, and other common components.
 
 ## Directory Description
 ### BoAT-SupportLayer
