@@ -1,18 +1,18 @@
-## ***BoAT Support Layer 是什么***
-***BoAT Support Layer***是什么？必须了解***BoAT Infra Arch***是什么
-    
-## ***BoAT Infra Arch 是什么***
-***BoAT Infra Arch*** 即BoAT基础架构,是一个跨平台应用框架，通过抽象不同平台的应用接口，为应用提供统一的跨平台应用抽象接口，应用程序可以通过调用这些抽象接口快速实现在不同平台之间移植。
+## BoAT Support Layer
+
+要了解***BoAT Support Layer***，先要了解***BoAT Infra Arch***。
+
+***BoAT Infra Arch*** 基础架构，是一个跨平台应用框架，通过抽象不同平台的应用API，为BoAT应用提供统一的跨平台应用抽象接口，BoAT应用程序可以通过调用这些抽象接口快速实现在不同平台之间移植。
 
 ***BoAT Infra Arch***包含四层结构
     
-1.平台层，提供基础的系统支持，向上层提供各个平台的系统应用接口。
+1.***OS***平台层，提供基础的操作系统支持，向上层提供各个OS平台的系统调用API接口。
     
-2.***BoAT Support Layer***层，是***BoAT Infra Arch***架构的核心层，***BoAT Support Layer***向上层提供统一的跨平台应用抽象接口，并按照不同平台提供的系统API接口实现不同平台的跨平台应用抽象接口的实例，即跨平台应用抽象接口在不同平台的具体实现。
+2.***BoAT Support Layer***层，是***BoAT Infra Arch***架构的核心层，***BoAT Support Layer***向上层提供统一的跨平台应用抽象接口，并按照不同平台提供的系统调用API接口，实现不同平台的跨平台应用抽象接口的实例，通过条件编译进行选择编译实现跨平台抽象接口供上层调用。
 
-3.***Composable BoAT Core*** 可组合BoAT核心层，熟悉BoAT的朋友会知道这就是曾经BoAT功能的核心组件，***Composable BoAT Core***使用***BoAT Support Layer***提供的跨平台应用抽象接口实现BoAT的核心功能，包括对不同区块链上链、查询等操作的支持。
+3.***Composable BoAT Core*** 可组合BoAT核心层，熟悉BoAT的朋友会知道这就是BoAT功能的核心组件，***Composable BoAT Core***使用***BoAT Support Layer***提供的跨平台应用抽象接口实现BoAT的核心功能，包括对不同区块链上链、查询等操作的支持。
 
-4.应用层，可以直接使用***BoAT Support Layer***提供的跨平台应用抽象接口实现应用功能，也可以调用***Composable BoAT Core***提供的区块链操作接口实现对各种区块链的访问。
+4.应用层，可以直接使用***BoAT Support Layer***提供的跨平台应用抽象接口实现应用功能，也可以调用***Composable BoAT Core***提供的区块链操作接口***BoAT Engine***实现对各种区块链的访问。
 
 ## ***BoAT Support Layer*** 实现什么功能
 ***BoAT Support Layer***是***BoAT Infra Arch***架构的核心支柱层，基于***BoAT Infra Arch***架构的所有应用程序的实现都是以***BoAT Support Layer***层为基础。***BoAT Support Layer***向上为应用层和 ***Composable BoAT Core***层提供统一的跨平台应用抽象接口，向下按照不同平台提供的系统API接口实现抽象接口的具体实例，应用程序通过调用统一的跨平台应用抽象接口，间接调用适配平台的系统API接口实现应用功能。
