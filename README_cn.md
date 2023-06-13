@@ -18,11 +18,11 @@
 ***BoAT Support Layer***是***BoAT Infra Arch***架构的核心支柱层，基于***BoAT Infra Arch***架构的所有应用程序的实现都是以***BoAT Support Layer***层为基础。***BoAT Support Layer***向上为应用层和 ***Composable BoAT Core***层提供统一的跨平台应用抽象接口，向下按照不同平台提供的系统API接口实现抽象接口的具体实例，应用程序通过调用统一的跨平台应用抽象接口，间接调用适配平台的系统API接口实现应用功能。
 
 ## ***BoAT Support Layer***组件
-***OSAL：***
+***OSAL（Operating System Abstraction Layer）：***
 
 操作系统抽象层，定义底层平台操作系统相关抽象对象的跨平台应用抽象接口，按照接口定义实现不同平台操作系统抽象对象接口的实例，通常包含 ***semaphore***、***task***、***timer***、***queue***等系统功能抽象对象
 	
-***DAL：***
+***DAL（Driver Abstraction Layer）：***
 
 驱动抽象层，定义平台相关驱动的抽象对象的跨平台应用抽象接口，按照接口定义实现不同平台操作系统抽象对象接口的实例，通常包含uart、i2c、虚拟AT、storage等
 	
