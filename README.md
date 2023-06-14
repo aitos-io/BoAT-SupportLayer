@@ -1,4 +1,4 @@
-## BoAT Support Layer?
+## BoAT Support Layer
 
 To understand the ***BoAT Support Layer***, it's necessary to first understand the ***BoAT Infra Arch***.
 
