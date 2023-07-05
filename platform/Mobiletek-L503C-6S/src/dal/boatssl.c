@@ -8,11 +8,16 @@
 * @Descripttion:
 ****************************************************************************************
 */
+
+#include <sys/types.h>
+#include <string.h>
+#include <stdlib.h>
 #include "boattypes.h"
 #include "boaterrcode.h"
 #include "boatlog.h"
 #include "boatdal.h"
 #include "boatplatformdal.h"
+#include "boatplatformosal.h"
 
 #include "ol_flash_fs.h"
 #include "mbtk_ssl_hal.h"
@@ -307,15 +312,16 @@ void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd)
     if ((SSLCtx *)*tlsContext == NULL)
 	{
 		BoatLog(BOAT_LOG_CRITICAL, "tlsContext can't be NULL.");
-		return -1;
+		return ;
 	}
-	ret = ol_ssl_shutdown((SSLCtx *)*tlsContext);
+	
+    ol_ssl_shutdown((SSLCtx *)*tlsContext);
 	ol_ssl_ctx_deinit((SSLCtx *)*tlsContext);
     if(*tlsContext != NULL)
     {
         BoatFree(*tlsContext);
     }
-	return ret;
+	return;
 #else
     close(sockfd);
 #endif
