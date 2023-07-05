@@ -25,6 +25,7 @@
 #include "mbtk_i2c.h"
 #include "mbtk_ssl_hal.h"
 #include "mbtk_socket_api.h"
+#include "nl_api_uart.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
