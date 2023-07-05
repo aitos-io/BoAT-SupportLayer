@@ -123,6 +123,7 @@ BOAT_RESULT boatMutexUnlock(boatMutex *mutex)
 {
 
     if (mutex == NULL)
+    {
         return BOAT_ERROR;
     }
     if (mutex->mutexID != NULL)
