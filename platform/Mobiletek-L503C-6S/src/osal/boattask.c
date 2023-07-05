@@ -12,7 +12,6 @@
 #include "boatiotsdk.h"
 #include "boatosal.h"
 #include "boatlog.h"
-#include "osi_api.h"
 
 #include "mbtk_os.h"
 
