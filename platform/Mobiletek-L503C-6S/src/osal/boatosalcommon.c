@@ -109,7 +109,7 @@ void BoatSleep(BUINT32 second)
 * @return
 ****************************************************************************************
 */
-long int BoatGetTimes()
+uint32_t BoatGetTimes()
 {
     uint32_t  time;
     uint32_t ret = ol_time(&time);
