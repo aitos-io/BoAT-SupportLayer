@@ -48,7 +48,6 @@ To use boat HTTP RPC porting, RPC_USE_BOATHTTPPORT in boatoptions.h must set to 
 // #include "rpcport.h"
 #include "boathttpport.h"
 
-#include "httpclient.h"
 #include "boatlog.h"
 #include "boatplatformosal.h"
 
@@ -374,7 +373,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 
     // Set callback and receive buffer for RESPONSE
     // Clean up response buffer
-    memset(boathttpport_context_ptr->http_response_body.string_ptr,U0,boathttpport_context_ptr->http_response_body.string_space);
+    memset(boathttpport_context_ptr->http_response_body.string_ptr,0U,boathttpport_context_ptr->http_response_body.string_space);
     boathttpport_context_ptr->http_response_body.string_len = 0;
 
     ol_http_client_setopt(client, HTTPCLIENT_OPT_RESPONSECB_DATA, boathttpport_context_ptr->http_response_body.string_ptr);
@@ -479,6 +478,6 @@ BOAT_RESULT BoatHttpGlobalInit(void)
 */
 void BoatHttpGlobalDeInit(void)
 {
-    return BOAT_SUCCESS;
+    return ;
 }
  #endif // end of #if RPC_USE_BOATHTTPPORT == 1

@@ -39,6 +39,8 @@ To use boat HTTP RPC porting, RPC_USE_BOATHTTPPORT in boatoptions.h must set to 
 //! Receiving buffer size
 #define BOATHTTPPORT_RECV_BUF_SIZE 4096
 
+#define OLHTTPPORT_RECV_BUF_SIZE_STEP 1024
+
 typedef struct TBoatHttpPortContext
 {
     BCHAR *remote_url_str;            //!< URL of the blockchain node, e.g. "http://a.b.com:8545"
