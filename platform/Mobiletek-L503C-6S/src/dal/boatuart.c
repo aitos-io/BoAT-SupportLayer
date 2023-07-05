@@ -47,7 +47,7 @@
 #define UART_STOPBITS_MAX 2
 #define UART_PARITY       2
 
-void (*boatUartRxCallback)(boatUart *uartRef,  unsigned char *data, BUINT32 len);
+void (*dalBoatUartRxCallback)(boatUart *uartRef,  unsigned char *data, BUINT32 len);
 
 
 void LYNQ_uart_cb(MBTK_UART_Port port)
@@ -68,7 +68,7 @@ void LYNQ_uart_cb(MBTK_UART_Port port)
     ol_Uart_Read(port, data, UART_BUF_LEN_DEFAULT, &read_len);
     if(read_len > 0)
     {
-		boatUartRxCallback(NULL,data,read_len);
+		dalBoatUartRxCallback(NULL,data,read_len);
     }
     else
     {
@@ -99,7 +99,7 @@ BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config, 
 
     ol_Uart_SetDcb(OL_UART_PORT_STUART, &uart_dcb);
 
-	boatUartRxCallback = rxCallback;
+	dalBoatUartRxCallback = rxCallback;
 
     err = ol_Uart_Open(OL_UART_PORT_STUART);
 
