@@ -13,8 +13,10 @@
 #include "boaterrcode.h"
 #include "rand.h"
 
+#include "mbtk_comm_api.h"
 #include "ol_flash_fs.h"
 #include "mbtk_os.h"
+
 
 /**
 ****************************************************************************************
@@ -109,10 +111,10 @@ void BoatSleep(BUINT32 second)
 * @return
 ****************************************************************************************
 */
-uint32_t BoatGetTimes()
+long int BoatGetTimes(void)
 {
     uint32_t  time;
-    uint32_t ret = ol_time(&time);
+    long int ret =(long int) ol_time(&time);
     BoatLog(BOAT_LOG_NORMAL, " BoatGetTimes = %ld", ret);
     return ret;
 }
