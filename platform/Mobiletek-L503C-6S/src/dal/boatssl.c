@@ -357,6 +357,7 @@ void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd)
     if(*tlsContext != NULL)
     {
         BoatFree(*tlsContext);
+        *tlsContext = NULL;
     }
 	return;
 #else
