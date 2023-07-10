@@ -69,8 +69,10 @@ __BOATSTATIC void response_cb( char *data_ptr, int size,
     // NOTE: For historic reasons, argument size is always 1 and nmemb is the
     // size of the data chunk to write. And size * nmemb doesn't include null
     // terminator even if the data were string.
-    data_size = size * nmemb;
+   // data_size = size * nmemb;
+    data_size = size;
     BoatLog(BOAT_LOG_NORMAL, "response_cb data_size : %d.", data_size);
+
     // If response buffer has enough space:
     if( mem->string_space - mem->string_len > data_size ) // 1 more byte reserved for null terminator
     {
@@ -97,6 +99,7 @@ __BOATSTATIC void response_cb( char *data_ptr, int size,
             mem->string_space = expanded_to_space;
             mem->string_len += data_size;
             mem->string_ptr[mem->string_len] = '\0';
+
         }
 
     }
@@ -373,10 +376,15 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 
     // Set callback and receive buffer for RESPONSE
     // Clean up response buffer
+    memset(boathttpport_context_ptr->http_response_head.string_ptr,0U,boathttpport_context_ptr->http_response_head.string_len);
+    boathttpport_context_ptr->http_response_head.string_len = 0;
+
     memset(boathttpport_context_ptr->http_response_body.string_ptr,0U,boathttpport_context_ptr->http_response_body.string_space);
     boathttpport_context_ptr->http_response_body.string_len = 0;
 
-    ol_http_client_setopt(client, HTTPCLIENT_OPT_RESPONSECB_DATA, boathttpport_context_ptr->http_response_body.string_ptr);
+    ol_http_client_setopt(client, HTTPCLIENT_OPT_RESPONSECB_DATA, &(boathttpport_context_ptr->http_response_head));
+
+    BoatLog(BOAT_LOG_NORMAL,"httpport head_buf address = %p",&(boathttpport_context_ptr->http_response_head));
 	ol_http_client_setopt(client, HTTPCLIENT_OPT_RESPONSECB, response_cb);
 
 
@@ -395,18 +403,12 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
     // Perform the RPC request
     olhttp_result = ol_http_client_perform(client);
 
-    if( olhttp_result != HTTP_CLIENT_OK )
-    {
-        BoatLog(BOAT_LOG_NORMAL, "ol_http_client_perform fails: %d.", olhttp_result);
-        boat_throw(BOAT_ERROR_CURL_CODE_FAIL - olhttp_result, cleanup);
-    }
-    
     olhttp_result = ol_http_client_getinfo(client, HTTPCLIENT_GETINFO_RESPONSE_CODE, &info);
 
     if(( olhttp_result == HTTP_CLIENT_OK ) && (info != HTTP_TCP_ESTABLISHED))
     {
-        *response_str_ptr = boathttpport_context_ptr->http_response_body.string_ptr;
-        *response_len_ptr = boathttpport_context_ptr->http_response_body.string_len;
+        *response_str_ptr = boathttpport_context_ptr->http_response_head.string_ptr;
+        *response_len_ptr = boathttpport_context_ptr->http_response_head.string_len;
         
         BoatLog(BOAT_LOG_VERBOSE, "Post: %s", request_str);
         BoatLog(BOAT_LOG_VERBOSE, "Result Code: %ld", info);
