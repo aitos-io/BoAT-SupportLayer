@@ -42,6 +42,7 @@ static void boatTimerDefaultThread(union sigval sigv)
     }
 }
 
+#ifdef USEGETTIMESTAMP
 void boatGetTimeStamp(char   * p)
 {
     time_t ltime;
@@ -62,6 +63,7 @@ void boatGetTimeStamp(char   * p)
 			today->tm_sec,
 			timebuffer.millitm);
 }
+#endif
 
 BOAT_RESULT boatTimerStart(boatTimer *timerRef, BUINT32 initialTime, BUINT32 intervalTime, void (*callbackRoutine)(void *), void *argv)
 {
@@ -142,9 +144,11 @@ void boatTimerInitTimeridZero(boatTimer *timerRef)
 	timerRef->timerId = 0;
 }
 
+#ifdef USETIMERIDINVALID
 void boatTimerInitTimeridInvalid(boatTimer *timerRef)
 {
 	timerRef->timerId = (timer_t)0x80ba2d00;
 }
+#endif
 
 
