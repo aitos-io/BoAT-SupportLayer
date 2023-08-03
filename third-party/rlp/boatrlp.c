@@ -67,10 +67,10 @@ BOAT_RESULT RlpInitListObject(RlpObject *rlp_object_ptr)
     rlp_list_descriptors_ptr = BoatMalloc(sizeof(RlpListDescriptors));
 
     if (rlp_list_descriptors_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Fail to allocate memory for RLP list descriptor.");
         return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
-    }
+    }// LCOV_EXCL_STOP
 
     rlp_list_descriptors_ptr->descriptor_num = 0;
 
@@ -89,53 +89,53 @@ BSINT32 RlpEncoderAppendObjectToList(RlpObject *to_list_object_ptr, RlpObject *f
     boat_try_declare;
 
     if (to_list_object_ptr == NULL || from_object_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Argument cannot be NULL.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderAppendObjectToList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (to_list_object_ptr->object_type != RLP_OBJECT_TYPE_LIST)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "\"To RLP Object\" MUST be type List.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderAppendObjectToList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (to_list_object_ptr->object_list.list_descriptors_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "List descriptors of \"To RLP Object\" MUST be available.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderAppendObjectToList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     to_rlp_list_descriptors_ptr = to_list_object_ptr->object_list.list_descriptors_ptr;
 
     if (RlpCheckListDescriptorsCapacity(to_rlp_list_descriptors_ptr) != BOAT_TRUE)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "\"To RLP Object\"\'s RLP descriptors are full.");
         boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncoderAppendObjectToList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (from_object_ptr->object_type == RLP_OBJECT_TYPE_STRING)
     {
         if (   from_object_ptr->object_string.string_ptr == NULL
             && from_object_ptr->object_string.string_len != 0)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "\"From RLP Object\" is NULL String with non-zero length.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderAppendObjectToList_cleanup);
-        }
+        }// LCOV_EXCL_STOP
     }
     else if (from_object_ptr->object_type == RLP_OBJECT_TYPE_LIST)
     {
         if (from_object_ptr->object_list.list_descriptors_ptr == NULL)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "\"From RLP List Object\" MUST have list descriptors filled.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderAppendObjectToList_cleanup);
-        }
+        }// LCOV_EXCL_STOP
     }
     else
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Unknown \"From RLP Object\" type: %d.", from_object_ptr->object_type);
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderAppendObjectToList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
 
     descriptor_index = to_rlp_list_descriptors_ptr->descriptor_num;
@@ -144,10 +144,10 @@ BSINT32 RlpEncoderAppendObjectToList(RlpObject *to_list_object_ptr, RlpObject *f
     to_rlp_list_descriptors_ptr->descriptor_num++;
 
     boat_catch(RlpEncoderAppendObjectToList_cleanup)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Exception: %d", boat_exception);
         return boat_exception;
-    }
+    }// LCOV_EXCL_STOP
     
     return (descriptor_index);
 }
@@ -158,62 +158,62 @@ BSINT32 RlpEncoderReplaceObjectInList(RlpObject *to_list_object_ptr, BSINT32 rep
     boat_try_declare;
 
     if (to_list_object_ptr == NULL || replace_index < 0 || from_object_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Argument cannot be NULL.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderReplaceObjectInList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (to_list_object_ptr->object_type != RLP_OBJECT_TYPE_LIST)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "\"To RLP Object\" MUST be type List.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderReplaceObjectInList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (to_list_object_ptr->object_list.list_descriptors_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "List descriptors of \"To RLP Object\" MUST be available.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderReplaceObjectInList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
 
     if (replace_index >= to_list_object_ptr->object_list.list_descriptors_ptr->descriptor_num)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "replace_index (%d) MUST be less than descriptor_num (%u).", replace_index, to_list_object_ptr->object_list.list_descriptors_ptr->descriptor_num);
         boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncoderReplaceObjectInList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (from_object_ptr->object_type == RLP_OBJECT_TYPE_STRING)
     {
         if ((from_object_ptr->object_string.string_ptr == NULL) && \
             (from_object_ptr->object_string.string_len != 0))
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "\"From RLP Object\" is NULL String with non-zero length.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderReplaceObjectInList_cleanup);
-        }
+        }// LCOV_EXCL_STOP
     }
     else if (from_object_ptr->object_type == RLP_OBJECT_TYPE_LIST)
     {
         if (from_object_ptr->object_list.list_descriptors_ptr == NULL)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "\"From RLP List Object\" MUST have list descriptors filled.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncoderReplaceObjectInList_cleanup);
-        }
+        }// LCOV_EXCL_STOP
     }
     else
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Unknown \"From RLP Object\" type: %d.", from_object_ptr->object_type);
         boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncoderReplaceObjectInList_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
 
     to_list_object_ptr->object_list.list_descriptors_ptr->rlp_object_ptr[replace_index] = from_object_ptr;
 
 
-    boat_catch(RlpEncoderReplaceObjectInList_cleanup)
+    boat_catch(RlpEncoderReplaceObjectInList_cleanup)// LCOV_EXCL_START
     {
         BoatLog(BOAT_LOG_VERBOSE, "Exception: %d", boat_exception);
         return boat_exception;
-    }
+    }// LCOV_EXCL_STOP
     
     return replace_index;
 }
@@ -507,43 +507,43 @@ BOAT_RESULT RlpEncode(RlpObject *rlp_object_ptr, RlpEncodedStreamObject *parent_
     boat_try_declare;
 
     if (rlp_object_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Argument cannot be NULL.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncode_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     rlp_encoded_stream_len = RlpRecursiveCalcEncodingSize(rlp_object_ptr, &rlp_head_size);
 
     if (rlp_encoded_stream_len == RLP_STREAM_LEN_UNKNOWN)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Fail to calculate RLP stream size.");
         boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncode_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     if (parent_storage_ptr != NULL)
     {
         if (   parent_storage_ptr->stream_ptr == NULL
             || parent_storage_ptr->stream_len < rlp_encoded_stream_len)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "Parent storage doesn't have enough space to hold encoded String.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncode_cleanup);
-        }
+        }// LCOV_EXCL_STOP
     }
     
     if (rlp_object_ptr->object_type == RLP_OBJECT_TYPE_STRING)
     {
         if (parent_storage_ptr == NULL)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "<parent_storage_ptr> cannot be NULL if RLP object is type String.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncode_cleanup);
-        }
+        }// LCOV_EXCL_STOP
 
         if (  rlp_object_ptr->object_string.string_ptr == NULL
             && rlp_object_ptr->object_string.string_len != 0)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "\"From RLP Object\" is NULL String with non-zero length.");
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncode_cleanup);
-        }
+        }// LCOV_EXCL_STOP
 
         // Ready to encode a String Object
         field_len = rlp_object_ptr->object_string.string_len;
@@ -595,10 +595,10 @@ BOAT_RESULT RlpEncode(RlpObject *rlp_object_ptr, RlpEncodedStreamObject *parent_
                 offset += field_len;
 
                 if (offset != rlp_encoded_stream_len)
-                {
+                {// LCOV_EXCL_START
                     BoatLog(BOAT_LOG_CRITICAL, "RLP encoding internal error: Error Size, memory overflowing.");
                     boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncode_cleanup);
-                }
+                }// LCOV_EXCL_STOP
             }
         }
     }
@@ -608,10 +608,10 @@ BOAT_RESULT RlpEncode(RlpObject *rlp_object_ptr, RlpEncodedStreamObject *parent_
             BoatMalloc(rlp_encoded_stream_len);
 
         if (rlp_object_ptr->object_list.rlp_encoded_stream_object.stream_ptr == NULL)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "Fail to allocate memory for RLP encoded stream.");
             boat_throw(BOAT_ERROR_COMMON_OUT_OF_MEMORY, RlpEncode_cleanup);
-        }
+        }// LCOV_EXCL_STOP
 
         rlp_object_ptr->object_list.rlp_encoded_stream_object.stream_len = rlp_encoded_stream_len;
 
@@ -621,10 +621,10 @@ BOAT_RESULT RlpEncode(RlpObject *rlp_object_ptr, RlpEncodedStreamObject *parent_
         rlp_list_descriptors_ptr = rlp_object_ptr->object_list.list_descriptors_ptr;
 
         if (rlp_list_descriptors_ptr == NULL)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_VERBOSE, "RLP List descriptor is NULL.");
             boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncode_cleanup);
-        }
+        }// LCOV_EXCL_STOP
   
         for (descriptor_index = 0; 
              descriptor_index < rlp_list_descriptors_ptr->descriptor_num;
@@ -633,24 +633,24 @@ BOAT_RESULT RlpEncode(RlpObject *rlp_object_ptr, RlpEncodedStreamObject *parent_
             sub_field_rlp_stream_len = RlpRecursiveCalcEncodingSize(rlp_list_descriptors_ptr->rlp_object_ptr[descriptor_index], NULL);
 
             if (sub_field_rlp_stream_len == RLP_STREAM_LEN_UNKNOWN)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_VERBOSE, "Fail to calculate RLP stream size.");
                 boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncode_cleanup);
-            }
+            }// LCOV_EXCL_STOP
 
             result = RlpEncode(rlp_list_descriptors_ptr->rlp_object_ptr[descriptor_index], &stream_object);
 
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "RLP encoding fails.");
                 boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncode_cleanup);
-            }
+            }// LCOV_EXCL_STOP
   
             if (stream_object.stream_len < sub_field_rlp_stream_len)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_CRITICAL, "RLP encoding internal error: Error Size.");
                 boat_throw(BOAT_ERROR_RLP_ENCODER_FAIL, RlpEncode_cleanup);
-            }
+            }// LCOV_EXCL_STOP
 
             stream_object.stream_ptr += sub_field_rlp_stream_len;
             stream_object.stream_len -= sub_field_rlp_stream_len;
@@ -694,10 +694,10 @@ BOAT_RESULT RlpEncode(RlpObject *rlp_object_ptr, RlpEncodedStreamObject *parent_
         }  
     }
     else
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_VERBOSE, "Unknown RLP Object type: %d.", rlp_object_ptr->object_type);
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, RlpEncode_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     boat_catch(RlpEncode_cleanup)
     {
