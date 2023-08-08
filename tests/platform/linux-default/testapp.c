@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 	Suite *suitemakeKeypairtest = makeKeypairtest_suite();
 	Suite *suitemakeKeystoreSofttest = makeKeystoreSofttest_suite();
 	Suite *suitemakeKeystoreIntftest = makeKeystoreIntftest_suite();
+	Suite *suitemakeSsltest = makessltestSuite();
+	Suite *suitemakeStoragetest = makestoragetestSuite();
 
     sr = srunner_create(suitemakeTasktest);
 	srunner_add_suite(sr, suitemakeTimertest);
@@ -29,6 +31,8 @@ int main(int argc, char *argv[])
 	srunner_add_suite(sr, suitemakeKeypairtest);
 	srunner_add_suite(sr, suitemakeKeystoreSofttest);
 	srunner_add_suite(sr, suitemakeKeystoreIntftest);
+	srunner_add_suite(sr, suitemakeSsltest);
+	srunner_add_suite(sr, suitemakeStoragetest);
 
     srunner_run_all(sr,CK_NORMAL);
 

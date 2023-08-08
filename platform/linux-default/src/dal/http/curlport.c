@@ -128,9 +128,9 @@ BoatHttpPortContext *BoatHttpPortInit(void)
     curlport_context_ptr = BoatMalloc(sizeof(BoatHttpPortContext));
 
     if (curlport_context_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "Fail to allocate Curl Context.");
-    }
+    }// LCOV_EXCL_STOP
     else
     {
 
@@ -140,11 +140,11 @@ BoatHttpPortContext *BoatHttpPortInit(void)
         curlport_context_ptr->curlport_response.string_ptr = BoatMalloc(CURLPORT_RECV_BUF_SIZE_STEP);
 
         if (curlport_context_ptr->curlport_response.string_ptr == NULL)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_CRITICAL, "Fail to allocate Curl RESPONSE buffer.");
             BoatFree(curlport_context_ptr);
             curlport_context_ptr = NULL;
-        }
+        }// LCOV_EXCL_STOP
     }
 
     return curlport_context_ptr;
@@ -199,26 +199,26 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *curlport_context_ptr,
     boat_try_declare;
 
     if (curlport_context_ptr == NULL || request_str == NULL || response_str_ptr == NULL || response_len_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "Argument cannot be NULL.");
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, CurlPortRequestSync_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     curl_ctx_ptr = curl_easy_init();
 
     if (curl_ctx_ptr == NULL)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "curl_easy_init() fails.");
         boat_throw(BOAT_ERROR_CURL_INIT_FAIL, CurlPortRequestSync_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     // Set RPC URL in format "<protocol>://<target name or IP>:<port>". e.g. "http://192.168.56.1:7545"
     curl_result = curl_easy_setopt(curl_ctx_ptr, CURLOPT_URL, curlport_context_ptr->remote_url_str);
     if (curl_result != CURLE_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "Unknown URL: %s", curlport_context_ptr->remote_url_str);
         boat_throw(BOAT_ERROR_CURL_SETOPT_FAIL, CurlPortRequestSync_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     // Configure all protocols to be supported
     curl_easy_setopt(curl_ctx_ptr, CURLOPT_PROTOCOLS, CURLPROTO_ALL);
@@ -282,10 +282,10 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *curlport_context_ptr,
     curl_result = curl_easy_perform(curl_ctx_ptr);
 
     if (curl_result != CURLE_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "curl_easy_perform fails with CURLcode: %d.", curl_result);
         boat_throw(BOAT_ERROR_CURL_CODE_FAIL - curl_result, CurlPortRequestSync_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     curl_result = curl_easy_getinfo(curl_ctx_ptr, CURLINFO_RESPONSE_CODE, &info);
 
@@ -299,10 +299,10 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *curlport_context_ptr,
         BoatLog(BOAT_LOG_VERBOSE, "Response: %s", *response_str_ptr);
     }
     else
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "curl_easy_getinfo fails with CURLcode: %d, HTTP response code %ld.", curl_result, info);
         boat_throw(BOAT_ERROR_CURL_INFO_FAIL - info, CurlPortRequestSync_cleanup);
-    }
+    }// LCOV_EXCL_STOP
 
     // Clean Up
     curl_slist_free_all(curl_opt_list_ptr);

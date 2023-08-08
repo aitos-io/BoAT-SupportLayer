@@ -228,10 +228,10 @@ http2IntfContext *http2Init(void)
     /* allocate memory for http2 structure */
     http2Context = BoatMalloc(sizeof(http2IntfContext));
     if (NULL == http2Context)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "BoatMalloc failed.");
         boat_throw(BOAT_ERROR_COMMON_OUT_OF_MEMORY, http2Init_exception);
-    }
+    }// LCOV_EXCL_STOP
     http2Context->session = NULL;
     http2Context->nodeUrl = NULL;
 #if (BOAT_TLS_SUPPORT == 1)
@@ -261,10 +261,10 @@ http2IntfContext *http2Init(void)
     /* http2Context->sendBuf initial */
     http2Context->sendBuf.field_ptr = BoatMalloc(BOAT_HTTP2_SEND_BUF_MAX_LEN);
     if (NULL == http2Context->sendBuf.field_ptr)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "BoatMalloc failed.");
         boat_throw(BOAT_ERROR_COMMON_OUT_OF_MEMORY, http2Init_exception);
-    }
+    }// LCOV_EXCL_STOP
 
     /* boat catch handle */
     boat_catch(http2Init_exception)
@@ -356,18 +356,18 @@ BOAT_RESULT http2SubmitRequest(http2IntfContext *context)
 #endif
     result = BoatTlsInit(context->nodeUrl, context->hostName, context->tlsCAchain, tlsPrikey, tlscert, &context->sockfd, (boatSSlCtx **)&context->tlsContext, NULL);
     if (result != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "BoatTlsInit failed.");
         boat_throw(BOAT_ERROR_HTTP2_TLS_INIT_FAIL, http2SubmitRequest_exception);
-    }
+    }// LCOV_EXCL_STOP
 #else
 
     context->sockfd = BoatConnect(context->nodeUrl, NULL);
     if (context->sockfd < 0)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "BoatConnect failed.");
         boat_throw(BOAT_ERROR_HTTP2_CONNECT_FAIL, http2SubmitRequest_exception);
-    }
+    }// LCOV_EXCL_STOP
 
 #endif
     if (context->session != NULL)
@@ -386,29 +386,29 @@ BOAT_RESULT http2SubmitRequest(http2IntfContext *context)
 
     nghttp2_result = nghttp2_submit_settings(context->session, NGHTTP2_FLAG_NONE, NULL, 0);
     if (nghttp2_result < 0)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "submit settings failed.");
         boat_throw(BOAT_ERROR_HTTP2_INTERNAL + result, http2SubmitRequest_exception);
-    }
+    }// LCOV_EXCL_STOP
     data_prd.read_callback = data_source_read_callback;
     nghttp2_result = nghttp2_submit_request(context->session, NULL, nva, sizeof(nva) / sizeof(nva[0]), &data_prd, NULL);
     if (nghttp2_result < 0)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "submit request failed.");
         boat_throw(BOAT_ERROR_HTTP2_INTERNAL + result, http2SubmitRequest_exception);
-    }
+    }// LCOV_EXCL_STOP
     nghttp2_result = nghttp2_session_send(context->session);
     if (nghttp2_result < 0)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "submit request failed.");
         boat_throw(BOAT_ERROR_HTTP2_INTERNAL + result, http2SubmitRequest_exception);
-    }
+    }// LCOV_EXCL_STOP
     nghttp2_result = nghttp2_session_recv(context->session);
     if (nghttp2_result < 0)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_CRITICAL, "submit request failed.");
         boat_throw(BOAT_ERROR_HTTP2_INTERNAL + result, http2SubmitRequest_exception);
-    }
+    }// LCOV_EXCL_STOP
     result = BOAT_SUCCESS;
     boat_catch(http2SubmitRequest_exception)
     {

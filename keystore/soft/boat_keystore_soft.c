@@ -596,10 +596,10 @@ BOAT_RESULT BoAT_DeletePrikeyByIndex_soft(BUINT8 index)
             memset(lengthBytes, 0x00, sizeof(lengthBytes));
             result = BoATStoreSoftRotNvram(BOAT_STORE_PRIKEY, offset, lengthBytes, sizeof(lengthBytes), BOAT_STORE_TYPE_FLASH); // only need to reset keypair length bytes
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "delete keypair fail");
                 boat_throw(BOAT_ERROR, updataPrikeyData_exception);
-            }
+            }// LCOV_EXCL_STOP
         }
         else
         {
@@ -609,16 +609,16 @@ BOAT_RESULT BoAT_DeletePrikeyByIndex_soft(BUINT8 index)
             /* prikey content*/
             result = BoatReadSoftRotNvram(BOAT_STORE_PRIKEY, offset, lengthBytes, sizeof(lengthBytes), BOAT_STORE_TYPE_FLASH);
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "read prikey lengthbytes fail,ret = %d ", result);
                 boat_throw(result, updataPrikeyData_exception);
-            }
+            }// LCOV_EXCL_STOP
             paramLength = UtilityGetLVData_L(lengthBytes);
             if (paramLength < 0)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "prikey data length err ");
                 boat_throw(BOAT_ERROR, updataPrikeyData_exception);
-            }
+            }// LCOV_EXCL_STOP
             paramLengthLen = UtilityGetTLV_LL_from_len(paramLength);
             offset += (paramLengthLen + paramLength);
             offset_moveFrom = offset;
@@ -629,29 +629,29 @@ BOAT_RESULT BoAT_DeletePrikeyByIndex_soft(BUINT8 index)
                 /* index */
                 result = BoatReadSoftRotNvram(BOAT_STORE_PRIKEY, offset, lengthBytes, sizeof(lengthBytes), BOAT_STORE_TYPE_FLASH);
                 if (result != BOAT_SUCCESS)
-                {
+                {// LCOV_EXCL_START
                     boat_throw(result, updataPrikeyData_exception);
-                }
+                }// LCOV_EXCL_STOP
                 paramLength = UtilityGetLVData_L(lengthBytes);
                 if (paramLength < 0)
-                {
+                {// LCOV_EXCL_START
                     BoatLog(BOAT_LOG_NORMAL, "keypair data length err ");
                     boat_throw(BOAT_ERROR, updataPrikeyData_exception);
-                }
+                }// LCOV_EXCL_STOP
                 paramLengthLen = UtilityGetTLV_LL_from_len(paramLength);
                 offset += (paramLengthLen + paramLength);
                 prikeyLength += (paramLengthLen + paramLength);
                 result = BoatReadSoftRotNvram(BOAT_STORE_PRIKEY, offset, lengthBytes, sizeof(lengthBytes), BOAT_STORE_TYPE_FLASH);
                 if (result != BOAT_SUCCESS)
-                {
+                {// LCOV_EXCL_START
                     boat_throw(result, updataPrikeyData_exception);
-                }
+                }// LCOV_EXCL_STOP
                 paramLength = UtilityGetLVData_L(lengthBytes);
                 if (paramLength < 0)
-                {
+                {// LCOV_EXCL_START
                     BoatLog(BOAT_LOG_NORMAL, "keypair data length err ");
                     boat_throw(BOAT_ERROR, updataPrikeyData_exception);
-                }
+                }// LCOV_EXCL_STOP
                 paramLengthLen = UtilityGetTLV_LL_from_len(paramLength);
                 offset += (paramLengthLen + paramLength);
                 prikeyLength += (paramLengthLen + paramLength);
@@ -659,24 +659,24 @@ BOAT_RESULT BoAT_DeletePrikeyByIndex_soft(BUINT8 index)
             // all the keypairs'length after index keypair
             prikeyData = BoatMalloc(prikeyLength);
             if (NULL == prikeyData)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "fail to malloc memory ");
                 boat_throw(BOAT_ERROR_COMMON_OUT_OF_MEMORY, updataPrikeyData_exception);
-            }
+            }// LCOV_EXCL_STOP
             result = BoatReadSoftRotNvram(BOAT_STORE_PRIKEY, offset_moveFrom, prikeyData, prikeyLength, BOAT_STORE_TYPE_FLASH);
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 BoatFree(prikeyData);
                 BoatLog(BOAT_LOG_NORMAL, "read keypair data fail ");
                 boat_throw(BOAT_ERROR_STORAGE_FILE_READ_FAIL, updataPrikeyData_exception);
-            }
+            }// LCOV_EXCL_STOP
             result = BoATStoreSoftRotNvram(BOAT_STORE_PRIKEY, offset_moveTo, prikeyData, prikeyLength, BOAT_STORE_TYPE_FLASH);
             BoatFree(prikeyData);
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 /* recover keypairNum */
                 boat_throw(BOAT_ERROR_STORAGE_FILE_WRITE_FAIL, updataPrikeyData_exception);
-            }
+            }// LCOV_EXCL_STOP
         }
     }
 

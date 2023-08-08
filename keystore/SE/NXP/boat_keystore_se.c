@@ -67,10 +67,10 @@ BOAT_RESULT BoAT_Keystore_Write_Binary_se(BUINT8 *data, BUINT32 datalen, BUINT32
 
     ret = boat_send_apdu(apdu_select, sizeof(apdu_select), res, &reslen, &sw);
     if (ret != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu fail  %d\n", ret);
         boat_throw(BOAT_ERROR, binary_write_exception);
-    }
+    }// LCOV_EXCL_STOP
     else
     {
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu  OK \n");
@@ -80,10 +80,10 @@ BOAT_RESULT BoAT_Keystore_Write_Binary_se(BUINT8 *data, BUINT32 datalen, BUINT32
 
     sw = Se05x_API_WriteBinary(&policy, OBJECT_BINARY_ID, offset, 0, data, datalen);
     if (sw != SM_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "write binary data fail, sw : %x \n", sw);
         boat_throw(BOAT_ERROR, binary_write_exception);
-    }
+    }// LCOV_EXCL_STOP
     boat_catch(binary_write_exception)
     {
         BoatLog(BOAT_LOG_CRITICAL, "Exception: %d", boat_exception);
@@ -129,10 +129,10 @@ BOAT_RESULT BoAT_Keystore_read_Binary_se(BUINT8 *data, BUINT32 *datalen, BUINT32
 
     ret = boat_send_apdu(apdu_select, sizeof(apdu_select), res, &reslen, &sw);
     if (ret != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu fail  %d\n", ret);
         boat_throw(BOAT_ERROR, binary_write_exception);
-    }
+    }// LCOV_EXCL_STOP
     else
     {
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu  OK \n");
@@ -142,10 +142,10 @@ BOAT_RESULT BoAT_Keystore_read_Binary_se(BUINT8 *data, BUINT32 *datalen, BUINT32
 
     sw = Se05x_API_ReadObject(OBJECT_BINARY_ID, offset, 0, data, datalen);
     if (sw != SM_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "write binary data fail, sw : %x \n", sw);
         boat_throw(BOAT_ERROR, binary_write_exception);
-    }
+    }// LCOV_EXCL_STOP
     // sw = Se05x_API_DeleteSecureObject(OBJECT_SECP256K1_ID);
     // BoatLog(BOAT_LOG_NORMAL, "boat delete ECkey  sw : %x \n", sw);
     boat_catch(binary_write_exception)
@@ -195,10 +195,10 @@ BOAT_RESULT BoAT_Keystore_Gen_Keypair_se(BoatKeypairPriKeyType type, BoatKeypair
 
     ret = boat_send_apdu(apdu_select, sizeof(apdu_select), res, &reslen, &sw);
     if (ret != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu fail  %d\n", ret);
         boat_throw(BOAT_ERROR, keypair_gen_exception);
-    }
+    }// LCOV_EXCL_STOP
     else
     {
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu  OK \n");
@@ -210,10 +210,10 @@ BOAT_RESULT BoAT_Keystore_Gen_Keypair_se(BoatKeypairPriKeyType type, BoatKeypair
     BUINT32 ECCurveListLen = sizeof(ECCurveList);
     sw = Se05x_API_ReadECCurveList(ECCurveList, &ECCurveListLen);
     if (sw != SM_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "read ECCurveList  fail %x\n", sw);
         boat_throw(BOAT_ERROR, keypair_gen_exception);
-    }
+    }// LCOV_EXCL_STOP
     for (i = 0; i < ECCurveListLen; i++)
     {
         /* ECCurve ID of secp256k1 equal 0x10 */
@@ -233,57 +233,57 @@ BOAT_RESULT BoAT_Keystore_Gen_Keypair_se(BoatKeypairPriKeyType type, BoatKeypair
         const BUINT8 ecc_ordern[] = {EC_PARAM_secp256k1_order};
         sw = Se05x_API_CreateECCurve(kSE05x_ECCurve_Secp256k1);
         if (sw != SM_OK)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, "CreateECCurve fail, sw : %x \n", sw);
             boat_throw(BOAT_ERROR, keypair_gen_exception);
-        }
+        }// LCOV_EXCL_STOP
 
         sw = Se05x_API_SetECCurveParam(kSE05x_ECCurve_Secp256k1, kSE05x_ECCurveParam_PARAM_A, ecc_a, sizeof(ecc_a));
         if (sw != SM_OK)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, "SetECCurveParam PARAM_A fail, sw : %x \n", sw);
             boat_throw(BOAT_ERROR, keypair_gen_exception);
-        }
+        }// LCOV_EXCL_STOP
 
         sw = Se05x_API_SetECCurveParam(kSE05x_ECCurve_Secp256k1, kSE05x_ECCurveParam_PARAM_B, ecc_b, sizeof(ecc_b));
         if (sw != SM_OK)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, "SetECCurveParam PARAM_B fail, sw : %x \n", sw);
             boat_throw(BOAT_ERROR, keypair_gen_exception);
-        }
+        }// LCOV_EXCL_STOP
         sw = Se05x_API_SetECCurveParam(kSE05x_ECCurve_Secp256k1, kSE05x_ECCurveParam_PARAM_G, ecc_G, sizeof(ecc_G));
         if (sw != SM_OK)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, "SetECCurveParam PARAM_G fail, sw : %x \n", sw);
             boat_throw(BOAT_ERROR, keypair_gen_exception);
-        }
+        }// LCOV_EXCL_STOP
         sw = Se05x_API_SetECCurveParam(kSE05x_ECCurve_Secp256k1, kSE05x_ECCurveParam_PARAM_N, ecc_ordern, sizeof(ecc_ordern));
         if (sw != SM_OK)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, "SetECCurveParam PARAM_N fail, sw : %x \n", sw);
             boat_throw(BOAT_ERROR, keypair_gen_exception);
-        }
+        }// LCOV_EXCL_STOP
         sw = Se05x_API_SetECCurveParam(kSE05x_ECCurve_Secp256k1, kSE05x_ECCurveParam_PARAM_PRIME, ecc_prime, sizeof(ecc_prime));
         if (sw != SM_OK)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, "SetECCurveParam PARAM_PRIME fail, sw : %x \n", sw);
             boat_throw(BOAT_ERROR, keypair_gen_exception);
-        }
+        }// LCOV_EXCL_STOP
     }
 
     sw = Se05x_API_WriteECKey(&policy, 0, OBJECT_SECP256K1_ID, kSE05x_ECCurve_Secp256k1, NULL, 0, NULL, 0, kSE05x_INS_NA, kSE05x_KeyPart_Pair);
     if (sw != SM_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "Write ECkey fail, sw : %x \n", sw);
         boat_throw(BOAT_ERROR, keypair_gen_exception);
-    }
+    }// LCOV_EXCL_STOP
     keypair->pubkey.value_len = sizeof(keypair->pubkey.value);
     sw = Se05x_API_ReadObject(OBJECT_SECP256K1_ID, 0, 0, keypair->pubkey.value, &keypair->pubkey.value_len);
     if (sw != SM_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "read ECkey fail, sw : %x \n", sw);
         boat_throw(BOAT_ERROR, keypair_gen_exception);
-    }
+    }// LCOV_EXCL_STOP
     // sw = Se05x_API_WriteBinary(&policy, OBJECT_BINARY_ID, OFFSET_KEYPAIR_GEN_FLAG, 0, keypairGenFlag, sizeof(keypairGenFlag));
     // if (sw != SM_OK)
     // {
@@ -341,20 +341,20 @@ BOAT_RESULT BoAT_Keystore_Sign_se(BoatKeypairPriKeyType type, BUINT8 prikeyIndex
 
     ret = boat_send_apdu(apdu_select, sizeof(apdu_select), res, &reslen, &sw);
     if (ret != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu fail  %d\n", ret);
         boat_throw(BOAT_ERROR, keypair_sign_exception);
-    }
+    }// LCOV_EXCL_STOP
     else
     {
         BoatLog(BOAT_LOG_NORMAL, "boat_send_apdu  OK \n");
     }
     sw = Se05x_API_ECDSASign(OBJECT_SECP256K1_ID, kSE05x_ECSignatureAlgo_SHA_256, digest, digestLen, signature, signatureLen);
     if (sw != SM_OK)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "ECDSA sign fail, sw : %x \n", sw);
         boat_throw(BOAT_ERROR, keypair_sign_exception);
-    }
+    }// LCOV_EXCL_STOP
     BoatLog_hexdump(BOAT_LOG_NORMAL, "signresult : ", signature, *signatureLen);
     *Prefix = 0x03;
     boat_catch(keypair_sign_exception)

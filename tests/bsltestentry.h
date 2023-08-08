@@ -11,3 +11,7 @@ Suite *makeMutextest_suite(void);
 Suite *makeKeypairtest_suite(void);
 Suite *makeKeystoreSofttest_suite(void);
 Suite *makeKeystoreIntftest_suite(void);
+Suite *makessltestSuite(void);
+Suite *makestoragetestSuite(void);
+
+
