@@ -48,7 +48,7 @@
 ```
 
 ## BoAT Support Layer代码下载
-![代码下载](https://github.com/aitos-io/BoAT-SupportLayer/releases/tag/BoAT-SupportLayer-v3.1.0)
+[代码下载](https://github.com/aitos-io/BoAT-SupportLayer/releases/tag/BoAT-SupportLayer-v3.1.0)
 ## BoAT Support Layer使用说明  
 
-BoAT-SupportLayer 的编译和应用参考 BoAT-ProjectTemplate的![使用说明](https://github.com/aitos-io/BoAT-ProjectTemplate/blob/dev/README_cn.md)
+BoAT-SupportLayer 的编译和应用参考 BoAT-ProjectTemplate的[使用说明](https://github.com/aitos-io/BoAT-ProjectTemplate/blob/dev/README_cn.md)
