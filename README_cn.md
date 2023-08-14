@@ -1,6 +1,6 @@
 ## BoAT Support Layer
 
-***BoAT Support Layer***，是实现***BoAT EDGE***产品的***BoAT Infra Arch***基础架构的核心组件，在不同***platform***平台和***BoAT EDGE***产品应用组件之间构建跨平台应用接口静态库。  
+***BoAT Support Layer***，是实现***BoAT EDGE***产品的[***BoAT Infra Arch***](https://github.com/phengao/hello-world/blob/master/docs/BoAT_Overall_Design_cn.md)基础架构的核心组件，在不同***platform***平台和***BoAT EDGE***产品应用组件之间构建跨平台应用接口静态库。  
 基于***BoAT Infra Arch***架构的所有应用程序的实现都以***BoAT Support Layer***层为基础。***BoAT Support Layer***向上为应用层和 ***Composable BoAT Core***层提供统一的跨平台应用抽象接口，向下按照不同平台提供的系统API接口实现抽象接口的具体实例，应用程序通过调用统一的跨平台应用抽象接口，间接调用适配平台的系统API接口实现应用功能。
 
 ## BoAT Support Layer组件
