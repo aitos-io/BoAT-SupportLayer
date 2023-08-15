@@ -38,8 +38,9 @@ boatLogConfig.h defines options for compiling.
 
 //! BOAT_LOG_LEVEL is a macro that limits the log detail up to that level.
 //! Seting it to BOAT_LOG_NONE means outputing nothing.
+#ifndef BOAT_LOG_LEVEL
 #define BOAT_LOG_LEVEL   BOAT_LOG_VERBOSE
-
+#endif
 
 
 #define BoatPrintf                               printf
