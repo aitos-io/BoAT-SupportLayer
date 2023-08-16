@@ -66,7 +66,7 @@ BOAT_RESULT boatMutexDestroy(boatMutex *mutex)
         return BOAT_ERROR;
     }
 
-    if (mutex->mutexID != NULL)
+    if (mutex->mutexRef != NULL)
     {
         sAPI_MutexDelete(mutex->mutexRef); ///// no return value
         BoatLog(BOAT_LOG_NORMAL, "boatMutexDestroy ok");
@@ -94,7 +94,7 @@ BOAT_RESULT boatMutexLock(boatMutex *mutex, BUINT32 timeout)
         return BOAT_ERROR;
     }
 
-    if(mutex->mutexID == NULL)
+    if(mutex->mutexRef == NULL)
     {
         return BOAT_ERROR;
     }
@@ -126,9 +126,9 @@ BOAT_RESULT boatMutexUnlock(boatMutex *mutex)
     {
         return BOAT_ERROR;
     }
-    if (mutex->mutexID != NULL)
+    if (mutex->mutexRef != NULL)
     {
-        sAPI_MutexUnlock(mutex->mutexRef);
+        sAPI_MutexUnLock(mutex->mutexRef);
         return BOAT_SUCCESS;
     }
     else
