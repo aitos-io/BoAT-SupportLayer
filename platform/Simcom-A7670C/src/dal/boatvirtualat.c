@@ -17,25 +17,6 @@ static char atResBuf[512]={0};
 BUINT32 (* dalVirtualAtCallback)(char *content,BUINT32 len);
 
 
-static void at_recv_task(void)
-{
-    char r_data[512] = {0};
-    int result = 0;
-    int event = 0;
-    int len = 0;
-
-    while(1)
-    {
-       result = ol_os_msgq_recv(at_msgq, &event, sizeof(int), 5*200);
-       if(result == mbtk_os_success && event == OL_EVENT_AT_RESP)
-       {
-            memset(r_data, 0x0, sizeof(r_data));
-            len = ol_read_at_response(r_data,511);
-            dalVirtualAtCallback(r_data,len);
-       }
-    }
-}
-
 /*!*****************************************************************************
 @brief Init a BoAT virtual AT channel
 
