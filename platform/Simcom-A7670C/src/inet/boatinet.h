@@ -34,5 +34,6 @@ boatLogConfig.h defines options for compiling.
 #define __BOATINET_H__
 
 #include "simcom_os.h"
+#include "scfw_inet.h"
 
 #endif
