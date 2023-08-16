@@ -1,4 +1,7 @@
 # Select one of the crypto-dep and platform
+ifneq (,$(BOAT_LOG_LEVEL))
+BOAT_CFLAGS +=  -DBOAT_LOG_LEVEL=$(BOAT_LOG_LEVEL)
+endif
 
 .PHONY:all common crypto_default keccak  keystore platform keypair   third-party tests
     #cryptointf http2
