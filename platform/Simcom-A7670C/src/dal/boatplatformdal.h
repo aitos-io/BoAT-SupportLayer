@@ -27,6 +27,7 @@
 #include "sc_i2c.h"
 #include "simcom_common.h"
 #include "simcom_os.h"
+#include "simcom_ssl.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
