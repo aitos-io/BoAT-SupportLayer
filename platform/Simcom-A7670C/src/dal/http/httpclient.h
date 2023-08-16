@@ -21,8 +21,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <sys/time.h>
-#include "lwip/sockets.h"
+//#include <sys/time.h>
+
 
 //#define BOAT_HTTPCLIENT_SSL_ENABLE
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE

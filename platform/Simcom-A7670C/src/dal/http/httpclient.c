@@ -26,8 +26,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "http_client.h"
+#include "httpclient.h"
 #include "stdio.h"
+#include "string.h"
+#include "boatlog.h"
+
 #include "scfw_netdb.h"
 #include "scfw_socket.h"
 #include "simcom_os.h"
@@ -150,175 +153,6 @@ unsigned long boat_htonl(unsigned long n)
 unsigned short boat_htons(unsigned short n)
 {
     return ((n & 0xff) << 8) | ((n & 0xff00) >> 8);
-}
-
-int ip4addr_aton1(const char *cp, ip4_addr_t *addr)
-{
-    u32_t val;
-    u8_t base;
-    char c;
-    u32_t parts[4];
-    u32_t *pp = parts;
-
-    c = *cp;
-    for (;;)
-    {
-        /*
-         * Collect number up to ``.''.
-         * Values are specified as for C:
-         * 0x=hex, 0=octal, 1-9=decimal.
-         */
-        if (!isdigit(c))
-        {
-            return 0;
-        }
-        val = 0;
-        base = 10;
-        if (c == '0')
-        {
-            c = *++cp;
-            if (c == 'x' || c == 'X')
-            {
-                base = 16;
-                c = *++cp;
-            }
-            else
-            {
-                base = 8;
-            }
-        }
-        for (;;)
-        {
-            if (isdigit(c))
-            {
-                val = (val * base) + (u32_t)(c - '0');
-                c = *++cp;
-            }
-            else if (base == 16 && isxdigit(c))
-            {
-                val = (val << 4) | (u32_t)(c + 10 - (islower(c) ? 'a' : 'A'));
-                c = *++cp;
-            }
-            else
-            {
-                break;
-            }
-        }
-        if (c == '.')
-        {
-            /*
-             * Internet format:
-             *  a.b.c.d
-             *  a.b.c   (with c treated as 16 bits)
-             *  a.b (with b treated as 24 bits)
-             */
-            if (pp >= parts + 3)
-            {
-                return 0;
-            }
-            *pp++ = val;
-            c = *++cp;
-        }
-        else
-        {
-            break;
-        }
-    }
-    /*
-     * Check for trailing characters.
-     */
-    if (c != '\0' && !isspace(c))
-    {
-        return 0;
-    }
-    /*
-     * Concoct the address according to
-     * the number of parts specified.
-     */
-    switch (pp - parts + 1)
-    {
-
-    case 0:
-        return 0; /* initial nondigit */
-
-    case 1: /* a -- 32 bits */
-        break;
-
-    case 2: /* a.b -- 8.24 bits */
-        if (val > 0xffffffUL)
-        {
-            return 0;
-        }
-        if (parts[0] > 0xff)
-        {
-            return 0;
-        }
-        val |= parts[0] << 24;
-        break;
-
-    case 3: /* a.b.c -- 8.8.16 bits */
-        if (val > 0xffff)
-        {
-            return 0;
-        }
-        if ((parts[0] > 0xff) || (parts[1] > 0xff))
-        {
-            return 0;
-        }
-        val |= (parts[0] << 24) | (parts[1] << 16);
-        break;
-
-    case 4: /* a.b.c.d -- 8.8.8.8 bits */
-        if (val > 0xff)
-        {
-            return 0;
-        }
-        if ((parts[0] > 0xff) || (parts[1] > 0xff) || (parts[2] > 0xff))
-        {
-            return 0;
-        }
-        val |= (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8);
-        break;
-    default:
-        break;
-    }
-    if (addr)
-    {
-        ip4_addr_set_u32(addr, val);
-    }
-    return 1;
-}
-
-static int getHostByIpOrName(char *hostorip_str, GAPP_TCPIP_ADDR_T *addr)
-{
-    int i;
-    char c;
-    int hostnamefound = 0;
-
-    for (i = 0; i < strlen(hostorip_str); i++)
-    {
-        c = hostorip_str[i];
-        if (!((c >= '0' && c <= '9') || c == '.'))
-        {
-            hostnamefound = 1;
-            break;
-        }
-    }
-
-    if (hostnamefound != 0)
-    {
-        if (fibo_getHostByName(hostorip_str, &addr->sin_addr, 1, 0) != 0)
-        {
-            return HTTPCLIENT_UNRESOLVED_DNS;
-        }
-    }
-    else
-    {
-        ip4addr_aton1(hostorip_str, &addr->sin_addr.u_addr.ip4);
-        addr->sin_addr.u_addr.ip4.addr = boat_htonl(addr->sin_addr.u_addr.ip4.addr);
-    }
-
-    return 0;
 }
 
 int httpclient_conn(httpclient_t *client, char *host)
@@ -742,63 +576,6 @@ int httpclient_send_userdata(httpclient_t *client, httpclient_data_t *client_dat
     return HTTPCLIENT_OK;
 }
 
-static int ssl_recv_unblock(INT32 sock, void *buf, INT32 size, INT32 timeout)
-{
-    struct timeval tm = {0};
-    fd_set rset;
-    // BUINT8 *temp = buf;
-
-    int fd = fibo_ssl_sock_get_fd(sock);
-
-    int ret = fibo_ssl_sock_recv(sock, buf, size);
-    if (ret > 0)
-    {
-        BoatLog(BOAT_LOG_VERBOSE, "recv data size:%d", ret);
-        return ret;
-    }
-    else if (ret < 0)
-    {
-        BoatLog(BOAT_LOG_VERBOSE, "recv data fail ");
-        if (fibo_get_ssl_errcode() == 0)
-        {
-            return 0;
-        }
-        return ret;
-    }
-
-    FD_ZERO(&rset);
-    FD_SET(fd, &rset);
-    tm.tv_sec = timeout / 1000;
-    tm.tv_usec = (timeout % 1000) * 1000;
-
-    ret = select(fd + 1, &rset, NULL, NULL, timeout > 0 ? &tm : NULL);
-    if (ret < 0)
-    {
-        BoatLog(BOAT_LOG_VERBOSE, "select failed:%s", strerror(errno));
-        return -1;
-    }
-    else if (ret == 0)
-    {
-        BoatLog(BOAT_LOG_VERBOSE, "select timeout");
-        return -1;
-    }
-    else
-    {
-        ret = fibo_ssl_sock_recv(sock, buf, size);
-        if (ret >= 0)
-        {
-            // BoatLog(BOAT_LOG_VERBOSE, "recv data size:%d", ret);
-            return ret;
-        }
-        else if (ret < 0)
-        {
-            BoatLog(BOAT_LOG_VERBOSE, "recv data fail");
-            return ret;
-        }
-    }
-    BoatLog(BOAT_LOG_VERBOSE, "recv data 111 fail");
-    return -1;
-}
 
 int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, int *p_read_len) /* 0 on success, err code on failure */
 {
@@ -814,8 +591,7 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
             if (readLen < min_len) 
             {
                 ret = recv(client->socket, buf + readLen, min_len - readLen, 0);
-                //ret = fibo_sock_recv(client->socket, buf + readLen, min_len - readLen);
-                DBG("recv [not blocking] return:%d", ret);
+                DBG("recv [blocking] return:%d", ret);
                 if (ret == 0) 
                 {
                     DBG("recv [blocking] return 0 may disconnected");
@@ -833,10 +609,7 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
                 }
             }
 #else
-            // ret = recv(client->socket, buf + readLen, max_len - readLen, 0);
-            DBG("boat fibo_sock_recv 000");
-            ret = fibo_sock_recv(client->socket, (unsigned char *)buf + readLen, max_len - readLen);
-            DBG("boat fibo_sock_recv 111 ret = %d ", ret);
+             ret = recv(client->socket, buf + readLen, max_len - readLen, 0);
 #endif
         }
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE
@@ -845,19 +618,18 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
             int nb_flag;
             if (readLen < min_len)
             {
-                // nb_flag = 1;
-                // lwip_ioctl(client->socket, FIONBIO, &nb_flag);
+                nb_flag = 1;
+                //lwip_ioctl(client->socket, FIONBIO, &nb_flag);
                 boat_sys_log("httpread:readlen:%d,min_len:%d", readLen, min_len);
-                //ret = ssl_recv_unblock(client->socket, (unsigned char *)buf + readLen, min_len - readLen, 10 * 1000);
-                ret = sAPI_SslRead();
+                ret = sAPI_SslRead(0, (unsigned char *)buf + readLen, min_len - readLen);
                 boat_sys_log("httpread:ret:%d", ret);
             }
             else
             {
                 nb_flag = 0;
-                lwip_ioctl(client->socket, FIONBIO, &nb_flag);
+                //lwip_ioctl(client->socket, FIONBIO, &nb_flag);
                 boat_sys_log("httpread1:readlen:%d,max_len:%d", readLen, max_len);
-                ret = ssl_recv_unblock(client->socket, (unsigned char *)buf + readLen, max_len - readLen, 10 * 1000);
+                ret = sAPI_SslRead(0, (unsigned char *)buf + readLen, max_len - readLen);
                 boat_sys_log("httpread2:ret:%d", ret);
             }
         }
@@ -993,7 +765,7 @@ int httpclient_retrieve_content(httpclient_t *client, char *data, int len, httpc
                         }
                         else
                         {
-                            osiDelayUS(1000);
+                            sAPI_DelayUs(1000);
                             continue;
                         }
                     }
@@ -1307,6 +1079,7 @@ HTTPCLIENT_RESULT httpclient_connect(httpclient_t *client, char *url)
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE
     else
     {
+        ret = httpclient_conn(client, host);
         ret = httpclient_ssl_conn(client, host);
     }
 #endif
@@ -1385,8 +1158,7 @@ void httpclient_close(httpclient_t *client)
     if (client->is_http)
     {
         if (client->socket >= 0)
-            // close(client->socket);
-            fibo_sock_close(client->socket);
+            close(client->socket);
     }
 #ifdef BOAT_HTTPCLIENT_SSL_ENABLE
     else
@@ -1497,7 +1269,7 @@ static int httpclient_ssl_send_all(httpclient_t *client, const char *data, size_
 
     while (written_len < length)
     {
-        int ret = fibo_ssl_sock_send(client->socket, (unsigned char *)(data + written_len), (length - written_len));
+        int ret = sAPI_SslSend(0, (unsigned char *)(data + written_len), (length - written_len));
         if (ret > 0)
         {
             written_len += ret;
@@ -1518,51 +1290,25 @@ static int httpclient_ssl_send_all(httpclient_t *client, const char *data, size_
 
 static int httpclient_ssl_conn(httpclient_t *client, char *host)
 {
-    int ret = 0;
-    boat_sys_log("ssl conn starts");
-
-    int fd = -1;
-    struct addrinfo hints, *addr_list;
-
-    memset( &hints, 0, sizeof( hints ) );
-    hints.ai_family = SC_AF_INET;
-    hints.ai_socktype = SC_SOCK_STREAM;
-    hints.ai_protocol = SC_IPPROTO_TCP;
-
-    if (getaddrinfo(domain, port, &hints, &addr_list ) != 0 )
+    SCSslCtx_t ctx;
+    memset(&ctx,0,sizeof(ctx));
+    ctx.fd = client->socket;
+    ctx.ssl_version = SC_SSL_CFG_VERSION_ALL;
+    if (sAPI_SslHandShake(&ctx) != 0)
     {
-        boat_sys_log("Dns parse domain fail. Please check domain:%s.\r\n", domain);
-        return -1;
+        DBG("[%s,%d] ssl handshake fail.", __func__, __LINE__);
+        ret = -1;
     }
-
-    bool flag = false;
-    for (struct addrinfo *cur = addr_list; cur != NULL; cur = cur->ai_next)
+    else
     {
-        fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol);
-        if (fd < 0)
-        {
-            boat_sys_log("create socket fail.\r\n");
-            continue;
-        }
-
-        if (connect(fd, cur->ai_addr, cur->ai_addrlen) == 0)
-        {
-            flag = true;
-            boat_sys_log("connect to server success.\r\n");
-            break;
-        }
-
-        close(fd);
+        ret = 0;
     }
-
-    freeaddrinfo(addr_list);
-
     return ret;
 }
 
 static int httpclient_ssl_close(httpclient_t *client)
 {
-    fibo_ssl_sock_close(client->socket);
+    sAPI_SslClose(0);
     // wolfSSL_free(boat_ssl);
     return 0;
 }
