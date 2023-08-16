@@ -49,7 +49,7 @@
 
 void (*dalBoatUartRxCallback)(boatUart *uartRef,  unsigned char *data, BUINT32 len);
 
-static void SC_Uart_Callback(SC_Uart_Port_Number port, void *para)
+static void SC_boat_Uart_Callback(SC_Uart_Port_Number port, void *para)
 {
     int readLen = 0;
     uint8_t tmp[512] ={0};
@@ -121,21 +121,21 @@ BOAT_RESULT boatUartInit(boatUart *uartRef, BUINT8 port, boatUartConfig config, 
     else
     {
         uartRef->uartPort = -1;
-        retrun BOAT_ERROR;
+        return BOAT_ERROR;
     }
     
     result = sAPI_UartControl(port,SC_UART_OPEN);
     if(result != SC_UART_RETURN_CODE_OK)
     {
         uartRef->uartPort = -1;
-        retrun BOAT_ERROR;
+        return BOAT_ERROR;
     }
 
-    result = sAPI_UartRegisterCallback(port,SC_Uart_Callback)
+    result = sAPI_UartRegisterCallback(port,SC_boat_Uart_Callback);
     if(result != SC_UART_RETURN_CODE_OK)
     {
         uartRef->uartPort = -1;
-        retrun BOAT_ERROR;
+        return BOAT_ERROR;
     }
 
     return BOAT_SUCCESS;
