@@ -25,6 +25,8 @@
 #include "simcom_debug.h"
 #include "simcom_os.h"
 #include "simcom_common.h"
+#include "scfw_inet.h"
+
 // #if (PROTOCOL_USE_HLFABRIC == 1 || PROTOCOL_USE_CHAINMAKER_V1 == 1 || PROTOCOL_USE_CHAINMAKER_V2 == 1 || BOAT_PROTOCOL_USE_HWBCS == 1)
 /******************************************************************************
                               BOAT SOCKET WARPPER
@@ -91,43 +93,6 @@ BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certl
     return retval;
 }
 #endif
-
-uint32_t htonl(uint32_t hostlong) {
-  uint32_t res;
-  unsigned char *p = (unsigned char *)&res;
-  *p++ = hostlong >> 24;
-  *p++ = (hostlong >> 16) & 0xffu;
-  *p++ = (hostlong >> 8) & 0xffu;
-  *p = hostlong & 0xffu;
-  return res;
-}
-
-uint16_t htons(uint16_t hostshort) {
-  uint16_t res;
-  unsigned char *p = (unsigned char *)&res;
-  *p++ = hostshort >> 8;
-  *p = hostshort & 0xffu;
-  return res;
-}
-
-uint32_t ntohl(uint32_t netlong) {
-  uint32_t res;
-  unsigned char *p = (unsigned char *)&netlong;
-  res = *p++ << 24;
-  res += *p++ << 16;
-  res += *p++ << 8;
-  res += *p;
-  return res;
-}
-
-uint16_t ntohs(uint16_t netshort) {
-  uint16_t res;
-  unsigned char *p = (unsigned char *)&netshort;
-  res = *p++ << 8;
-  res += *p;
-  return res;
-}
-
 
 
 /**
@@ -352,7 +317,7 @@ BSINT32 BoatSend(BSINT32 sockfd, boatSSlCtx *tlsContext, const BUINT8 *buf, size
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
     //! @todo BOAT_HLFABRIC_TLS_SUPPORT implementation in crypto default.
 
-	return sAPI_SslSend(0,buf,len);
+	return sAPI_SslSend(0,(INT8 *)buf,len);
 
 #else
     return send(sockfd, buf, len, 0);
@@ -384,7 +349,7 @@ BSINT32 BoatRecv(BSINT32 sockfd, boatSSlCtx *tlsContext, BUINT8 *buf, size_t len
 {
 #if (BOAT_TLS_SUPPORT == 1)
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
-	return sAPI_SslRead(0, buf, len);
+	return sAPI_SslRead(0, (INT8 *)buf, len);
 #else
     return recv(sockfd, buf, len, 0);
 #endif
