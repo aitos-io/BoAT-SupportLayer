@@ -134,7 +134,7 @@ struct boatPlatformSem{
 #ifndef PLATFORM_OSAL_QUEUE
 #define PLATFORM_OSAL_QUEUE
 struct boatPlatformQueue{
-    sMsgQRef queueTd; //! message queue descriptor
+    sMsgQRef queueId; //! message queue descriptor
     BUINT32 maxSize; //!  put/get message buffer size must qeual maxSize, 
 };
 #endif/////PLATFORM_OSAL_QUEUE
