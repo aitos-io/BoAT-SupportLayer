@@ -101,6 +101,7 @@ static void *taskHelloThread(void *param)
             break;
         }
     }
+	(void)rtnVal;
     return NULL;
 }
 void createStateDetectTask(void)
@@ -444,6 +445,7 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0026_boatTimerStart_Limit)
 
     }
     BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_linuxDefault_03Timer_test_0026_boatTimerStart_Limit finished\r\n");
+	(void)p;
 }
 END_TEST
 

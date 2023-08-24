@@ -319,6 +319,7 @@ static void *semTaskWatiSleep2s(void *param)
 
 	//fibo_thread_delete();
 	pthread_exit(NULL);
+	(void)rtnVal;
 	return NULL;	
 }
 

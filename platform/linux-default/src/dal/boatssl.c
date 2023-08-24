@@ -105,7 +105,6 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 	struct hostent *he;
 	struct sockaddr_in server;
 	struct sockaddr localaddr;
-	struct sockaddr_in *localaddr_ptr;
 	socklen_t addrlen = sizeof(struct sockaddr);
 
 	(void)rsvd;

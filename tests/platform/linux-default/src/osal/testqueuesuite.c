@@ -398,6 +398,7 @@ static void *queueTaskReceiveSleep2s(void *param)
 	BoatLog(BOAT_LOG_NORMAL, "[boat][queue] Testing queueTaskReceiveSleep2s finished\r\n");
 	sleep(1);///// sleep 2 seconds
 	boatQueueDelete(&taskQueueId);
+	(void)rtnVal;
 
 	return NULL;	
 }
