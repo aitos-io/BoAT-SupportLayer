@@ -20,7 +20,6 @@
 
 #include "hal_gpio.h"
 #include "hal_i2c.h"
-#include "driver_demo_config.h"
 
 
 static void i2c_master_poll_init(HAL_I2C_HandleTypeDef *i2cHandle,BUINT32 speed,BUINT8 addrBits)

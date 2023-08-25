@@ -121,7 +121,7 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
 	}
 	else
 	{
-		xy_fseek(file_hdl, offset, FS_SEEK_BEGIN);
+		xy_fseek(file_hdl, offset, FS_SEEK_SET);
 	}
 	count = xy_fwrite(writeBuf, 1, writeLen, file_hdl);
 	xy_fclose(file_hdl);

@@ -35,9 +35,7 @@
 #include "boatlog.h"
 #include "boatdal.h"
 
-
 #include "hal_gpio.h"
-#include "hal_uart.h"
 
 #define UART_BUF_LEN_DEFAULT 256
 #define UART_PORT_NUMBER_MAX 5
@@ -153,7 +151,7 @@ BOAT_RESULT boatUartDeinit(boatUart *uartRef)
 
 void boatUartInitUartIdNagtive(boatUart *uart)
 {
-	uart->uartPort = {0};
+	memset(&(uart->uartPort),0U,sizeof(HAL_UART_HandleTypeDef));
 }
 
 

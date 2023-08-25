@@ -20,7 +20,6 @@
 #include "boatplatformosal.h"
 
 #include "qcloud_iot_import.h"
-#include "network_interface.h"
 #include "xy_ssl_api.h"
 
 // #if (PROTOCOL_USE_HLFABRIC == 1 || PROTOCOL_USE_CHAINMAKER_V1 == 1 || PROTOCOL_USE_CHAINMAKER_V2 == 1 || BOAT_PROTOCOL_USE_HWBCS == 1)
@@ -107,10 +106,6 @@ BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certl
 */
 BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 {
-	INT32 sockfd = -1;
-	SChostent *host_entry = NULL;
-	SCsockAddrIn server;
-
 	char ip[64];
 	char port[8];
 	char *ptr = NULL;
