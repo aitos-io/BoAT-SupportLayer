@@ -177,7 +177,7 @@ static void taskLoopSleep500msLoopnum(void *param)
 		
 	}
 	BoatLog(BOAT_LOG_NORMAL, "[boat][task] Testing taskLoopSleep500msLoopnum finished[%p]\r\n",&param);
-
+	(void)tt;
 	return ;	
 }
 

@@ -210,6 +210,7 @@ static void *mutex_task_lock_sleep_2s(void *param)
 	}
 	BoatLog(BOAT_LOG_VERBOSE,"Testing mutex_task_lock_sleep_2s finished\r\n");
 	sleep(2);
+	(void)rtnVal;
 
 
 	return NULL;	

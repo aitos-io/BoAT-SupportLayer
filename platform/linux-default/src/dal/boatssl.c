@@ -107,7 +107,6 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 	struct sockaddr localaddr;
 	struct sockaddr_in *localaddr_ptr;
 	socklen_t addrlen = sizeof(struct sockaddr);
-
 	(void)rsvd;
 
 	ptr = strchr(address, ':');
@@ -166,7 +165,7 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 	}
 
 	BoatLog(BOAT_LOG_VERBOSE, "%s:%s[%d] connected!", ip, port, connectfd);
-
+	(void)localaddr_ptr;
 	return connectfd;
 }
 
