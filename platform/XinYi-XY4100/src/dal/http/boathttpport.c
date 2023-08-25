@@ -291,7 +291,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
     memset(&client, 0x00, sizeof(client));
     memset(&client_data, 0x00, sizeof(client_data));
 
-    client.timeout_in_sec = 30;
+    //client.timeout_in_sec = 30;
 
     client_data.is_more = false;
 
