@@ -19,8 +19,9 @@
 #include "boatplatformdal.h"
 #include "boatplatformosal.h"
 
-#include "qcloud_iot_import.h"
+//#include "qcloud_iot_import.h"
 #include "xy_ssl_api.h"
+#include "xy_tcpip_api.h"
 
 // #if (PROTOCOL_USE_HLFABRIC == 1 || PROTOCOL_USE_CHAINMAKER_V1 == 1 || PROTOCOL_USE_CHAINMAKER_V2 == 1 || BOAT_PROTOCOL_USE_HWBCS == 1)
 /******************************************************************************
@@ -90,6 +91,7 @@ BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certl
 #endif
 
 
+
 /**
 ****************************************************************************************
 * @brief:
@@ -106,25 +108,39 @@ BOAT_RESULT boat_find_subject_common_name(const BCHAR *cert, const BUINT32 certl
 */
 BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 {
-	char ip[64];
-	char port[8];
-	char *ptr = NULL;
+    int                 connectfd;
+    char                ip[64];
+    char                port[8];
+    char                *ptr = NULL;
+    struct hostent      *he; 
+    struct sockaddr_in  server;
+    struct sockaddr     localaddr;
+    struct sockaddr_in  *localaddr_ptr;
+    socklen_t           addrlen = sizeof(struct sockaddr);
 
-	(void)rsvd;
+    (void)rsvd;
 
-	ptr = strchr(address, ':');
-	if (NULL == ptr)
-	{
-		BoatLog(BOAT_LOG_CRITICAL, "invalid address:%s.", address);
+    ptr = strchr(address, ':');
+    if (NULL == ptr)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "invalid address:%s.", address);
+        return -1;
+    }
+
+    memset(ip  , 0      , sizeof(ip));
+    memset(port, 0      , sizeof(port));
+    memcpy(ip  , address, (int)(ptr - address));
+    memcpy(port, ptr + 1, strlen(address) - (int)(ptr - address));
+
+
+	/* Create TCP socket */
+	if ((connectfd = xy_socket_by_host(ip, Sock_IPv46, IPPROTO_TCP, 0, atoi(port), NULL)) == -1) {
+		BoatLog(BOAT_LOG_CRITICAL, "failed to connect with TCP server: %s:%d", ip, atoi(port));
 		return -1;
 	}
-
-	memset(ip, 0, sizeof(ip));
-	memset(port, 0, sizeof(port));
-	memcpy(ip, address, (int)(ptr - address));
-	memcpy(port, ptr + 1, strlen(address) - (int)(ptr - address));
-
-	return HAL_TCP_Connect(ip,atoi(port));
+	else{
+		return connectfd;
+	}
 
 }
 
@@ -134,10 +150,10 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 #include "xy_ssl_api.h"
 #include "at_ssl_config.h"
 
-#define BOAT_TLS_KEYS_PATH "U:/user_fsdisk/boat/tempKeys"
-#define BOAT_TLS_CA_KEY "U:/user_fsdisk/boat/tempKeys/caKey.txt"
-#define BOAT_TLS_CLIENT_KEY "U:/user_fsdisk/boat/tempKeys/clientKey.txt"
-#define BOAT_TLS_CLIENT_CERT "U:/user_fsdisk/boat/tempKeys/clientCert.txt"
+#define BOAT_TLS_KEYS_PATH "D:/tempKeys"
+#define BOAT_TLS_CA_KEY "D:/tempKeys/caKey.txt"
+#define BOAT_TLS_CLIENT_KEY "D:/tempKeys/clientKey.txt"
+#define BOAT_TLS_CLIENT_CERT "D:/tempKeys/clientCert.txt"
 
 BOAT_RESULT writeTlsKeys2FS(const BoatFieldVariable caChain, const BoatFieldVariable clientPrikey,const BoatFieldVariable clientCert)
 {
@@ -146,10 +162,10 @@ BOAT_RESULT writeTlsKeys2FS(const BoatFieldVariable caChain, const BoatFieldVari
 	xy_fs_remove_dirlist(BOAT_TLS_KEYS_PATH);
 
 	ret = xy_fmkdir(BOAT_TLS_KEYS_PATH);
-	if(ret != 0)
+	//if(ret != 0)
 	{
 		BoatLog(BOAT_LOG_CRITICAL, "xy_fmkdir %s err(%d)",BOAT_TLS_KEYS_PATH,ret);
-		return ret;
+	//	return ret;
 	}
 
 	/* 1.save caChain to fs */
@@ -241,33 +257,41 @@ end1:
 *  for details.
 ****************************************************************************************
 */
+
+/* mbedTLS header include */
+#include "mbedtls/entropy.h"
+#include "mbedtls/ctr_drbg.h"
+#include "mbedtls/ecdsa.h"
+#include "mbedtls/pk.h"
+#include "mbedtls/sha256.h"
+#include "mbedtls/asn1.h"
+
+#include "mbedtls/net_sockets.h"
+#include "mbedtls/ssl.h"
+#include "mbedtls/bignum.h"
+#include "mbedtls/asn1write.h"
+#include "mbedtls/error.h"
+
+static mbedtls_ssl_context *g_ssl_ctx = NULL;
+static mbedtls_ssl_config *g_ssl_cfg = NULL;
+static mbedtls_x509_crt *g_ssl_ca_crt = NULL;
+static mbedtls_net_context *g_ssl_net = NULL;
+
+#if (BOAT_TLS_IDENTIFY_CLIENT == 1)
+static mbedtls_x509_crt *g_ssl_client_crt = NULL;
+static mbedtls_pk_context *g_ssl_client_key = NULL;
+#endif
+
+
 BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatFieldVariable caChain, const BoatFieldVariable clientPrikey,
                         const BoatFieldVariable clientCert, BSINT32 *socketfd, boatSSlCtx **tlsContext, void *rsvd)
 {
 
     BOAT_RESULT result = BOAT_SUCCESS;
-	BSINT32 sockfd;
-	// SCSslCtx_t *tlsContext_ptr = BoatMalloc(sizeof(SCSslCtx_t));
-	boat_try_declare;
+	mbedtls_entropy_context entropy;
+    mbedtls_ctr_drbg_context ctr_drbg;
 
-	// //write ssl keys to fileSystem
-	// result = writeTlsKeys2FS(caChain,clientPrikey,clientCert);
-	// if(result != BOAT_SUCCESS)
-	// {
-	// 	BoatLog(BOAT_LOG_NORMAL, "writeTlsKeys2FS fail ");
-	// 	return result;
-	// }
-	sockfd = BoatConnect(address, NULL);
-	if (sockfd == 0)
-	{
-		BoatLog(BOAT_LOG_NORMAL, "socket connect fail ");
-		boat_throw(sockfd, BoatTlsInit_exception);
-	}
-	else
-	{
-		BoatLog(BOAT_LOG_NORMAL, "socket connect success!!! ");
-	}
-	BoatLog(BOAT_LOG_NORMAL, "boat hostName = %s ", hostName);
+	boat_try_declare;
 
 	char ip[64];
 	char port[8];
@@ -287,51 +311,207 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 	memcpy(ip, address, (int)(ptr - address));
 	memcpy(port, ptr + 1, strlen(address) - (int)(ptr - address));
 
-	ssl_config_t *sslConf = xy_malloc(sizeof(ssl_config_t));
+	//connect first
+	int ret = BoatConnect(address, NULL);
+    if (ret == -1)
+    {
+        BoatLog(BOAT_LOG_NORMAL, "socket connect fail ");
+        return BOAT_ERROR;
+    }
+	BoatLog(BOAT_LOG_NORMAL,"socket connect success ");
+    *socketfd = ret;
 
-	sslConf->protocol = 0; //TLS
-	sslConf->vsn = SSL_VERSION_DEFAULT; 
-	sslConf->cipher_suites = SSL_CIPHERSUITE_DEFAULT;
-	sslConf->ignore_local_time = SSL_IGNORELOCALTIME_DEFAULT;
-	sslConf->negotiate_time = SSL_NEGOTIATETIME_DEFAULT;
-	sslConf->session_cache_enable = SSL_SESSION_CACHE_DEFAULT;
 
-	sslConf->cert.from = SSL_CERT_FROM_BUF;
-	sslConf->cert.path.rootCA = caChain.field_ptr ;
+	g_ssl_ctx = BoatMalloc(sizeof(mbedtls_ssl_context));
+	if (g_ssl_ctx == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to allocate ssl_context.");
+		result =  BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		boat_throw(result, BoatTlsInit_exception);
+	}
+
+	g_ssl_cfg = BoatMalloc(sizeof(mbedtls_ssl_config));
+	if (g_ssl_cfg == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to allocate ssl_config.");
+		result =  BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		boat_throw(result, BoatTlsInit_exception);
+	}
+	g_ssl_ca_crt = BoatMalloc(sizeof(mbedtls_x509_crt));
+	if (g_ssl_ca_crt == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to allocate x509_crt.");
+		result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		boat_throw(result, BoatTlsInit_exception);
+	}
+	g_ssl_net = BoatMalloc(sizeof(mbedtls_net_context));
+	if (g_ssl_net == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to allocate net_context.");
+		result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		boat_throw(result, BoatTlsInit_exception);
+	}
 
 #if (BOAT_TLS_IDENTIFY_CLIENT == 1)
-	sslConf->cert.path.clientKey = clientPrikey.field_ptr;
-	sslConf->cert.path.clientCert = clientCert.field_ptr;
+
+	g_ssl_client_crt= BoatMalloc(sizeof(mbedtls_x509_crt));
+	if (g_ssl_client_crt == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to allocate x509_crt.");
+		result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		boat_throw(result, BoatTlsInit_exception);
+	}
+
+	g_ssl_client_key = BoatMalloc(sizeof(mbedtls_pk_context));
+	if (g_ssl_client_key == NULL)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to allocate pk.");
+		result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
+		boat_throw(result, BoatTlsInit_exception);
+	}
 #endif
 
-	void *sslCtx = ssl_init(sslConf);
-	if(sslCtx == NULL)
-	{
-		BoatLog(BOAT_LOG_NORMAL, "ssl init fail ");
-		boat_throw(-1, BoatTlsInit_exception);
-	}
+	mbedtls_entropy_init(&entropy);
+    mbedtls_ctr_drbg_init(&ctr_drbg);
+	mbedtls_net_init(g_ssl_net);
+	mbedtls_ssl_init(g_ssl_ctx);
+	mbedtls_ssl_config_init(g_ssl_cfg);
+	mbedtls_x509_crt_init(g_ssl_ca_crt);
 
-	int ret = ssl_handshake(sslCtx,1,hostName,atoi(port),1000);
-	if(ret != 0)
+#if (BOAT_TLS_IDENTIFY_CLIENT == 1)
+	mbedtls_x509_crt_init(g_ssl_client_crt);
+	mbedtls_pk_init(g_ssl_client_key);
+#endif
+	result = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy, NULL, 0);
+    if (result != BOAT_SUCCESS)
 	{
-		BoatLog(BOAT_LOG_NORMAL, "ssl handshake fail ");
-		boat_throw(ret, BoatTlsInit_exception);
-	}
+		BoatLog(BOAT_LOG_CRITICAL, "Failed to execute ctr_drbg_seed.");
+        boat_throw(result, BoatTlsInit_exception);
+    }
 
+	result = mbedtls_ssl_config_defaults(g_ssl_cfg, MBEDTLS_SSL_IS_CLIENT,
+										 MBEDTLS_SSL_TRANSPORT_STREAM,
+										 MBEDTLS_SSL_PRESET_DEFAULT);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute ssl_config_defaults.\n");
+        boat_throw(result, BoatTlsInit_exception);
+    }
+
+	mbedtls_ssl_conf_rng(g_ssl_cfg, mbedtls_ctr_drbg_random, &ctr_drbg);
+
+	result += mbedtls_x509_crt_parse(g_ssl_ca_crt, caChain.field_ptr, caChain.field_len);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute x509_crt_parse: -%x\n", -result);
+        boat_throw(result, BoatTlsInit_exception);
+    }
+
+	mbedtls_ssl_conf_ca_chain(g_ssl_cfg, g_ssl_ca_crt, NULL);
+#if (BOAT_TLS_IDENTIFY_CLIENT == 1)
+	result += mbedtls_x509_crt_parse(g_ssl_client_crt, clientCert.field_ptr, clientCert.field_len);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute x509_crt_parse: -%x\n", -result);
+        boat_throw(result, BoatTlsInit_exception);
+    }
+
+	result += mbedtls_pk_parse_key(g_ssl_client_key,clientPrikey.field_ptr,clientPrikey.field_len,NULL,0,NULL,NULL);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute pk_parse: -%x\n", -result);
+        boat_throw(result, BoatTlsInit_exception);
+    }
+
+	result += mbedtls_ssl_conf_own_cert(g_ssl_cfg,g_ssl_client_crt,g_ssl_client_key);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute conf_own_cert: -%x\n", -result);
+        boat_throw(result, BoatTlsInit_exception);
+    }
+#endif
+	mbedtls_ssl_conf_authmode(g_ssl_cfg, MBEDTLS_SSL_VERIFY_NONE); //2
+	mbedtls_ssl_conf_ciphersuites(g_ssl_cfg, mbedtls_ssl_list_ciphersuites());
+
+	result = mbedtls_ssl_setup(g_ssl_ctx,g_ssl_cfg);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute ssl_setup: -%x\n", -result);
+        boat_throw(result, BoatTlsInit_exception);
+    }
+
+	result = mbedtls_ssl_set_hostname(g_ssl_ctx, ip);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute hostname_set.\n");
+        boat_throw(result, BoatTlsInit_exception);
+    }
+
+	g_ssl_net->fd = ret;
+
+	mbedtls_ssl_set_bio(g_ssl_ctx,g_ssl_net, mbedtls_net_send, mbedtls_net_recv, NULL);
+
+	result = mbedtls_ssl_handshake(g_ssl_ctx);
+	if (result != BOAT_SUCCESS)
+    {
+        BoatLog(BOAT_LOG_CRITICAL, "Failed to execute ssl_handshake: -%x\n", -result);
+        boat_throw(result, BoatTlsInit_exception);
+    }
+	BoatLog(BOAT_LOG_NORMAL, "ret = ssl_handshake SUCCESSED!");
+
+	(*tlsContext)->sslCtx = g_ssl_ctx;
+
+	/* boat catch handle */
 	boat_catch(BoatTlsInit_exception)
 	{
-		BoatLog(BOAT_LOG_CRITICAL, "Exception: %d", boat_exception);
-		result = boat_exception;
-		xy_fs_remove_dirlist(BOAT_TLS_KEYS_PATH);
-		ssl_deinit(&sslCtx);
-		xy_free(sslConf);
-		sslConf = NULL;
-		sslCtx = NULL;
+        BoatLog(BOAT_LOG_CRITICAL, "Exception: %d", boat_exception);
+        result = boat_exception;
+		if(g_ssl_ctx)
+		{
+			mbedtls_ssl_free(g_ssl_ctx);
+			BoatFree(g_ssl_ctx);
+			g_ssl_ctx = NULL;
+		}
+			
+		if(g_ssl_net)
+		{
+			mbedtls_net_free(g_ssl_net);
+			BoatFree(g_ssl_net);
+			g_ssl_net = NULL;
+		}
+			
+		if(g_ssl_cfg)
+		{
+			mbedtls_ssl_config_free(g_ssl_cfg);
+			BoatFree(g_ssl_cfg);
+			g_ssl_cfg = NULL;
+		}
+			
+		if(g_ssl_ca_crt)
+		{
+			mbedtls_x509_crt_free(g_ssl_ca_crt);
+			BoatFree(g_ssl_ca_crt);
+			g_ssl_ca_crt = NULL;
+		}	
+#if (BOAT_TLS_IDENTIFY_CLIENT == 1)
+		if(g_ssl_client_crt)
+		{
+			mbedtls_x509_crt_free(g_ssl_client_crt);
+			BoatFree(g_ssl_client_crt);
+			g_ssl_client_crt = NULL;
+		}
+
+		if(g_ssl_client_key)
+		{
+			mbedtls_pk_free(g_ssl_client_key);
+			BoatFree(g_ssl_client_key);
+			g_ssl_client_key = NULL;
+		}
+#endif
+
 	}
-
-	*socketfd = ssl_get_socket_fd(sslCtx);
-
-	*tlsContext = sslCtx;
+	mbedtls_entropy_free(&entropy);
+    mbedtls_ctr_drbg_free(&ctr_drbg);
 
 	return result;
 }
@@ -363,7 +543,7 @@ BSINT32 BoatSend(BSINT32 sockfd, boatSSlCtx *tlsContext, const BUINT8 *buf, size
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
     //! @todo BOAT_HLFABRIC_TLS_SUPPORT implementation in crypto default.
 
-	return ssl_write(tlsContext,buf,len,1000);
+	return mbedtls_ssl_write(tlsContext->sslCtx,buf,len);
 
 #else
     return send(sockfd, buf, len, 0);
@@ -395,7 +575,7 @@ BSINT32 BoatRecv(BSINT32 sockfd, boatSSlCtx *tlsContext, BUINT8 *buf, size_t len
 {
 #if (BOAT_TLS_SUPPORT == 1)
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
-	return ssl_read(tlsContext,buf,len,1000);
+	return mbedtls_ssl_read(tlsContext->sslCtx,buf,len);
 #else
     return recv(sockfd, buf, len, 0);
 #endif
@@ -421,11 +601,54 @@ void BoatClose(BSINT32 sockfd, boatSSlCtx **tlsContext, void *rsvd)
 #if (BOAT_TLS_SUPPORT == 1)
     // free tls releated
     //! @todo BOAT_TLS_SUPPORT implementation in crypto default.
-    ssl_shutdown(*tlsContext,500);
-    ssl_deinit(tlsContext);
-	*tlsContext = NULL;
-	xy_fs_remove_dirlist(BOAT_TLS_KEYS_PATH);
-	return;
+    if (*tlsContext != NULL)
+	{
+		BoatLog(BOAT_LOG_NORMAL,"run BoatClose...");
+		close(sockfd);
+
+		if(g_ssl_ctx)
+		{
+			mbedtls_ssl_free(g_ssl_ctx);
+			BoatFree(g_ssl_ctx);
+			g_ssl_ctx = NULL;
+		}
+		(*tlsContext)->sslCtx = NULL;
+		if(g_ssl_net)
+		{
+			mbedtls_net_free(g_ssl_net);
+			BoatFree(g_ssl_net);
+			g_ssl_net = NULL;
+		}
+			
+		if(g_ssl_cfg)
+		{
+			mbedtls_ssl_config_free(g_ssl_cfg);
+			BoatFree(g_ssl_cfg);
+			g_ssl_cfg = NULL;
+		}
+			
+		if(g_ssl_ca_crt)
+		{
+			mbedtls_x509_crt_free(g_ssl_ca_crt);
+			BoatFree(g_ssl_ca_crt);
+			g_ssl_ca_crt = NULL;
+		}	
+#if (BOAT_TLS_IDENTIFY_CLIENT == 1)
+		if(g_ssl_client_crt)
+		{
+			mbedtls_x509_crt_free(g_ssl_client_crt);
+			BoatFree(g_ssl_client_crt);
+			g_ssl_client_crt = NULL;
+		}
+
+		if(g_ssl_client_key)
+		{
+			mbedtls_pk_free(g_ssl_client_key);
+			BoatFree(g_ssl_client_key);
+			g_ssl_client_key = NULL;
+		}
+#endif
+	}
 #else
     close(sockfd);
 #endif
