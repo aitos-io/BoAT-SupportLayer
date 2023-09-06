@@ -111,7 +111,7 @@ void BoatSleep(BUINT32 second)
 */
 long int BoatGetTimes(void)
 {
-    return xy_get_GMT_time_ms();
+    return (xy_get_GMT_time_ms()/1000);
 }
 
 /**
