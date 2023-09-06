@@ -26,6 +26,7 @@
 
 #include "hal_i2c.h"
 #include "hal_uart.h"
+#include "mbedtls/ssl.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
@@ -68,7 +69,7 @@ extern void dal_virtualAT_callback(BUINT8 *buf, BUINT16 len);
 
 struct boatPlatformSSL
 {
-
+    mbedtls_ssl_context *sslCtx;
 };
 #endif
 

@@ -24,7 +24,8 @@ boatLogConfig.h defines options for compiling.
 #define __BOATLOG_H__
 
 #include "boattypes.h"
-//#include "xy_system.h"
+#include "xy_system.h"
+#include "xy_utils.h"
 
 //! BOAT LOG LEVEL DEFINITION
 //! Log level is used to control the detail of log output.
@@ -64,9 +65,7 @@ extern const BCHAR *const g_log_level_name_str[];
     {                                                                                       \
         if (level <= BOAT_LOG_LEVEL)                                                        \
         {                                                                                   \
-            BoatPrintf("[BOAT] %s: "__FILE__                                               \
-                       ":%d, %s(): " format "\n",                                           \
-                       g_log_level_name_str[level - 1], __LINE__, __func__, ##__VA_ARGS__); \
+            BoatPrintf("[BOAT] line %d, %s(): " format "\n", __LINE__, __func__, ##__VA_ARGS__); \
         }                                                                                   \
     } while (0)
 #endif
@@ -99,11 +98,12 @@ extern const BCHAR *const g_log_level_name_str[];
         {                                                                                                 \
             BoatPrintf("%s: %s[%03d]: ", g_log_level_name_str[level - 1], title, len);                    \
             if (len > 0)                                                                                  \
-            {                                                                                             \
-                for (int i = 0; i < len; i++)                                                             \
-                {                                                                                         \
-                    BoatPrintf("%c%c", "0123456789ABCDEF"[buf[i] / 16], "0123456789ABCDEF"[buf[i] % 16]); \
-                }                                                                                         \
+            {                                                           \
+                char *hexStr = xy_malloc(len*2+1);                  \
+                memset(hexStr,0U,len*2+1);                                  \
+                bytes2hexstr(buf,len,hexStr,len*2+1);                             \
+                BoatPrintf("%s",hexStr);                                      \
+                xy_free(hexStr);                \
             }                                                                                             \
             else                                                                                          \
             {                                                                                             \
