@@ -292,6 +292,22 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
     memset(&client_data, 0x00, sizeof(client_data));
 
     //client.timeout_in_sec = 30;
+	char port[8];
+	char *ptr = NULL;
+
+	ptr = strchr(boathttpport_context_ptr->remote_url_str, ':');
+	if (NULL == ptr)
+	{
+		BoatLog(BOAT_LOG_CRITICAL, "invalid address:%s.", boathttpport_context_ptr->remote_url_str);
+		return -1;
+	}
+
+	memset(port, 0, sizeof(port));
+	//memcpy(ip, address, (int)(ptr - address));
+	memcpy(port, ptr + 1, strlen(boathttpport_context_ptr->remote_url_str) - (int)(ptr - (boathttpport_context_ptr->remote_url_str)));
+
+    client.cid = 1;
+    client.remote_port = atoi(port);
 
     client_data.is_more = false;
 
@@ -365,6 +381,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 */
 BOAT_RESULT BoatHttpGlobalInit(void)
 {
+    BoatLog(BOAT_LOG_NORMAL,"run into boat lib!!!!");
     return BOAT_SUCCESS;
 }
 
