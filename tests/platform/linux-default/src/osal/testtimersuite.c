@@ -18,6 +18,8 @@ void boatTimerInitTimeridZero(boatTimer *Timer);
 void boatTimerInitTimeridInvalid(boatTimer *timerRef);
 
 BOAT_RESULT boatTimestamp(BSINT64 *timestamp);
+void BoatSleepMs(BUINT32 ms);
+
 
 
 void showtimestamp(void)
@@ -99,6 +101,7 @@ static void *taskHelloThread(void *param)
             break;
         }
     }
+	(void)rtnVal;
     return NULL;
 }
 void createStateDetectTask(void)
@@ -154,7 +157,7 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0011_boatTimerStart_Successf
     
     rtnVal = boatTimerStart(&testTimerID, 0, 400, periodtimeFunc, NULL);
     ck_assert_int_eq(rtnVal,0);
-    sleep(3);
+    BoatSleepMs(3000);
     boatTimerDestroy(&testTimerID);    ///// must destroy the timer once you stop using it.
     BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_linuxDefault_03Timer_test_0011_boatTimerStart_Successful_PeriodTimer finished\r\n");
     
@@ -307,13 +310,13 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0021_onetimeTimerStartAndDes
             usleep(500*1000);
         }
     }
-    sleep(1);
+    BoatSleepMs(1000);
     testflag = 3;
-    sleep(1);
+    BoatSleepMs(1000);
     testflag = 2;
-    sleep(1);
+    BoatSleepMs(1000);
     testflag = 1;
-    sleep(1);
+    BoatSleepMs(1000);
 
     showtimestamp();
     boatTimerDestroy(&testTimerID);///// must destroy the timer once you stop using it.
@@ -442,6 +445,7 @@ START_TEST(test_BoAT_OSAL_linuxDefault_03Timer_test_0026_boatTimerStart_Limit)
 
     }
     BoatLog(BOAT_LOG_NORMAL, "[boat][timer] Testing test_BoAT_OSAL_linuxDefault_03Timer_test_0026_boatTimerStart_Limit finished\r\n");
+	(void)p;
 }
 END_TEST
 

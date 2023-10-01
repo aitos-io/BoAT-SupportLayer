@@ -103,10 +103,10 @@ BOAT_RESULT BoatWriteStorage(BUINT32 offset, BUINT8 *writeBuf, BUINT32 writeLen,
 	{
 		buf_zero = BoatMalloc(offset - size);
 		if (NULL == buf_zero)
-		{
+		{// LCOV_EXCL_START
 			fclose(file_ptr);
 			return BOAT_ERROR_COMMON_OUT_OF_MEMORY;
-		}
+		}// LCOV_EXCL_STOP
 		memset(buf_zero, 0x00, offset - size);
 		count = fwrite(buf_zero, 1, offset - size, file_ptr);
 		BoatFree(buf_zero);

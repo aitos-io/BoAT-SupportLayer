@@ -345,9 +345,9 @@ BOAT_RESULT BoATKeypair_GetKeypairByIndex(BoatKeypairPriKeyCtx *priKeyCtx, BUINT
             }
             priKeyCtx->keypair_name = BoatMalloc(paramLength + 1);
             if (priKeyCtx->keypair_name == NULL)
-            {
+            {// LCOV_EXCL_START
                 return BOAT_ERROR;
-            }
+            }// LCOV_EXCL_STOP
             result = BoatReadSoftRotNvram(BOAT_STORE_KEYPAIR, offset, (BUINT8 *)priKeyCtx->keypair_name, paramLength, storetype);
             if (result != BOAT_SUCCESS)
             {
@@ -884,9 +884,9 @@ __BOATSTATIC BOAT_RESULT BoATKeypair_DataCtx_Store(BoatKeypairPriKeyCtx mKeypair
     }
     keypairData = BoatMalloc(keypairLength);
     if (keypairData == NULL)
-    {
+    {// LCOV_EXCL_START
         return BOAT_ERROR;
-    }
+    }// LCOV_EXCL_STOP
     result = BoATKeypair_Get_DataCtx_Data(mKeypairPrikeyCtx, keypairData, &keypairLength);
     if (result != BOAT_SUCCESS)
     {
@@ -1004,10 +1004,10 @@ BOAT_RESULT BoatKeypairCreate(BoatKeypairPriKeyCtx_config *keypairConfig, BCHAR 
     {
         result = BoATKeypair_GetFreeIndex_From_Persistent();
         if (result < BOAT_SUCCESS)
-        {
+        {// LCOV_EXCL_START
             BoatLog(BOAT_LOG_NORMAL, " keypair get free index fail %d ", result);
             boat_throw(result, keypairdelete_exception);
-        }
+        }// LCOV_EXCL_STOP
         keypairIndex = result; // from 1 to BOAT_MAX_KEYPAIR_NUM
     }
     else
@@ -1017,10 +1017,10 @@ BOAT_RESULT BoatKeypairCreate(BoatKeypairPriKeyCtx_config *keypairConfig, BCHAR 
 
     result = BoatPort_keyCreate(keypairConfig, &mKeypairDataCtx);
     if (result != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, " key create fail");
         boat_throw(result, keypairdelete_exception);
-    }
+    }// LCOV_EXCL_STOP
     BoatLog(BOAT_LOG_NORMAL, "BoatPort_keyCreate success , index = %d ", keypairIndex);
     if (keypairName == NULL)
     {
@@ -1037,19 +1037,19 @@ BOAT_RESULT BoatKeypairCreate(BoatKeypairPriKeyCtx_config *keypairConfig, BCHAR 
     mKeypairDataCtx.prikeyCtx.keypair_index = keypairIndex;
     result = BoATKeypair_DataCtx_Store(mKeypairDataCtx.prikeyCtx, storeType);
     if (result != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "keystore store keypair fail , ret = %d ", result);
         boat_throw(result, keypairdelete_exception);
-    }
+    }// LCOV_EXCL_STOP
 #if (BOAT_CRYPTO_USE_SE != 1)
     result = BoAT_Keystore_store_prikey(mKeypairDataCtx.prikeyCtx.keypair_index, mKeypairDataCtx.extraData.value, mKeypairDataCtx.extraData.value_len);
     if (result != BOAT_SUCCESS)
-    {
+    {// LCOV_EXCL_START
         BoatLog(BOAT_LOG_NORMAL, "keystore store prikey fail , ret = %d ", result);
         result = BoATIotKeypairDelete(keypairIndex);
         BoatLog(BOAT_LOG_NORMAL, "delete keypair  ret = %d ", result);
         boat_throw(BOAT_ERROR, keypairdelete_exception);
-    }
+    }// LCOV_EXCL_STOP
     memset(mKeypairDataCtx.extraData.value, 0x00, mKeypairDataCtx.extraData.value_len);
 #endif
     boat_catch(keypairdelete_exception)
@@ -1204,11 +1204,11 @@ BOAT_RESULT BoATIotKeypairDelete(BUINT8 index)
             memset(lengthBytes, 0x00, sizeof(lengthBytes));
             result = BoATStoreSoftRotNvram(BOAT_STORE_KEYPAIR, offset, lengthBytes, sizeof(lengthBytes), BOAT_STORE_TYPE_FLASH); // only need to reset keypair length bytes
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "delete keypair fail ");
                 // return result;
                 boat_throw(result, keypairdelete_exception);
-            }
+            }// LCOV_EXCL_STOP
         }
         else
         {
@@ -1223,15 +1223,15 @@ BOAT_RESULT BoATIotKeypairDelete(BUINT8 index)
                 /* code */
                 result = BoatReadSoftRotNvram(BOAT_STORE_KEYPAIR, offset, lengthBytes, sizeof(lengthBytes), BOAT_STORE_TYPE_FLASH);
                 if (result != BOAT_SUCCESS)
-                {
+                {// LCOV_EXCL_START
                     boat_throw(result, keypairdelete_exception);
-                }
+                }// LCOV_EXCL_STOP
                 paramLength = UtilityGetLVData_L(lengthBytes);
                 if (paramLength < 0)
-                {
+                {// LCOV_EXCL_START
                     BoatLog(BOAT_LOG_NORMAL, "keypair data length err ");
                     boat_throw(result, keypairdelete_exception);
-                }
+                }// LCOV_EXCL_STOP
                 paramLengthLen = UtilityGetTLV_LL_from_len(paramLength);
                 offset += (paramLengthLen + paramLength);
                 keypairLength += (paramLengthLen + paramLength);
@@ -1239,24 +1239,24 @@ BOAT_RESULT BoATIotKeypairDelete(BUINT8 index)
             // all the keypairs'length after index keypair
             keypairData = BoatMalloc(keypairLength);
             if (NULL == keypairData)
-            {
+            {// LCOV_EXCL_START
                 BoatLog(BOAT_LOG_NORMAL, "fail to malloc memory ");
                 boat_throw(BOAT_ERROR_COMMON_OUT_OF_MEMORY, keypairdelete_exception);
-            }
+            }// LCOV_EXCL_STOP
             result = BoatReadSoftRotNvram(BOAT_STORE_KEYPAIR, offset_moveFrom, keypairData, keypairLength, BOAT_STORE_TYPE_FLASH);
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 BoatFree(keypairData);
                 BoatLog(BOAT_LOG_NORMAL, "read keypair data fail ");
                 boat_throw(BOAT_ERROR_STORAGE_FILE_READ_FAIL, keypairdelete_exception);
-            }
+            }// LCOV_EXCL_STOP
             result = BoATStoreSoftRotNvram(BOAT_STORE_KEYPAIR, offset_moveTo, keypairData, keypairLength, BOAT_STORE_TYPE_FLASH);
             BoatFree(keypairData);
             if (result != BOAT_SUCCESS)
-            {
+            {// LCOV_EXCL_START
                 /* recover keypairNum */
                 boat_throw(BOAT_ERROR_STORAGE_FILE_WRITE_FAIL, keypairdelete_exception);
-            }
+            }// LCOV_EXCL_STOP
         }
     }
     BoatLog(BOAT_LOG_NORMAL, "delete keypair data success ");

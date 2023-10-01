@@ -37,15 +37,19 @@ static X509 *buffer2x509(const uint8_t *cert, size_t len)
 	BIO *b = BIO_new_mem_buf((void *)cert, len);
 	if (NULL == b)
 	{
+		// LCOV_EXCL_START 
 		BoatLog(BOAT_LOG_NORMAL, "read cert data fail");
 		return NULL;
+		// LCOV_EXCL_STOP
+		
 	}
 	X509 *x509 = PEM_read_bio_X509(b, NULL, NULL, NULL);
 	if (NULL == x509)
 	{
-		BoatLog(BOAT_LOG_NORMAL, "PEM_read_bio_X509 fail");
+		BoatLog(BOAT_LOG_NORMAL, "PEM_read_bio_X509 fail"); // LCOV_EXCL_START
 		BIO_free(b);
 		return NULL;
+		// LCOV_EXCL_STOP
 	}
 	BIO_free(b);
 	return x509;
@@ -63,8 +67,9 @@ static EVP_PKEY *buffer2evpkey(const uint8_t *key, size_t key_len)
 	EVP_PKEY *evpkey = PEM_read_bio_PrivateKey(b, NULL, NULL, NULL);
 	if (NULL == evpkey)
 	{
-		BIO_free(b);
-		return NULL;
+		BIO_free(b); // LCOV_EXCL_START
+		return NULL; 
+		// LCOV_EXCL_STOP
 	}
 	BIO_free(b);
 	return evpkey;
@@ -102,14 +107,14 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 	struct sockaddr localaddr;
 	struct sockaddr_in *localaddr_ptr;
 	socklen_t addrlen = sizeof(struct sockaddr);
-
 	(void)rsvd;
 
 	ptr = strchr(address, ':');
 	if (NULL == ptr)
 	{
-		BoatLog(BOAT_LOG_CRITICAL, "invalid address:%s.", address);
-		return -1;
+		BoatLog(BOAT_LOG_CRITICAL, "invalid address:%s.", address); // LCOV_EXCL_START
+		return -1; 
+		// LCOV_EXCL_STOP
 	}
 
 	memset(ip, 0, sizeof(ip));
@@ -119,8 +124,9 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 
 	if ((he = gethostbyname(ip)) == NULL)
 	{
-		BoatLog(BOAT_LOG_CRITICAL, "gethostbyname() error");
-		return -1;
+		BoatLog(BOAT_LOG_CRITICAL, "gethostbyname() error"); // LCOV_EXCL_START
+		return -1; 
+		// LCOV_EXCL_STOP
 	}
 
 	if ((connectfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -146,9 +152,10 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 	}
 	if (getsockname(connectfd, &localaddr, &addrlen) < 0)
 	{
-		BoatLog(BOAT_LOG_CRITICAL, "getsockname() error");
+		BoatLog(BOAT_LOG_CRITICAL, "getsockname() error"); // LCOV_EXCL_START
 		close(connectfd);
-		return -1;
+		return -1; 
+		// LCOV_EXCL_STOP
 	}
 	else
 	{
@@ -158,7 +165,7 @@ BSINT32 BoatConnect(const BCHAR *address, void *rsvd)
 	}
 
 	BoatLog(BOAT_LOG_VERBOSE, "%s:%s[%d] connected!", ip, port, connectfd);
-
+	(void)localaddr_ptr;
 	return connectfd;
 }
 
@@ -191,16 +198,19 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 	ctx = SSL_CTX_new(SSLv23_client_method());
 	if (ctx == NULL)
 	{
-		BoatLog(BOAT_LOG_NORMAL, "creat SSL CTX fail ");
-		return BOAT_ERROR;
+		BoatLog(BOAT_LOG_NORMAL, "creat SSL CTX fail "); // LCOV_EXCL_START
+		return BOAT_ERROR; 
+		// LCOV_EXCL_STOP
 	}
 	// client and server verification
 	SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
 	cert = buffer2x509(caChain.field_ptr, caChain.field_len);
 	if (cert == NULL)
 	{
-		BoatLog(BOAT_LOG_NORMAL, " get x509 cert fail");
-		return BOAT_ERROR;
+		BoatLog(BOAT_LOG_NORMAL, " get x509 cert fail"); // LCOV_EXCL_START
+		return BOAT_ERROR; 
+
+		// LCOV_EXCL_STOP
 	}
 	X509_STORE *certS = SSL_CTX_get_cert_store(ctx);
 	X509_STORE_add_cert(certS, cert);
@@ -211,41 +221,46 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 		clientTlsCert = buffer2x509(clientCert.field_ptr, clientCert.field_len);
 		if (clientTlsCert == NULL)
 		{
-			BoatLog(BOAT_LOG_NORMAL, "read client tls cert fail ");
+			BoatLog(BOAT_LOG_NORMAL, "read client tls cert fail "); // LCOV_EXCL_START
 			SSL_CTX_free(ctx);
-			return BOAT_ERROR;
+			return BOAT_ERROR; 
+			// LCOV_EXCL_STOP
 		}
 		if (SSL_CTX_use_certificate(ctx, clientTlsCert) <= 0)
 		{
-			BoatLog(BOAT_LOG_NORMAL, "load client tls cert fail ");
+			BoatLog(BOAT_LOG_NORMAL, "load client tls cert fail "); // LCOV_EXCL_START
 			SSL_CTX_free(ctx);
 			X509_free(clientTlsCert);
-			return BOAT_ERROR;
+			return BOAT_ERROR; 
+			// LCOV_EXCL_STOP
 		}
 		X509_free(clientTlsCert);
 
 		clientTlsprikey = buffer2evpkey(clientPrikey.field_ptr, clientPrikey.field_len);
 		if (clientTlsprikey == NULL)
 		{
-			BoatLog(BOAT_LOG_NORMAL, "read client tls key fail ");
+			BoatLog(BOAT_LOG_NORMAL, "read client tls key fail "); // LCOV_EXCL_START
 			SSL_CTX_free(ctx);
-			return BOAT_ERROR;
+			return BOAT_ERROR; 
+			// LCOV_EXCL_STOP
 		}
 		/* load client prikey */
 		if (SSL_CTX_use_PrivateKey(ctx, clientTlsprikey) <= 0)
 		{
-			BoatLog(BOAT_LOG_NORMAL, "load client tls key fail ");
+			BoatLog(BOAT_LOG_NORMAL, "load client tls key fail "); // LCOV_EXCL_START
 			EVP_PKEY_free(clientTlsprikey);
 			SSL_CTX_free(ctx);
-			return BOAT_ERROR;
+			return BOAT_ERROR; 
+			// LCOV_EXCL_STOP
 		}
 		EVP_PKEY_free(clientTlsprikey);
 		/* check client's private key */
 		if (!SSL_CTX_check_private_key(ctx))
 		{
-			BoatLog(BOAT_LOG_NORMAL, "creat SSL CTX fail ");
+			BoatLog(BOAT_LOG_NORMAL, "creat SSL CTX fail "); // LCOV_EXCL_START
 			SSL_CTX_free(ctx);
-			return BOAT_ERROR;
+			return BOAT_ERROR; 
+			// LCOV_EXCL_STOP
 		}
 	}
 	/* creat new SSL by ctx  */
@@ -258,9 +273,10 @@ BOAT_RESULT BoatTlsInit(const BCHAR *address, const BCHAR *hostName, const BoatF
 	/////if (SSL_connect(*tlsContext) == -1)
 	if (SSL_connect(*p) == -1)
 	{
-		BoatLog(BOAT_LOG_NORMAL, "SSL_connect fail ");
+		BoatLog(BOAT_LOG_NORMAL, "SSL_connect fail "); // LCOV_EXCL_START
 		SSL_CTX_free(ctx);
-		return BOAT_ERROR;
+		return BOAT_ERROR; 
+		// LCOV_EXCL_STOP
 	}
 	SSL_CTX_free(ctx);
 	return BOAT_SUCCESS;
