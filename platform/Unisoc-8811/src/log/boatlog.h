@@ -95,12 +95,12 @@ extern const BCHAR *const g_log_level_name_str[];
     {                                                                                                     \
         if (level <= BOAT_LOG_LEVEL)                                                                      \
         {                                                                                                 \
-            BoatPrintf("%s: %s[%03d]: ", g_log_level_name_str[level - 1], title, len);                    \
+            BoatPrintf("[BOAT] %s: %s[%03d]: ", g_log_level_name_str[level - 1], title, len);                    \
             if (len > 0)                                                                                  \
             {                                                                                             \
                 for (int i = 0; i < len; i++)                                                             \
                 {                                                                                         \
-                    BoatPrintf("%c%c", "0123456789ABCDEF"[buf[i] / 16], "0123456789ABCDEF"[buf[i] % 16]); \
+                    BoatPrintf("[BOAT] %c%c", "0123456789ABCDEF"[buf[i] / 16], "0123456789ABCDEF"[buf[i] % 16]); \
                 }                                                                                         \
             }                                                                                             \
             else                                                                                          \
