@@ -75,6 +75,7 @@ void BoatSleepMs(BUINT32 ms)
 
 BUINT32 random32(void)
 {
+	#if 0
 	static BUINT32 seed = 0;
 	if (seed == 0)
 	{
@@ -85,7 +86,11 @@ BUINT32 random32(void)
 	seed = 1664525 * seed + 1013904223;
 
 	return seed;
+	#endif
+	return rand();
 }
+
+static bool g_srand_flag = false;
 
 BOAT_RESULT BoatRandom(BUINT8 *output, BUINT32 outputLen, void *rsvd)
 {
@@ -98,7 +103,18 @@ BOAT_RESULT BoatRandom(BUINT8 *output, BUINT32 outputLen, void *rsvd)
 
 	(void)rsvd;
 
-	random_buffer(output, outputLen);
+	//random_buffer(output, outputLen);
+	if(g_srand_flag == false)
+	{
+		srand(time(NULL));
+		g_srand_flag = true;
+	}
+	
+
+	for(int i = 0;i < outputLen;i++)
+	{
+		output[i] = rand();
+	}
 
 	return BOAT_SUCCESS;
 }
