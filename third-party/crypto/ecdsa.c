@@ -94,7 +94,7 @@ void point_double(const ecdsa_curve *curve, curve_point *cp) {
   if (point_is_infinity(cp)) {
     return;
   }
-  if (bn_is_zero(&(cp->y))) {
+  if (crypto_bn_is_zero(&(cp->y))) {
     point_set_infinity(cp);
     return;
   }
@@ -134,14 +134,14 @@ void point_double(const ecdsa_curve *curve, curve_point *cp) {
 
 // set point to internal representation of point at infinity
 void point_set_infinity(curve_point *p) {
-  bn_zero(&(p->x));
-  bn_zero(&(p->y));
+  crypto_bn_zero(&(p->x));
+  crypto_bn_zero(&(p->y));
 }
 
 // return true iff p represent point at infinity
 // both coords are zero in internal representation
 int point_is_infinity(const curve_point *p) {
-  return bn_is_zero(&(p->x)) && bn_is_zero(&(p->y));
+  return crypto_bn_is_zero(&(p->x)) && crypto_bn_is_zero(&(p->y));
 }
 
 // return true iff both points are equal
@@ -158,7 +158,7 @@ int point_is_negative_of(const curve_point *p, const curve_point *q) {
   }
 
   // we shouldn't hit this for a valid point
-  if (bn_is_zero(&(p->y))) {
+  if (crypto_bn_is_zero(&(p->y))) {
     return 0;
   }
 
@@ -178,7 +178,7 @@ static void generate_k_random(bignum256 *k, const bignum256 *prime) {
     }
     k->val[8] = random32() & ((1u << BN_BITS_LAST_LIMB) - 1);
     // check that k is in range and not zero.
-  } while (bn_is_zero(k) || !bn_is_less(k, prime));
+  } while (crypto_bn_is_zero(k) || !bn_is_less(k, prime));
 }
 
 void curve_to_jacobian(const curve_point *p, jacobian_curve_point *jp,
@@ -275,7 +275,7 @@ void point_jacobian_add(const curve_point *p1, jacobian_curve_point *p2,
   bn_fast_mod(&h, prime);
   // h = x1' - x2;
 
-  bn_add(&xz, &p2->x);
+  crypto_bn_add(&xz, &p2->x);
   // xz = x1' + x2
 
   // check for h == 0 % prime.  Note that h never normalizes to
@@ -288,7 +288,7 @@ void point_jacobian_add(const curve_point *p1, jacobian_curve_point *p2,
   bn_subtractmod(&yz, &p2->y, &r, prime);
   // r = y1' - y2;
 
-  bn_add(&yz, &p2->y);
+  crypto_bn_add(&yz, &p2->y);
   // yz = y1' + y2
 
   r2 = p2->x;
@@ -682,7 +682,7 @@ int ecdsa_sign_digest(const ecdsa_curve *curve, const uint8_t *priv_key,
     // generate K deterministically
     generate_k_rfc6979(&k, &rng);
     // if k is too big or too small, we don't like it
-    if (bn_is_zero(&k) || !bn_is_less(&k, &curve->order)) {
+    if (crypto_bn_is_zero(&k) || !bn_is_less(&k, &curve->order)) {
       continue;
     }
 #else
@@ -699,7 +699,7 @@ int ecdsa_sign_digest(const ecdsa_curve *curve, const uint8_t *priv_key,
       by |= 2;
     }
     // if r is zero, we retry
-    if (bn_is_zero(&R.x)) {
+    if (crypto_bn_is_zero(&R.x)) {
       continue;
     }
 
@@ -709,12 +709,12 @@ int ecdsa_sign_digest(const ecdsa_curve *curve, const uint8_t *priv_key,
     bn_inverse(&k, &curve->order);           // (k*rand)^-1
     bn_read_be(priv_key, s);                 // priv
     bn_multiply(&R.x, s, &curve->order);     // R.x*priv
-    bn_add(s, &z);                           // R.x*priv + z
+    crypto_bn_add(s, &z);                           // R.x*priv + z
     bn_multiply(&k, s, &curve->order);       // (k*rand)^-1 (R.x*priv + z)
     bn_multiply(&randk, s, &curve->order);   // k^-1 (R.x*priv + z)
     bn_mod(s, &curve->order);
     // if s is zero, we retry
-    if (bn_is_zero(s)) {
+    if (crypto_bn_is_zero(s)) {
       continue;
     }
 
@@ -889,7 +889,7 @@ void uncompress_coords(const ecdsa_curve *curve, uint8_t odd,
   bn_multiply(x, y, &curve->prime);      // y is x^2
   bn_subi(y, -curve->a, &curve->prime);  // y is x^2 + a
   bn_multiply(x, y, &curve->prime);      // y is x^3 + ax
-  bn_add(y, &curve->b);                  // y is x^3 + ax + b
+  crypto_bn_add(y, &curve->b);                  // y is x^3 + ax + b
   bn_sqrt(y, &curve->prime);             // y = sqrt(y)
   if ((odd & 0x01) != (y->val[0] & 1)) {
     bn_subtract(&curve->prime, y, y);  // y = -y
@@ -986,11 +986,11 @@ int ecdsa_verify_digest(const ecdsa_curve *curve, const uint8_t *pub_key,
     bn_read_be(sig, &r);
     bn_read_be(sig + 32, &s);
     bn_read_be(digest, &z);
-    if (bn_is_zero(&r) || bn_is_zero(&s) || (!bn_is_less(&r, &curve->order)) ||
+    if (crypto_bn_is_zero(&r) || crypto_bn_is_zero(&s) || (!bn_is_less(&r, &curve->order)) ||
         (!bn_is_less(&s, &curve->order))) {
       result = 2;
     }
-    if (bn_is_zero(&z)) {
+    if (crypto_bn_is_zero(&z)) {
       // The digest was all-zero. The probability of this happening by chance is
       // infinitesimal, but it could be induced by a fault injection. In this
       // case the signature (r,s) can be forged by taking r := (t * Q).x mod n
@@ -1051,16 +1051,16 @@ int ecdsa_recover_pub_from_sig(const ecdsa_curve* curve, uint8_t* pub_key,
     // read r and s
     bn_read_be(sig, &r);
     bn_read_be(sig + 32, &s);
-    if (!bn_is_less(&r, &curve->order) || bn_is_zero(&r)) {
+    if (!bn_is_less(&r, &curve->order) || crypto_bn_is_zero(&r)) {
         return 1;
     }
-    if (!bn_is_less(&s, &curve->order) || bn_is_zero(&s)) {
+    if (!bn_is_less(&s, &curve->order) || crypto_bn_is_zero(&s)) {
         return 1;
     }
     // cp = R = k * G (k is secret nonce when signing)
     memcpy(&cp.x, &r, sizeof(bignum256));
     if (recid & 2) {
-        bn_add(&cp.x, &curve->order);
+        crypto_bn_add(&cp.x, &curve->order);
         if (!bn_is_less(&cp.x, &curve->prime)) {
             return 1;
         }
