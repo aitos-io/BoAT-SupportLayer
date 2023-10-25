@@ -208,7 +208,7 @@ unsigned int bn_digitcount(const bignum256 *x) {
 
 // x = 0
 // Guarantees x is normalized
-void bn_zero(bignum256 *x) {
+void crypto_bn_zero(bignum256 *x) {
   for (int i = 0; i < BN_LIMBS; i++) {
     x->val[i] = 0;
   }
@@ -225,7 +225,7 @@ void bn_one(bignum256 *x) {
 
 // Returns x == 0
 // Assumes x is normalized
-int bn_is_zero(const bignum256 *x) {
+int crypto_bn_is_zero(const bignum256 *x) {
   uint32_t result = 0;
   for (int i = 0; i < BN_LIMBS; i++) {
     result |= x->val[i];
@@ -1031,7 +1031,7 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
     return s
   */
 
-  if (bn_is_zero(x)) return;
+  if (crypto_bn_is_zero(x)) return;
 
   bn_fast_mod(x, prime);
   bn_mod(x, prime);
@@ -1040,7 +1040,7 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
   bn_copy(prime, &u);
   bn_copy(x, &v);
   bn_one(&s);
-  bn_zero(&r);
+  crypto_bn_zero(&r);
 
   int k = 0;
   while (!bn_is_one(&v)) {
@@ -1053,16 +1053,16 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
     } else if (bn_is_less(&v, &u)) {
       bn_subtract(&u, &v, &u);
       bn_rshift(&u);
-      bn_add(&r, &s);
+      crypto_bn_add(&r, &s);
       bn_lshift(&s);
     } else {
       bn_subtract(&v, &u, &v);
       bn_rshift(&v);
-      bn_add(&s, &r);
+      crypto_bn_add(&s, &r);
       bn_lshift(&r);
     }
     k += 1;
-    assert(!bn_is_zero(&v)); // assert GCD(x, prime) == 1
+    assert(!crypto_bn_is_zero(&v)); // assert GCD(x, prime) == 1
   }
 
   // s = s / 2**(k // BITS_PER_LIMB * BITS_PER_LIMB)
@@ -1131,10 +1131,10 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
   bn_copy(prime, &u);
   bn_copy(x, &v);
   bn_one(&s);
-  bn_zero(&r);
+  crypto_bn_zero(&r);
 
   bignum256 zero = {0};
-  bn_zero(&zero);
+  crypto_bn_zero(&zero);
 
   int k = 0;
 
@@ -1164,7 +1164,7 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
                     b3 | b4, BN_INVERSE_FAST_TERNARY(b3, &v, &u), &zero),
                 BN_INVERSE_FAST_TERNARY(b3, &u, &v));
 
-    bn_add(BN_INVERSE_FAST_TERNARY(b3, &r, &s),
+    crypto_bn_add(BN_INVERSE_FAST_TERNARY(b3, &r, &s),
            BN_INVERSE_FAST_TERNARY(b3 | b4, BN_INVERSE_FAST_TERNARY(b3, &s, &r),
                                    &zero));
     bn_rshift(BN_INVERSE_FAST_TERNARY(b1 | b3, &u, &v));
@@ -1189,7 +1189,7 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
     bn_cmov(&s, i < k % BN_BITS_PER_LIMB, &r, &s);
   }
 
-  bn_cmov(x, bn_is_zero(x), x, &s);
+  bn_cmov(x, crypto_bn_is_zero(x), x, &s);
 
   memzero(&u, sizeof(u));
   memzero(&v, sizeof(v));
@@ -1243,10 +1243,10 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
   bn_copy(prime, &u);
   bn_copy(x, &v);
   bn_one(&s);
-  bn_zero(&r);
+  crypto_bn_zero(&r);
 
   bignum256 zero = {0};
-  bn_zero(&zero);
+  crypto_bn_zero(&zero);
 
   int k = 0;
 
@@ -1284,7 +1284,7 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
 
     // r_plus_s = r + s
     bn_copy(&r, &r_plus_s);
-    bn_add(&r_plus_s, &s);
+    crypto_bn_add(&r_plus_s, &s);
 
     // r_twice = 2 * r
     bn_copy(&r, &r_twice);
@@ -1325,7 +1325,7 @@ void bn_inverse_fast(bignum256 *x, const bignum256 *prime) {
     bn_cmov(&s, i < k % BN_BITS_PER_LIMB, &r, &s);
   }
 
-  bn_cmov(x, bn_is_zero(x), x, &s);
+  bn_cmov(x, crypto_bn_is_zero(x), x, &s);
 
   memzero(&u, sizeof(u));
   memzero(&v, sizeof(v));
@@ -1365,7 +1365,7 @@ void bn_normalize(bignum256 *x) {
 // Assumes x, y are normalized, x + y < 2**(LIMBS*BITS_PER_LIMB) == 2**261
 // Guarantees x is normalized
 // Works properly even if &x == &y
-void bn_add(bignum256 *x, const bignum256 *y) {
+void crypto_bn_add(bignum256 *x, const bignum256 *y) {
   uint32_t acc = 0;
   for (int i = 0; i < BN_LIMBS; i++) {
     acc += x->val[i] + y->val[i];
@@ -1717,7 +1717,7 @@ size_t bn_format(const bignum256 *amount, const char *prefix, const char *suffix
   // amount //= 10**exponent
   for (; exponent < 0; ++exponent) {
     // if temp == 0, there is no need to divide it by 10 anymore
-    if (bn_is_zero(&temp)) {
+    if (crypto_bn_is_zero(&temp)) {
       exponent = 0;
       break;
     }
@@ -1752,7 +1752,7 @@ size_t bn_format(const bignum256 *amount, const char *prefix, const char *suffix
         fractional_part = true;
         BN_FORMAT_ADD_OUTPUT_CHAR('0' + digit)
       }
-      else if (bn_is_zero(&temp)) {
+      else if (crypto_bn_is_zero(&temp)) {
         // We break since the remaining digits are zeroes and fractional_part == trailing == false
         decimals = 0;
         break;
@@ -1767,7 +1767,7 @@ size_t bn_format(const bignum256 *amount, const char *prefix, const char *suffix
 
   {  // Add integer-part digits of amount
     // Add trailing zeroes
-    if (!bn_is_zero(&temp)) {
+    if (!crypto_bn_is_zero(&temp)) {
       for (; exponent > 0; --exponent) {
         BN_FORMAT_ADD_OUTPUT_CHAR('0')
       }
@@ -1778,7 +1778,7 @@ size_t bn_format(const bignum256 *amount, const char *prefix, const char *suffix
     do {
       bn_divmod10(&temp, &digit);
       BN_FORMAT_ADD_OUTPUT_CHAR('0' + digit)
-    } while (!bn_is_zero(&temp));
+    } while (!crypto_bn_is_zero(&temp));
   }
 
   // Add prefix

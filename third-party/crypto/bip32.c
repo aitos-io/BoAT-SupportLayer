@@ -129,7 +129,7 @@ int hdnode_from_xprv(uint32_t depth, uint32_t child_num,
   } else if (info->params) {
     bignum256 a = {0};
     bn_read_be(private_key, &a);
-    if (bn_is_zero(&a)) {  // == 0
+    if (crypto_bn_is_zero(&a)) {  // == 0
       failed = true;
     } else {
       if (!bn_is_less(&a, &info->params->order)) {  // >= order
@@ -173,7 +173,7 @@ int hdnode_from_seed(const uint8_t *seed, int seed_len, const char *curve,
     bignum256 a = {0};
     while (true) {
       bn_read_be(I, &a);
-      if (!bn_is_zero(&a)                                   // != 0
+      if (!crypto_bn_is_zero(&a)                                   // != 0
           && bn_is_less(&a, &out->curve->params->order)) {  // < order
         break;
       }
@@ -234,9 +234,9 @@ int hdnode_private_ckd(HDNode *inout, uint32_t i) {
       if (!bn_is_less(&b, &inout->curve->params->order)) {  // >= order
         failed = true;
       } else {
-        bn_add(&b, &a);
+        crypto_bn_add(&b, &a);
         bn_mod(&b, &inout->curve->params->order);
-        if (bn_is_zero(&b)) {
+        if (crypto_bn_is_zero(&b)) {
           failed = true;
         }
       }
