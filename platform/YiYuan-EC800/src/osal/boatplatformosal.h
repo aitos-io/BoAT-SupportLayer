@@ -97,7 +97,7 @@ void BoatSleepMs(BUINT32 ms);
 #ifndef PLATFORM_OSAL_MUTEX
 #define PLATFORM_OSAL_MUTEX
 struct boatPlatformMutex{
-    int mutexID; //! ML307A mutex descriptor
+    ql_mutex_t mutexId; //! ML307A mutex descriptor
 };
 #endif/////PLATFORM_OSAL_MUTEX
 
@@ -134,7 +134,6 @@ struct boatPlatformSem{
 #define PLATFORM_OSAL_QUEUE
 struct boatPlatformQueue{
     ql_queue_t queueId; //! ML307A message queue descriptor
-    BUINT32 maxSize; //! ML307A put/get message buffer size must qeual maxSize, 
 };
 #endif/////PLATFORM_OSAL_QUEUE
 

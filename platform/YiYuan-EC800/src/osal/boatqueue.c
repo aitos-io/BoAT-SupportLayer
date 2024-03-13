@@ -79,7 +79,7 @@ Function: boatQueueDelete()
 *******************************************************************************/
 BOAT_RESULT boatQueueDelete(boatQueue *msgQRef)
 {
-    osStatus_t status;
+    QlOSStatus ret;
 
     if(msgQRef == NULL)
     {
@@ -87,23 +87,20 @@ BOAT_RESULT boatQueueDelete(boatQueue *msgQRef)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if((msgQRef->queueId == NULL) || \
-        (msgQRef->maxSize == 0))
+    if((msgQRef->queueId == NULL))
     {
         BoatLog(BOAT_LOG_CRITICAL,"Invalid parameter");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    status = osMessageQueueDelete(msgQRef->queueId);
-    if(status != osOK)
+    ret = ql_rtos_queue_delete(msgQRef->queueId);
+    if(ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Queue delete failed!");
         return BOAT_ERROR;
     }
 
     msgQRef->queueId = NULL;
-    msgQRef->maxSize = 0U;
-
     return BOAT_SUCCESS;
 }
 
@@ -140,7 +137,7 @@ Function: boatQueueSend()
 *******************************************************************************/
 BOAT_RESULT boatQueueSend(const boatQueue *msgQRef, BUINT8 *msgPtr, BUINT32 msgLen, BUINT32 timeout)
 {
-    osStatus_t status;
+    QlOSStatus ret;
 
     if((msgQRef == NULL) || \
         (msgPtr == NULL) || \
@@ -150,21 +147,14 @@ BOAT_RESULT boatQueueSend(const boatQueue *msgQRef, BUINT8 *msgPtr, BUINT32 msgL
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if((msgQRef->queueId == NULL) || \
-        (msgQRef->maxSize == 0))
+    if((msgQRef->queueId == NULL))
     {
         BoatLog(BOAT_LOG_CRITICAL,"Invalid parameter");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(msgQRef->maxSize < msgLen)
-    {
-        BoatLog(BOAT_LOG_CRITICAL,"Msg is too long");
-        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
-    }
-
-    status = osMessageQueuePut(msgQRef->queueId,msgPtr,0,timeout*200/1000);
-    if(status != osOK)
+    ret = ql_rtos_queue_release(msgQRef->queueId, msgLen, msgPtr, timeout);
+    if(ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Queue send failed!");
         return BOAT_ERROR;
@@ -212,7 +202,7 @@ Function: boatQueueReceive()
 *******************************************************************************/
 BOAT_RESULT boatQueueReceive(const boatQueue *msgQRef, BUINT8 *msgPtr, BUINT32 msgLen ,BUINT32 timeout)
 {
-    osStatus_t status;
+    QlOSStatus ret;
 
     if((msgQRef == NULL) || \
         (msgPtr == NULL) || \
@@ -222,21 +212,14 @@ BOAT_RESULT boatQueueReceive(const boatQueue *msgQRef, BUINT8 *msgPtr, BUINT32 m
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if((msgQRef->queueId == NULL) || \
-        (msgQRef->maxSize == 0))
+    if((msgQRef->queueId == NULL))
     {
         BoatLog(BOAT_LOG_CRITICAL,"Invalid parameter");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(msgQRef->maxSize < msgLen)
-    {
-        BoatLog(BOAT_LOG_CRITICAL,"Msg is too long");
-        return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
-    }
-
-    status = osMessageQueueGet(msgQRef->queueId,msgPtr,NULL,timeout*200/1000);
-    if(status != osOK)
+    ret = ql_rtos_queue_wait(msgQRef->queueId, msgPtr, msgLen, timeout);
+    if(ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Queue receive failed!");
         return BOAT_ERROR;

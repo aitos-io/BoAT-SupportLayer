@@ -3,7 +3,6 @@
 #ifdef PLATFORM_OSAL_MUTEX
 
 #include "stdio.h"
-#include "cm_os.h"
 
 #include "boattypes.h"
 #include "boatlog.h"
@@ -38,8 +37,8 @@ BOAT_RESULT boatMutexInit(boatMutex *mutexRef)
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    mutexRef->mutexID = osMutexNew(NULL);
-    if(mutexRef->mutexID == NULL)
+    QlOSStatus ret = ql_rtos_mutex_create(&mutexRef->mutexId);
+    if(ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Mutex init failed!");
         return BOAT_ERROR;
@@ -69,21 +68,21 @@ Function: boatMutexDestroy()
 *******************************************************************************/
 BOAT_RESULT boatMutexDestroy(boatMutex *mutexRef)
 {
-    osStatus_t status;
+    QlOSStatus ret;
     if(mutexRef == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    status = osMutexDelete(mutexRef->mutexID);
-    if(status != osOK)
+    ret = ql_rtos_mutex_delete(mutexRef->mutexId);
+    if(ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Mutex Delete Failed!");
         return BOAT_ERROR;
     }
 
-    mutexRef->mutexID = NULL;
+    mutexRef->mutexId = NULL;
     
     return BOAT_SUCCESS;
 }
@@ -110,21 +109,21 @@ Function: boatMutexUnlock()
 *******************************************************************************/
 BOAT_RESULT boatMutexUnlock(boatMutex *mutexRef)
 {
-    osStatus_t status;
+    QlOSStatus ret;
     if(mutexRef == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(mutexRef->mutexID == NULL)
+    if(mutexRef->mutexId == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad mutexId!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    status = osMutexRelease(mutexRef->mutexID);
-    if(status != osOK)
+    ret = ql_rtos_mutex_unlock(mutexRef->mutexId);
+    if(ret != BOAT_SUCCESS)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Mutex unlock Failed!");
         return BOAT_ERROR;
@@ -162,22 +161,23 @@ Function: boatMutexLock()
 *******************************************************************************/
 BOAT_RESULT boatMutexLock(boatMutex *mutexRef,BUINT32 timeout)
 {
-    osStatus_t status;
+    QlOSStatus ret;
     if(mutexRef == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad Params!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    if(mutexRef->mutexID == NULL)
+    if(mutexRef->mutexId == NULL)
     {
         BoatLog(BOAT_LOG_CRITICAL,"Bad mutexId!");
         return BOAT_ERROR_COMMON_INVALID_ARGUMENT;
     }
 
-    status = osMutexAcquire(mutexRef->mutexID,timeout*200/1000);
-    if(status != osOK)
+    ret = ql_rtos_mutex_lock(mutexRef->mutexId,timeout);
+    if(ret != BOAT_SUCCESS)
     {
+		// check timeout
         BoatLog(BOAT_LOG_CRITICAL,"Mutex lock Failed!");
         return BOAT_ERROR;
     }
