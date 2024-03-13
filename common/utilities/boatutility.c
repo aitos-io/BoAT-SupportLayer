@@ -1453,7 +1453,7 @@ BCHAR *UtilityNative2PKCS(KeypairNative keypair)
     offset += len;
     outStr[offset++] = 0x0D;
     outStr[offset++] = 0x0A;
-    memcpy(outStr + offset, PRIKEY_PKCS_END, strlen(PRIKEY_PKCS_BEGIN));
+    memcpy(outStr + offset, PRIKEY_PKCS_END, strlen(PRIKEY_PKCS_END));
     outStr[offset++] = 0x0D;
     outStr[offset++] = 0x0A;
     outStr[offset++] = 0x00;
