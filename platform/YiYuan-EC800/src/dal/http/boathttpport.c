@@ -43,17 +43,29 @@ To use boat HTTP RPC porting, RPC_USE_BOATHTTPPORT in boatoptions.h must set to 
 
 #include "boatinternal.h"
 
-// #if RPC_USE_BOATHTTPPORT == 1
-
-// #include "rpcport.h"
 #include "boathttpport.h"
 
-//#include "httpclient.h"
 #include "boatlog.h"
 #include "boatplatformosal.h"
 
-#include "cm_http.h"
-#include "cm_ssl.h"
+#include "ql_http_client.h"
+
+#define HTTPSPROFILE_IDX 1
+#define PRINT_BUF_SIZE 65
+
+static QL_HTTP_CLIENT_EVENT_E httpsrequeststatus = QL_HTTP_CLIENT_EVENT_SEND_FAIL; 
+static BUINT8 httpsrequestcbstate = 0;
+#define HTTPSREQUESTCBLOCK 0xba
+#define HTTPSREQUESTCUNBLOCK 0xab
+static ql_sem_t httpsrequeststatussemaphore = NULL;
+
+typedef struct{
+int code;
+BoatHttpPortContext *boathttpport_context_ptr;
+}priData;
+
+
+
 
 /*!*****************************************************************************
 @brief Initialize boat HTTP RPC context.
@@ -77,6 +89,12 @@ BoatHttpPortContext *BoatHttpPortInit(void)
 {
     BoatHttpPortContext *boathttpport_context_ptr;
     BOAT_RESULT result = BOAT_SUCCESS;
+
+    httpsrequeststatus = 0;
+    httpsrequestcbstate = 0;
+
+    ql_rtos_semaphore_create(&httpsrequeststatussemaphore, 0);
+
 
     boathttpport_context_ptr = BoatMalloc(sizeof(BoatHttpPortContext));
 
@@ -197,6 +215,8 @@ void BoatHttpPortDeinit(BoatHttpPortContext *boathttpport_context_ptr)
 
     BoatFree(boathttpport_context_ptr);
 
+	ql_rtos_semaphore_delete(httpsrequeststatussemaphore);
+
     return;
 }
 
@@ -231,6 +251,104 @@ BOAT_RESULT BoatHttpPortSetOpt(BoatHttpPortContext *boathttpport_context_ptr, BC
 
     return BOAT_SUCCESS;
 }
+
+void httpsrequestreleasesemaphore(void)
+{
+    BUINT32 cnt = 0;
+    if(ql_rtos_semaphore_get_cnt(httpsrequeststatussemaphore, &cnt) == 0) // succ
+    {
+        if(cnt == 0)
+        {
+            ql_rtos_semaphore_release(httpsrequeststatussemaphore);
+        }            
+    }
+}
+
+
+static int httpsresponsecb(
+    QL_HTTP_CLIENT_T *client,
+    QL_HTTP_CLIENT_EVENT_E event,
+    int status_code, 
+    char *data, 
+    int data_len, 
+    void *private_data)
+{
+    int ret=0;
+
+    priData *pHttpPriData = (priData *)private_data;
+    
+    // set the https status
+    if(httpsrequestcbstate != HTTPSREQUESTCBLOCK)
+    {
+        httpsrequeststatus = event;
+    }
+
+    switch(event)
+    {
+        case QL_HTTP_CLIENT_EVENT_SEND_FAIL:
+            BoatLog(BOAT_LOG_VERBOSE, "http send failed!\n");
+			httpsrequeststatus = 0;
+            httpsrequestcbstate = HTTPSREQUESTCBLOCK; 
+            httpsrequestreleasesemaphore(); // this cb can not change the stat before a new https request
+            break;
+        case QL_HTTP_CLIENT_EVENT_SEND_SUCCESSED:
+            BoatLog(BOAT_LOG_VERBOSE, "http send successed! \n");
+
+            break;
+        case QL_HTTP_CLIENT_EVENT_RECV_HEADER_FAIL:
+            BoatLog(BOAT_LOG_VERBOSE, "http parse response header failed!\n");
+            httpsrequestcbstate = HTTPSREQUESTCBLOCK; 
+		
+            httpsrequestreleasesemaphore(); // this cb can not change the stat before a new https request
+            break;
+        case QL_HTTP_CLIENT_EVENT_RECV_HEADER_FINISHED:
+            BoatLog(BOAT_LOG_VERBOSE, "http recv header status_code:%d;header_len:%d!\n",status_code,data_len);
+			pHttpPriData->code = status_code;
+			if(pHttpPriData->boathttpport_context_ptr->http_response_head.string_len >
+				pHttpPriData->boathttpport_context_ptr->http_response_head.string_space - data_len)
+			{
+				data_len = pHttpPriData->boathttpport_context_ptr->http_response_head.string_space -
+					pHttpPriData->boathttpport_context_ptr->http_response_head.string_len;
+			}
+			
+			memcpy(pHttpPriData->boathttpport_context_ptr->http_response_head.string_ptr + 
+				pHttpPriData->boathttpport_context_ptr->http_response_head.string_len, data, data_len);
+
+			pHttpPriData->boathttpport_context_ptr->http_response_head.string_len += data_len;
+			ret = 1;
+            break;
+        case QL_HTTP_CLIENT_EVENT_RECV_BODY:
+            BoatLog(BOAT_LOG_VERBOSE, "http recv body status_code:%d;recv_body_len:%d!\n",status_code,data_len);
+			if(pHttpPriData->boathttpport_context_ptr->http_response_body.string_len >
+				pHttpPriData->boathttpport_context_ptr->http_response_body.string_space - data_len)
+			{
+				data_len = pHttpPriData->boathttpport_context_ptr->http_response_body.string_space -
+					pHttpPriData->boathttpport_context_ptr->http_response_body.string_len;
+			}
+			
+			memcpy(pHttpPriData->boathttpport_context_ptr->http_response_body.string_ptr + 
+				pHttpPriData->boathttpport_context_ptr->http_response_body.string_len, data, data_len);
+
+			pHttpPriData->boathttpport_context_ptr->http_response_body.string_len += data_len;
+            ret = 1; 
+            break;
+        case QL_HTTP_CLIENT_EVENT_RECV_BODY_FINISHED:
+            BoatLog(BOAT_LOG_VERBOSE, "http recv body finished!\n");
+            httpsrequestcbstate = HTTPSREQUESTCBLOCK; 
+            httpsrequeststatus = event;
+            httpsrequestreleasesemaphore(); // this cb can not change the stat before a new https request
+
+            break;
+        case QL_HTTP_CLIENT_EVENT_DISCONNECTED:
+            break;
+        default:
+            break;
+    }
+
+    httpsrequeststatus = event;
+    return ret;
+}
+
 
 /*!*****************************************************************************
 @brief Perform a synchronous HTTP POST and wait for its response.
@@ -271,8 +389,6 @@ Function: BoatHttpPortRequestSync()
     wrapper function. Typically it equals to strlen(response_str_ptr).
 
 *******************************************************************************/
-
-
 BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_ptr,
                                     const BCHAR *request_str,
                                     BUINT32 request_len,
@@ -280,12 +396,11 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
                                     BOAT_OUT BUINT32 *response_len_ptr)
 {
 
-    cm_httpclient_ret_code_e  ret;
-    cm_httpclient_handle_t client = NULL;
+    int  ret;
+    QL_HTTP_CLIENT_T * client = NULL;
+    QL_HTTP_CLIENT_LIST_T * header = NULL;
 
     BOAT_RESULT result = BOAT_ERROR;
-    cm_httpclient_sync_param_t param = {};
-    cm_httpclient_sync_response_t response = {};
     
     boat_try_declare;
 
@@ -296,22 +411,69 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, cleanup);
     }
 
-    
-
     if(client == NULL)
     {
         
+		client = ql_http_client_init();
+		
+		ret = ql_http_client_setopt(client, QL_HTTP_CLIENT_OPT_PDP_CID, 1); //set PDP cid,if not set,using default PDP
+		if(ret != 0)
+		{
+            result = BOAT_ERROR_HTTP_INIT_FAIL;
+            boat_throw(result,cleanup);
+		}
+		ret = ql_http_client_setopt(client, QL_HTTP_CLIENT_OPT_PROTOCOL_VER, 1); //"0" is HTTP 1.1, "1" is HTTP 1.0		
+		if(ret != 0)
+		{
+            result = BOAT_ERROR_HTTP_INIT_FAIL;
+            boat_throw(result,cleanup);
+		}
+		ret = ql_http_client_setopt(client, QL_HTTP_CLIENT_OPT_ENABLE_COOKIE, 1); //"0" is HTTP 1.1, "1" is HTTP 1.0
+		if(ret != 0)
+		{
+            result = BOAT_ERROR_HTTP_INIT_FAIL;
+            boat_throw(result,cleanup);
+		}
 
-        cm_httpclient_cfg_t client_cfg;
-        if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"https",strlen("https")))
+        if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"https",strlen("https"))) //  debug case sensitive
         {
-            client_cfg.ssl_enable = true;                                                   //Use SSL，HTTPS
-            client_cfg.ssl_id = 2;                                                          //Set ssl id
+			SSLConfig sslConfig = 
+			{
+				.en = 1,
+				.profileIdx = HTTPSPROFILE_IDX,
+				.serverName = "dev.api.joy-notary.molian.technology", // mmp: input parameter is better than const string //"www.baidu.com",	// maybe the part of hqd.url's domain name
+				.serverPort = 443,
+				.protocol = 0,
+				.dbgLevel = 1,
+				.sessionReuseEn = 0,
+				.vsn = SSL_VSN_ALL,
+				.verify = SSL_VERIFY_MODE_OPTIONAL,
+				.cert.from = SSL_CERT_FROM_BUF,
+				.cert.path.rootCA = NULL, // rootCA_path_aitos, // aitosroot.pem // debug, need a interface to get CA data
+				.cert.path.clientKey = NULL,
+				.cert.path.clientCert = NULL,
+				.cert.clientKeyPwd.data = NULL,
+				.cert.clientKeyPwd.len = 0,
+				.cipherList = "ALL",
+				.CTRDRBGSeed.data = NULL,
+				.CTRDRBGSeed.len = 0
+			};
+
+			ret = ql_http_client_setopt(client, QL_HTTP_CLIENT_OPT_SSL_CTX, &sslConfig); // CA certification 
+			if(ret != 0)
+			{
+				result = BOAT_ERROR_HTTP_INIT_FAIL;
+				boat_throw(result,cleanup);
+			}
         }
-        else if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"http",strlen("http")))
+        else if(0 == strncmp(boathttpport_context_ptr->remote_url_str,"http",strlen("http"))) //  debug case sensitive
         {
-            client_cfg.ssl_enable = false;                                                   //Don't use SSL，HTTP
-            //client_cfg.ssl_id = 2;                                                          //Set ssl id
+			ret = ql_http_client_setopt(client, QL_HTTP_CLIENT_OPT_SSL_CTX, NULL); // no CA certification 
+			if(ret != 0)
+			{
+				result = BOAT_ERROR_HTTP_INIT_FAIL;
+				boat_throw(result,cleanup);
+			}
         }
         else
         {
@@ -320,92 +482,62 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
             boat_throw(BOAT_ERROR_COMMON_INVALID_ARGUMENT, cleanup);
         }
 
-        ret = cm_httpclient_create((const uint8_t *)(boathttpport_context_ptr->remote_url_str), NULL, &client);
-        if (CM_HTTP_RET_CODE_OK != ret || NULL == client)
-        {
-            BoatLog(BOAT_LOG_CRITICAL, "Create HTTP instance ERROR.");
+		header = ql_http_client_list_append(header, "Connection: keep-alive\r\n"); // end with \r\n	
+		header = ql_http_client_list_append(header, "Content-type: application/json\r\n"); // end with \r\n		
+		ret = ql_http_client_setopt(client, QL_HTTP_CLIENT_OPT_HTTPHEADER, header);
+		if(ret != 0)
+		{
             result = BOAT_ERROR_HTTP_INIT_FAIL;
             boat_throw(result,cleanup);
-        }
+		}
 
-        BoatSleepMs(100);  //delay 100ms
-
-        ret = cm_httpclient_custom_header_set(client,"Content-Type: application/json\r\n",strlen("Content-Type: application/json\r\n"));
-        BoatLog(BOAT_LOG_CRITICAL, "Set custom header ret = %d",ret);
-
-        BoatSleepMs(100);  //delay 100ms
-
-        client_cfg.cid = 0;                                                             //Can be any value
-        client_cfg.conn_timeout = HTTPCLIENT_CONNECT_TIMEOUT_MAXTIME;
-        client_cfg.rsp_timeout = HTTPCLIENT_WAITRSP_TIMEOUT_MAXTIME;
-        client_cfg.dns_priority = 1;                                                    //ip v4 first
-        ret = cm_httpclient_set_cfg(client, client_cfg);                 
-
-        if (CM_HTTP_RET_CODE_OK != ret || NULL == client)
-        {
-            BoatLog(BOAT_LOG_CRITICAL, "HttpClient set config ERROR.");
-            result = BOAT_ERROR_HTTP_INIT_FAIL;
+		priData httpPriData;
+		httpPriData.code = 0;
+		httpPriData.boathttpport_context_ptr = boathttpport_context_ptr;
+		
+	    ret=ql_http_client_request(client, boathttpport_context_ptr->remote_url_str,
+                                QL_HTTP_CLIENT_REQUEST_POST,
+                                QL_HTTP_CLIENT_AUTH_TYPE_BASE,
+                                NULL,NULL, (char *)request_str, request_len,
+                                httpsresponsecb,&httpPriData);
+		if(ret != 0)
+		{
+            result = BOAT_ERROR_HTTP_CONNECT_FAIL;
             boat_throw(result,cleanup);
-        }
-
-        //int tmp = 0;
-        //cm_ssl_setopt(2 ,CM_SSL_PARAM_VERIFY, &tmp);                                    //Set ssl verify mode
-
-    }
-
-    BoatSleepMs(100);  //delay 100ms
-    param.method = HTTPCLIENT_REQUEST_POST;
-    param.path = (const uint8_t *)"/";
-    param.content = (uint8_t *)request_str;
-    param.content_length = request_len;
-
-    ret = cm_httpclient_sync_request(client, param, &response);                         //Send http request
-    if (CM_HTTP_RET_CODE_OK != ret || NULL == client)
-    {
-        BoatLog(BOAT_LOG_CRITICAL,"HttpClient POST Failed,ret = %d",ret);
-        result  = BOAT_ERROR_HTTP_POST_FAIL;
-    }
-    else
-    {
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_code is %d", response.response_code);
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_header: %s", response.response_header);
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_header_len is %d", response.response_header_len);
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_content: %s", response.response_content);
-        BoatLog(BOAT_LOG_VERBOSE,"Http POST response_content_len is %d", response.response_content_len);
-
-        if((200 == response.response_code) || (201 == response.response_code))
-        {
-            //Get response data
-            if((response.response_header_len < boathttpport_context_ptr->http_response_head.string_space) && \
-                (response.response_content_len < boathttpport_context_ptr->http_response_body.string_space))
-            {
-                memcpy(boathttpport_context_ptr->http_response_head.string_ptr,response.response_header,response.response_header_len);
-                boathttpport_context_ptr->http_response_head.string_len = response.response_header_len;
-
-                memcpy(boathttpport_context_ptr->http_response_body.string_ptr,response.response_content,response.response_content_len);
-                boathttpport_context_ptr->http_response_body.string_len = response.response_content_len;
-
-                *response_str_ptr = boathttpport_context_ptr->http_response_body.string_ptr;
-                *response_len_ptr = boathttpport_context_ptr->http_response_body.string_len;
-
-                result = BOAT_SUCCESS;
-            }
-            else
-            {
-                BoatLog(BOAT_LOG_CRITICAL,"Http response message is too long!");
-                result = BOAT_ERROR_COMMON_OUT_OF_MEMORY;
-            }
-        }
-        else
-        {
-            BoatLog(BOAT_LOG_CRITICAL,"Http Response code is Wrong!");
-            result = BOAT_ERROR_HTTP_POST_FAIL;
-        }
-        
+		}
+		
+		BoatLog(BOAT_LOG_VERBOSE, "ql_http_client_request ret=%d!\n",ret);
+		
+		ret = ql_rtos_semaphore_wait(httpsrequeststatussemaphore, 20000);
+		int status = httpsrequeststatus;
+		BoatLog(BOAT_LOG_VERBOSE, "ql_rtos_semaphore_wait status:%d %d\r\n", status, ret); //gethttpsrequeststatus(),ret);
+		if(ret == 0)
+		{
+			if(QL_HTTP_CLIENT_EVENT_RECV_BODY_FINISHED == status) //gethttpsrequeststatus()) // data recived
+			{
+				if((200 == httpPriData.code) || (201 == httpPriData.code))
+				{
+					*response_str_ptr = boathttpport_context_ptr->http_response_body.string_ptr;
+					*response_len_ptr = boathttpport_context_ptr->http_response_body.string_len;
+					result = BOAT_SUCCESS;
+				}
+				else
+				{
+					BoatLog(BOAT_LOG_CRITICAL,"Http Response code is Wrong!");
+					result = BOAT_ERROR_HTTP_POST_FAIL;
+				}
+			}
+			else
+			{
+				ret = BOAT_ERROR;
+			}
+		}
+			
+		ql_http_client_list_destroy(header);
+		ql_http_client_release(client); /*release http resources*/
 
     }
 
-    cm_httpclient_custom_header_free(client);
     BoatSleepMs(100);  //delay 100ms
 
     // Exceptional Clean Up
@@ -414,20 +546,6 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
         
         BoatLog(BOAT_LOG_NORMAL, "Exception: %d", boat_exception);
         result = boat_exception;
-    }
-
-    if(client != NULL)
-    {
-
-            cm_httpclient_terminate(client);
-            BoatSleepMs(100);
-            cm_httpclient_sync_free_data(client);                                        //Release client
-            BoatSleepMs(100);
-            cm_httpclient_delete(client);
-            client = NULL;
-
-            BoatSleepMs(150);   //delay 150ms
-
     }
 
     return result;
@@ -460,7 +578,7 @@ BOAT_RESULT BoatHttpGlobalInit(void)
 */
 void BoatHttpGlobalDeInit(void)
 {
-    return BOAT_SUCCESS;
+    return;
 }
 
 // #endif // end of #if RPC_USE_BOATHTTPPORT == 1
