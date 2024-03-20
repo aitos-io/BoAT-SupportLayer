@@ -57,7 +57,7 @@ static QL_HTTP_CLIENT_EVENT_E httpsrequeststatus = QL_HTTP_CLIENT_EVENT_SEND_FAI
 static BUINT8 httpsrequestcbstate = 0;
 #define HTTPSREQUESTCBLOCK 0xba
 #define HTTPSREQUESTCUNBLOCK 0xab
-static ql_sem_t httpsrequeststatussemaphore = NULL;
+static ql_sem_t httprequeststatussemaphore = NULL;
 
 typedef struct{
 int code;
@@ -93,7 +93,7 @@ BoatHttpPortContext *BoatHttpPortInit(void)
     httpsrequeststatus = 0;
     httpsrequestcbstate = 0;
 
-    ql_rtos_semaphore_create(&httpsrequeststatussemaphore, 0);
+    ql_rtos_semaphore_create(&httprequeststatussemaphore, 0);
 
 
     boathttpport_context_ptr = BoatMalloc(sizeof(BoatHttpPortContext));
@@ -215,7 +215,7 @@ void BoatHttpPortDeinit(BoatHttpPortContext *boathttpport_context_ptr)
 
     BoatFree(boathttpport_context_ptr);
 
-	ql_rtos_semaphore_delete(httpsrequeststatussemaphore);
+	ql_rtos_semaphore_delete(httprequeststatussemaphore);
 
     return;
 }
@@ -252,14 +252,14 @@ BOAT_RESULT BoatHttpPortSetOpt(BoatHttpPortContext *boathttpport_context_ptr, BC
     return BOAT_SUCCESS;
 }
 
-void httpsrequestreleasesemaphore(void)
+void httprequestreleasesemaphore(void)
 {
     BUINT32 cnt = 0;
-    if(ql_rtos_semaphore_get_cnt(httpsrequeststatussemaphore, &cnt) == 0) // succ
+    if(ql_rtos_semaphore_get_cnt(httprequeststatussemaphore, &cnt) == 0) // succ
     {
         if(cnt == 0)
         {
-            ql_rtos_semaphore_release(httpsrequeststatussemaphore);
+            ql_rtos_semaphore_release(httprequeststatussemaphore);
         }            
     }
 }
@@ -289,7 +289,7 @@ static int httpsresponsecb(
             BoatLog(BOAT_LOG_VERBOSE, "http send failed!\n");
 			httpsrequeststatus = 0;
             httpsrequestcbstate = HTTPSREQUESTCBLOCK; 
-            httpsrequestreleasesemaphore(); // this cb can not change the stat before a new https request
+            httprequestreleasesemaphore(); // this cb can not change the stat before a new https request
             break;
         case QL_HTTP_CLIENT_EVENT_SEND_SUCCESSED:
             BoatLog(BOAT_LOG_VERBOSE, "http send successed! \n");
@@ -299,7 +299,7 @@ static int httpsresponsecb(
             BoatLog(BOAT_LOG_VERBOSE, "http parse response header failed!\n");
             httpsrequestcbstate = HTTPSREQUESTCBLOCK; 
 		
-            httpsrequestreleasesemaphore(); // this cb can not change the stat before a new https request
+            httprequestreleasesemaphore(); // this cb can not change the stat before a new https request
             break;
         case QL_HTTP_CLIENT_EVENT_RECV_HEADER_FINISHED:
             BoatLog(BOAT_LOG_VERBOSE, "http recv header status_code:%d;header_len:%d!\n",status_code,data_len);
@@ -336,7 +336,7 @@ static int httpsresponsecb(
             BoatLog(BOAT_LOG_VERBOSE, "http recv body finished!\n");
             httpsrequestcbstate = HTTPSREQUESTCBLOCK; 
             httpsrequeststatus = event;
-            httpsrequestreleasesemaphore(); // this cb can not change the stat before a new https request
+            httprequestreleasesemaphore(); // this cb can not change the stat before a new https request
 
             break;
         case QL_HTTP_CLIENT_EVENT_DISCONNECTED:
@@ -508,7 +508,7 @@ BOAT_RESULT BoatHttpPortRequestSync(BoatHttpPortContext *boathttpport_context_pt
 		
 		BoatLog(BOAT_LOG_VERBOSE, "ql_http_client_request ret=%d!\n",ret);
 		
-		ret = ql_rtos_semaphore_wait(httpsrequeststatussemaphore, 20000);
+		ret = ql_rtos_semaphore_wait(httprequeststatussemaphore, 20000);
 		int status = httpsrequeststatus;
 		BoatLog(BOAT_LOG_VERBOSE, "ql_rtos_semaphore_wait status:%d %d\r\n", status, ret); //gethttpsrequeststatus(),ret);
 		if(ret == 0)

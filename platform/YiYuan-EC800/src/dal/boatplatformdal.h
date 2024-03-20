@@ -24,6 +24,7 @@
 
 
 #include "boattypes.h"
+#include "ql_uart.h"
 
 #ifndef __BOATPLATFORMDAL_H__
 #define __BOATPLATFORMDAL_H__
@@ -36,7 +37,7 @@
 #define PLATFORM_DAL_UART
 struct boatPlatformUART
 {
-    int   uartPort; //! ML307A UART descriptor
+    QL_UART_PORT_NUMBER_E   uartPort; //! ML307A UART descriptor
 };
 #endif // PLATFORM_DAL_UART
 
